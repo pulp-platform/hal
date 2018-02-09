@@ -48,6 +48,14 @@ static inline unsigned int apb_soc_nbClusters() {
   return pulp_read16(ARCHI_APB_SOC_CTRL_ADDR + APB_SOC_INFO_CLUSTERS_OFFSET);
 }
 
+static inline unsigned int hal_apb_soc_padfun_get(unsigned int id) {
+  return pulp_read32(ARCHI_APB_SOC_CTRL_ADDR + APB_SOC_PADFUN_OFFSET(id));
+}
+
+static inline void hal_apb_soc_padfun_set(unsigned int id, unsigned int value) {
+  pulp_write32(ARCHI_APB_SOC_CTRL_ADDR + APB_SOC_PADFUN_OFFSET(id), value);
+}
+
 static inline unsigned int apb_soc_padfun_get(unsigned int id) {
   return pulp_read32(ARCHI_APB_SOC_CTRL_ADDR + APB_SOC_PADFUN_OFFSET(id));
 }
