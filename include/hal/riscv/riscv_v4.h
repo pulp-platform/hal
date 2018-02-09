@@ -27,7 +27,56 @@
 
 #define SR_MTVEC  0x305
 
-#define hal_mepc_read() __builtin_pulp_spr_read(CSR_MEPC)
+
+
+
+
+
+#if defined(CORE_PULP_BUILTINS)
+
+static inline unsigned int hal_spr_read_then_clr(unsigned int reg, unsigned int val)
+{
+  return __builtin_pulp_read_then_spr_bit_clr(reg, val);
+}
+
+static inline void hal_spr_write(unsigned int reg, unsigned int val)
+{
+  __builtin_pulp_spr_write(reg, val);
+}
+
+static inline unsigned int hal_spr_read(unsigned int reg)
+{
+  return __builtin_pulp_spr_read(reg, val);
+}
+
+#else
+
+static inline unsigned int hal_spr_read_then_clr(unsigned int reg, unsigned int val)
+{
+  int state;
+  asm volatile ("csrrc %0, %1, %2" :  "=r" (state) : "I" (reg), "I" (val) );
+  return state;
+}
+
+static inline void hal_spr_write(unsigned int reg, unsigned int val)
+{
+  asm volatile ("csrw %0, %1" :  : "I" (reg), "r" (val) );
+}
+
+static inline unsigned int hal_spr_read(unsigned int reg)
+{
+  int result;
+  asm volatile ("csrr %0, %1" : "=r" (result) : "I" (reg) );
+  return result;
+}
+
+#endif
+
+
+
+
+
+#define hal_mepc_read() hal_spr_read(CSR_MEPC)
 
 static inline unsigned int core_id() {
   int hart_id;
@@ -137,19 +186,22 @@ static inline unsigned int hal_is_fc() {
 
 #endif
 
+
+
+
 static inline int hal_irq_disable()
 {
-  return __builtin_pulp_read_then_spr_bit_clr(0x300, 0x1<<3);
+  return hal_spr_read_then_clr(0x300, 0x1<<3);
 }
 
 static inline void hal_irq_restore(int state)
 {
-  __builtin_pulp_spr_write(0x300, state);
+  hal_spr_write(0x300, state);
 }
 
 static inline void hal_irq_enable()
 {
-  __builtin_pulp_spr_write(0x300, 0x1<<3);
+  hal_spr_write(0x300, 0x1<<3);
 }
 
 
