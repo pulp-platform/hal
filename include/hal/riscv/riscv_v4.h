@@ -46,7 +46,7 @@ static inline void hal_spr_write(unsigned int reg, unsigned int val)
 
 static inline unsigned int hal_spr_read(unsigned int reg)
 {
-  return __builtin_pulp_spr_read(reg, val);
+  return __builtin_pulp_spr_read(reg);
 }
 
 #else
