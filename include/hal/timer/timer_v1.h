@@ -44,16 +44,6 @@
 
 #define GET_TIMER_ADDR(t)  (ARCHI_TIMER_ADDR + ((t)+1)*0x40)
 
-static inline void start_timer() {*(volatile int*) START_TIME_ADDR = 1;}
-
-static inline void stop_timer() {*(volatile int*) STOP_TIME_ADDR = 1;}
-
-static inline void reset_timer() {*(volatile int*) RESET_TIME_ADDR = 1;}
-
-static inline int get_time() {return *(volatile int*) GET_TIME_LO_ADDR;}
-
-static inline int get_time_hi() {return *(volatile int*) GET_TIME_HI_ADDR;}
-
 static inline void start_core_timer(int timernum) {
   *(volatile int*)(GET_TIMER_ADDR(timernum) + 0x0) = 1;
 }
