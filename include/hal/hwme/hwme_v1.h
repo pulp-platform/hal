@@ -68,7 +68,7 @@
  */
 
 /* LOW-LEVEL HAL */
-#define HWME_ADDR_BASE FC_HWPE_BASE_ADDR
+#define HWME_ADDR_BASE ARCHI_FC_HWPE_ADDR
 #define HWME_ADDR_SPACE 0x00000100
 
 // For all the following functions we use __builtin_pulp_OffsetedWrite and __builtin_pulp_OffsetedRead
