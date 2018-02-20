@@ -120,8 +120,8 @@ static inline void hwme_vectstride_set(unsigned int value) {
 }
 
 static inline unsigned int hwme_shift_simplemul_value(
-  unsigned uint16_t shift,
-  unsigned          simplemul
+  unsigned short shift,
+  unsigned       simplemul
 ) {
   unsigned int res = 0;
 #if defined(__riscv__) && !defined(RV_ISA_RV32)
@@ -132,12 +132,6 @@ static inline unsigned int hwme_shift_simplemul_value(
          ((simplemul & 0xff));
 #endif
   return res;
-}
-
-static inline void hwme_wait_event() {
-#if PULP_CHIP != CHIP_QUENTIN
-  eu_evt_maskWaitAndClr(1 << PLP_EVT_ACC0);
-#endif
 }
 
 static inline void hwme_trigger_job() {
@@ -158,11 +152,11 @@ static inline void hwme_soft_clear() {
 }
 
 static inline void plp_hwme_enable() {
-  *(volatile int*) (EOC_UNIT_BASE_ADDR + (3 << 3)) |=  0xc00;
+  *(volatile int*) (ARCHI_SOC_EU_ADDR + (3 << 3)) |=  0xc00;
 }
 
 static inline void plp_hwme_disable() {
-  *(volatile int*) (EOC_UNIT_BASE_ADDR + (3 << 3)) &= ~0xc00;
+  *(volatile int*) (ARCHI_SOC_EU_ADDR + (3 << 3)) &= ~0xc00;
 }
 
 #endif /* __HAL_HWME_V1_H__ */
