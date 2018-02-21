@@ -214,17 +214,17 @@ static inline void xne_soft_clear() {
   XNE_WRITE(0, XNE_SOFT_CLEAR);
 }
 
-#ifdef ARCHI_HAS_CLUSTER
-
 static inline void plp_xne_enable() {
+#ifdef ARCHI_HAS_CLUSTER
   *(volatile int*) (EOC_UNIT_BASE_ADDR + (3 << 3)) |=  0xc00;
+#endif
 }
 
 static inline void plp_xne_disable() {
+#ifdef ARCHI_HAS_CLUSTER
   *(volatile int*) (EOC_UNIT_BASE_ADDR + (3 << 3)) &= ~0xc00;
-}
-
 #endif
+}
 
 #endif /* __HAL_XNE_V1_H__ */
 

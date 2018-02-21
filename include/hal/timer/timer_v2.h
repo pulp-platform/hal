@@ -101,6 +101,16 @@ static inline void hal_timer_count_set_64(
   pulp_write32(addr + PLP_TIMER_VALUE_HI, (int)(value >> 32));
 }
 
+static inline unsigned int hal_timer_cmp_get(unsigned int addr)
+{
+  return pulp_read32(addr + PLP_TIMER_CMP_LO);
+}
+
+static inline void hal_timer_cmp_set(unsigned int addr, unsigned int cmp)
+{
+  pulp_write32(addr + PLP_TIMER_CMP_LO, cmp);
+}
+
 
 
 
