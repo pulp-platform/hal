@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef	__HAL_HWCE_HWCE_V4_H__
-#define __HAL_HWCE_HWCE_V4_H__
+#ifndef	__HAL_HWCE_HWCE_V5_H__
+#define __HAL_HWCE_HWCE_V5_H__
 
 #include "hal/pulp.h"
 #include "archi/hwce/hwce_v5.h"
