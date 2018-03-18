@@ -26,5 +26,6 @@
 #include "hal/chips/honey/fll.h"
 #include "hal/periph/spi_v1.h"
 #include "hal/gpio/gpio_v0.h"
+#include "hal/cluster_ctrl/cluster_ctrl_v2.h"
 
 #endif
