@@ -36,10 +36,10 @@ typedef enum {
 
 typedef struct hal_bridge_req_s {
   uint32_t next;
-  char size;
-  char type;
-  char done;
-  char popped;
+  uint32_t size;
+  uint32_t type;
+  uint32_t done;
+  uint32_t popped;
   union {
     struct {
       uint32_t name_len;
