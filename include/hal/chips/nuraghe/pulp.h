@@ -19,5 +19,7 @@
 
 #include "hal/riscv/riscv_v4.h"
 #include "hal/eu/eu_v3.h"
+#include "hal/icache/icache_ctrl_v2.h"
+#include "hal/timer/timer_v2.h"
 
 #endif
