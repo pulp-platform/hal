@@ -23,5 +23,6 @@
 #include "hal/timer/timer_v1.h"
 #include "hal/icache/icache_ctrl_v1.h"
 #include "hal/cluster_ctrl/cluster_ctrl_v2.h"
+#include "hal/udma/udma_v1.h"
 
 #endif

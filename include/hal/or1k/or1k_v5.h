@@ -19,6 +19,17 @@
 
 #include "archi/or1k/spr-defs.h"
 
+static inline void hal_mtspr(unsigned long int  spr, unsigned long int  value) {       
+  __asm__ __volatile__ ("l.mtspr\t\t%0,%1,0": : "r" (spr), "r" (value));
+}
+
+static inline unsigned long int hal_mfspr(unsigned long spr) {       
+  unsigned long value;
+  __asm__ __volatile__ ("l.mfspr\t\t%0,%1,0" : "=r" (value) : "r" (spr));
+  return value;
+}
+
+
 static inline unsigned int hal_cluster_id() {
   unsigned int value;
   __asm__ ("l.mfspr\t\t%0,r0,%1" : "=r" (value) : "I" (SPR_CLUSTER_ID));
@@ -49,27 +60,19 @@ static inline unsigned int hal_core_id() {
 
 static inline int hal_irq_disable()
 {
-  int core_id = hal_core_id();
-  int state = pulp_irq_mask_low_read(core_id);
-  pulp_irq_mask_low_set(core_id, 0);
-  // As we are deactivating the interrupts in a peripheral,
-  // we have to put some nops to make sure interrupts are really inactive
-  // when we execute the next code.
-  __asm__ volatile ("l.nop" :  :  : "memory");
-  __asm__ volatile ("l.nop" :  :  : "memory");
-  __asm__ volatile ("l.nop" :  :  : "memory");
-  __asm__ volatile ("l.nop" :  :  : "memory");
-  __asm__ volatile ("l.nop" :  :  : "memory");
-  return state;
+  unsigned int sr = hal_mfspr(SPR_SR);
+  hal_mtspr(SPR_SR, sr & ~SPR_SR_IEE);
+  return sr;
 }
 
 static inline void hal_irq_restore(int state)
 {
-  pulp_irq_mask_low_set(hal_core_id(), state);
+  hal_mtspr(SPR_SR, state);
 }
 
 static inline void hal_irq_enable()
 {
+  hal_mtspr(SPR_SR, hal_mfspr(SPR_SR) | (SPR_SR_IEE));
 }
 
 static inline unsigned int hal_spr_read(unsigned long spr) {       
