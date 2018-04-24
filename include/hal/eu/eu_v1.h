@@ -198,6 +198,12 @@ static inline void eu_irq_maskSet(unsigned int irqMask)
   pulp_irq_mask_low_set(coreId, pulp_irq_mask_low_read(coreId) | irqMask);
 }
 
+static inline void eu_irq_maskClr(unsigned int irqMask)
+{
+  int coreId = hal_core_id();
+  pulp_irq_mask_low_set(coreId, pulp_irq_mask_low_read(coreId) & ~irqMask);
+}
+
 
 
 

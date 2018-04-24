@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 ETH Zurich and University of Bologna
+ * Copyright (C) 2018 GreenWaves Technologies
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-#ifndef __HAL_CHIPS_HONEY_PULP_H__
-#define __HAL_CHIPS_HONEY_PULP_H__
+#ifndef __HAL_CHIPS_NEURAGHE_PULP_H__
+#define __HAL_CHIPS_NEURAGHE_PULP_H__
 
-#include "hal/riscv/riscv_v3.h"
-#include "hal/dma/mchan_v4.h"
-#include "hal/eu/eu_v1.h"
-#include "hal/timer/timer_v1.h"
-#include "hal/apb_soc/apb_soc_v1.h"
-#include "hal/icache/icache_ctrl_v1.h"
-#include "hal/chips/honey/fll.h"
-#include "hal/periph/spi_v1.h"
-#include "hal/gpio/gpio_v0.h"
-#include "hal/cluster_ctrl/cluster_ctrl_v2.h"
+#include "hal/riscv/riscv_v4.h"
+#include "hal/eu/eu_v3.h"
+#include "hal/icache/icache_ctrl_v2.h"
+#include "hal/timer/timer_v2.h"
 
 #endif

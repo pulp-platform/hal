@@ -89,20 +89,20 @@ static inline void hal_itc_wait_for_interrupt() {
 
 
 static inline void hal_itc_wait_for_event_noirq(unsigned int mask) {
-  hal_itc_enable_set(mask);
 
   int end = 0;
   do {
     unsigned int state = hal_spr_read_then_clr(0x300, 0x1<<3);
     if ((hal_itc_status_value_get() & mask) == 0) {
+      hal_itc_enable_set(mask);
       asm volatile ("wfi");
+      hal_itc_enable_clr(mask);
     } else {
+      hal_itc_status_clr(mask);
       end = 1;
     }
     hal_spr_write(0x300, state);
   } while (!end);
-  hal_itc_status_clr(mask);
-  hal_itc_enable_clr(mask);
 }
 
 
