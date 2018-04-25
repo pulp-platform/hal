@@ -141,4 +141,27 @@ static inline void hal_udma_spim_clkdiv_set(uint32_t periph_base, uint32_t value
 
 #endif
 
+/*
+ * I2C
+ */
+
+#ifdef ARCHI_UDMA_HAS_I2C
+
+static inline uint32_t hal_udma_i2c_setup_compute(int en, int div)
+{
+  return (en << I2C_CMD_SETUP_ENABLE_BIT) | ( div << I2C_CMD_SETUP_DIV_BIT);
+}
+
+static inline void hal_udma_i2c_setup_set(uint32_t periph_base, uint32_t value)
+{
+  pulp_write32(periph_base + UDMA_CHANNEL_CUSTOM_OFFSET + ARCHI_I2C_SETUP_OFFSET, value);
+}
+
+static inline uint32_t hal_udma_i2c_setup_get(uint32_t periph_base)
+{
+  return pulp_read32(periph_base + UDMA_CHANNEL_CUSTOM_OFFSET + ARCHI_I2C_SETUP_OFFSET);
+}
+
+#endif
+
 #endif

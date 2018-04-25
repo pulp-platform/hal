@@ -23,5 +23,6 @@
 #include "hal/timer/timer_v1.h"
 #include "hal/icache/icache_ctrl_v1.h"
 #include "hal/udma/udma_v1.h"
+#include "hal/apb_soc/apb_soc_v1.h"
 
 #endif

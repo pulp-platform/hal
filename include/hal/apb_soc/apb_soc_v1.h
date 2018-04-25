@@ -17,7 +17,7 @@
 #ifndef __HAL_APB_SOC_APB_SOC_V1_H__
 #define __HAL_APB_SOC_APB_SOC_V1_H__
 
-#include "archi/pulp.h"
+#include "hal/pulp_io.h"
 
 static inline unsigned int apb_soc_nbCores() {
   return pulp_read16(ARCHI_APB_SOC_CTRL_ADDR + APB_SOC_INFO_CORES_OFFSET);
@@ -41,6 +41,9 @@ static inline int  apb_soc_get_pin_function(int pinnumber) {
   old_function = pulp_read32(SOC_CTRL_PADFUN0);
   old_function = (old_function >> pinnumber & 0x01);
   return old_function;
+}
+
+static inline void hal_apb_soc_padfun_set(unsigned int id, unsigned int value) {
 }
 
 #endif
