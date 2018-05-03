@@ -17,6 +17,7 @@
 #ifndef __HAL_OR1K_OR1K_V5_H__
 #define __HAL_OR1K_OR1K_V5_H__
 
+
 #include "archi/or1k/spr-defs.h"
 
 static inline void hal_mtspr(unsigned long int  spr, unsigned long int  value) {       
@@ -91,7 +92,7 @@ static inline unsigned int hal_mepc_read() {
   return 0;
 }
 
-static inline void or1k_mtspr(unsigned long int  spr, unsigned long int  value) {       
+static inline void hal_mtspr(unsigned long int  spr, unsigned long int  value) {       
   __asm__ __volatile__ ("l.mtspr\t\t%0,%1,0": : "r" (spr), "r" (value));
 }
 
@@ -146,6 +147,7 @@ static inline void hal_irq_restore(int state)
 static inline void hal_irq_enable()
 {
 }
+#endif
 
 /*
  * PERFORMANCE COUNTERS
@@ -157,52 +159,54 @@ static inline void hal_irq_enable()
 
 #define PCER_NB_EVENTS SPR_PCER_NB_EVENTS
 #define PCER_ALL_EVENTS_MASK SPR_PCER_ALL_EVENTS_MASK
+#define CSR_PCER_ALL_EVENTS_MASK PCER_ALL_EVENTS_MASK
 #define PCMR_ACTIVE SPR_PCMR_ACTIVE
 #define PCMR_SATURATE SPR_PCMR_SATURATE
  
+
 /* Configure the active events. eventMask is an OR of events got through SPR_PCER_EVENT_MASK */
 static inline void cpu_perf_conf_events(unsigned int eventMask)
 {
-  or1k_mtspr(SPR_PCER, eventMask);
+  hal_mtspr(SPR_PCER, eventMask);
 }
 
 /* Return events configuration */
 static inline unsigned int cpu_perf_conf_events_get()
 {
-  return or1k_mfspr(SPR_PCER);
+  return hal_mfspr(SPR_PCER);
 }
 
 /* Configure the mode. confMask is an OR of all SPR_PCMR_* macros */
 static inline void cpu_perf_conf(unsigned int confMask)
 {
-  or1k_mtspr(SPR_PCMR, confMask);
+  hal_mtspr(SPR_PCMR, confMask);
 }
 
 /* Starts counting in all counters. As this is using the mode register,
  * the rest of the config can be given through conf parameter */
 static inline void cpu_perf_start(unsigned int conf) {
-  or1k_mtspr(SPR_PCMR, SPR_PCMR_ACTIVE | conf);
+  hal_mtspr(SPR_PCMR, SPR_PCMR_ACTIVE | conf);
 }
 
 /* Stops counting in all counters. As this is using the mode register,
  * the rest of the config can be given through conf parameter */
 static inline void cpu_perf_stop(unsigned int conf) {
-  or1k_mtspr(SPR_PCMR, conf);
+  hal_mtspr(SPR_PCMR, conf);
 }
 
 /* Set the specified counter to the specified value */
 static inline void cpu_perf_set(unsigned int counterId, unsigned int value) {
-  or1k_mtspr(SPR_PCCR(counterId), value);
+  hal_mtspr(SPR_PCCR(counterId), value);
 }
 
 /* Set all counters to the specified value */
 static inline void cpu_perf_setall(unsigned int value) {
-  or1k_mtspr(SPR_PCCR(31), value);
+  hal_mtspr(SPR_PCCR(31), value);
 }
 
 /* Return the value of the specified counter */
 static inline unsigned int cpu_perf_get(unsigned int counterId) {
-  return or1k_mfspr(SPR_PCCR(counterId));
+  return hal_mfspr(SPR_PCCR(counterId));
 }
 
 static inline char *cpu_perf_name(int event) {
@@ -232,8 +236,6 @@ static inline char *cpu_perf_name(int event) {
 static inline unsigned int __builtin_bitinsert(unsigned int dst, unsigned int src, unsigned int size, unsigned int off) {
   return ((dst & ~(((1<<size)-1)<<off)) | (src << off));
 }
-
-#endif
 
 
 #endif
