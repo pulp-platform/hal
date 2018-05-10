@@ -87,9 +87,11 @@ static inline void hal_bridge_write(hal_bridge_req_t *req, int file, void* ptr, 
   req->write.len = len;
 }
 
-static inline void hal_bridge_fb_open(hal_bridge_req_t *req, int width, int height, int format)
+static inline void hal_bridge_fb_open(hal_bridge_req_t *req, int name_len, const char* name, int width, int height, int format)
 {
   req->type = HAL_BRIDGE_REQ_FB_OPEN;
+  req->fb_open.name_len = name_len;
+  req->fb_open.name = (uint32_t)(long)name;
   req->fb_open.width = width;
   req->fb_open.height = height;
   req->fb_open.format = format;
