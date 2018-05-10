@@ -87,6 +87,25 @@ static inline void hal_bridge_write(hal_bridge_req_t *req, int file, void* ptr, 
   req->write.len = len;
 }
 
+static inline void hal_bridge_fb_open(hal_bridge_req_t *req, int width, int height, int format)
+{
+  req->type = HAL_BRIDGE_REQ_FB_OPEN;
+  req->fb_open.width = width;
+  req->fb_open.height = height;
+  req->fb_open.format = format;
+}
+
+static inline void hal_bridge_fb_update(hal_bridge_req_t *req, uint64_t fb, unsigned int addr, int posx, int posy, int width, int height)
+{
+  req->type = HAL_BRIDGE_REQ_FB_UPDATE;
+  req->fb_update.screen = fb;
+  req->fb_update.addr = addr;
+  req->fb_update.posx = posx;
+  req->fb_update.posy = posy;
+  req->fb_update.width = width;
+  req->fb_update.height = height;
+}
+
 
 static inline void hal_debug_flush_printf(hal_debug_struct_t *debug_struct) {
   while(*(volatile uint32_t *)&debug_struct->pending_putchar);
