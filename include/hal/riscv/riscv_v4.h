@@ -82,8 +82,21 @@ static inline unsigned int hal_spr_read(unsigned int reg)
 
 
 
-//extern volatile uint64_t mcause __attribute__((csr(0x342)));
+#if defined(__LLVM__)
+
+#define csr_read(csr)           \
+({                \
+  register unsigned int __v;       \
+  __asm__ __volatile__ ("csrr %0, " #csr      \
+            : "=r" (__v));      \
+  __v;              \
+})
+
+#define hal_mepc_read() csr_read(0x341)
+
+#else
 #define hal_mepc_read() hal_spr_read(CSR_MEPC)
+#endif
 
 static inline unsigned int core_id() {
   int hart_id;
