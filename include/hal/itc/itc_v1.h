@@ -92,7 +92,8 @@ static inline void hal_itc_wait_for_event_noirq(unsigned int mask) {
 
   int end = 0;
   do {
-    unsigned int state = hal_spr_read_then_clr(0x300, 0x1<<3);
+
+    unsigned int state = hal_irq_disable();
     if ((hal_itc_status_value_get() & mask) == 0) {
       hal_itc_enable_set(mask);
       asm volatile ("wfi");
@@ -101,7 +102,7 @@ static inline void hal_itc_wait_for_event_noirq(unsigned int mask) {
       hal_itc_status_clr(mask);
       end = 1;
     }
-    hal_spr_write(0x300, state);
+    hal_irq_restore(state);
   } while (!end);
 }
 
@@ -111,13 +112,13 @@ static inline void hal_itc_wait_for_event(unsigned int mask) {
 
   int end = 0;
   do {
-    unsigned int state = hal_spr_read_then_clr(0x300, 0x1<<3);
+    unsigned int state = hal_irq_disable();
     if ((hal_itc_ack_value_get() & mask) == 0) {
       asm volatile ("wfi");
     } else {
       end = 1;
     }
-    hal_spr_write(0x300, state);
+    hal_irq_restore(state);
   } while (!end);
   hal_itc_ack_clr(mask);
 }
