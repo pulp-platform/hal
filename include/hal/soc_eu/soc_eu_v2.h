@@ -37,11 +37,13 @@ static inline void soc_eu_eventMask_reset(unsigned int first_reg) {
 
 static inline void soc_eu_eventMask_setEvent(int evt, unsigned int first_reg) {
   unsigned int reg = first_reg + (evt / 32 * 4);
+  evt = evt % 32;
   soc_eu_eventMask_set(reg, soc_eu_eventMask_get(reg) & ~(1 << evt));
 }
 
 static inline void soc_eu_eventMask_clearEvent(int evt, unsigned int first_reg) {
   unsigned int reg = first_reg + (evt / 32 * 4);
+  evt = evt % 32;
   soc_eu_eventMask_set(reg, soc_eu_eventMask_get(reg) | (1 << evt));
 }
 
