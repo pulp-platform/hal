@@ -24,7 +24,6 @@
 #include "hal/udma/udma_v2.h"
 #include "hal/apb_soc/apb_soc_v3.h"
 #include "hal/fll/fll_v1.h"
-#include "hal/rom/rom_v2.h"
 #include "archi/stdout/stdout_v3.h"
 #include "hal/gpio/gpio_v2.h"
 
