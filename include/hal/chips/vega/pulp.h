@@ -13,7 +13,7 @@
 #include "hal/riscv/riscv_v4.h"
 #include "hal/eu/eu_v3.h"
 #include "hal/itc/itc_v1.h"
-#include "hal/dma/mchan_v6.h"
+#include "hal/dma/mchan_v7.h"
 #include "hal/timer/timer_v2.h"
 #include "hal/soc_eu/soc_eu_v2.h"
 #include "hal/udma/udma_v3.h"
