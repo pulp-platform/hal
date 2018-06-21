@@ -51,7 +51,7 @@ static inline unsigned int hal_timer_fc_addr(int id, int sub_id)
 
 static inline unsigned int hal_timer_addr(int id, int sub_id)
 {
-  return ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_BIT + id * PLP_TIMER_AREA_SIZE + sub_id * 4;
+  return ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + id * PLP_TIMER_AREA_SIZE + sub_id * 4;
 }
 
 static inline unsigned int hal_timer_conf_get(unsigned int addr)
@@ -336,37 +336,37 @@ static inline void stop_timer_high() {
 #ifdef ARCHI_HAS_FC
 
 static inline void set_timer_fc_clock_low_32K_no_prescaler() {
-  if (hal_is_fc()) plp_fc_timer_raw_conf_low(plp_fc_timer_raw_conf_low_get() | (1<<PLP_TIMER_CLOCK_SOURCE_OFFSET));
+  if (hal_is_fc()) plp_fc_timer_raw_conf_low(plp_fc_timer_raw_conf_low_get() | (1<<PLP_TIMER_CLOCK_SOURCE_BIT));
 }
 
 static inline void set_timer_fc_clock_high_32K_no_prescaler() {
-  if (hal_is_fc()) plp_fc_timer_raw_conf_high(plp_fc_timer_raw_conf_high_get() | (1<<PLP_TIMER_CLOCK_SOURCE_OFFSET));
+  if (hal_is_fc()) plp_fc_timer_raw_conf_high(plp_fc_timer_raw_conf_high_get() | (1<<PLP_TIMER_CLOCK_SOURCE_BIT));
 }
 
 static inline void set_timer_fc_clock_low_fll_and_prescaler() {
-  if (hal_is_fc()) plp_fc_timer_raw_conf_low(plp_fc_timer_raw_conf_low_get() | (0<<PLP_TIMER_CLOCK_SOURCE_OFFSET));
+  if (hal_is_fc()) plp_fc_timer_raw_conf_low(plp_fc_timer_raw_conf_low_get() | (0<<PLP_TIMER_CLOCK_SOURCE_BIT));
 }
 
 static inline void set_timer_fc_clock_high_fll_and_prescaler() {
-  if (hal_is_fc()) plp_fc_timer_raw_conf_high(plp_fc_timer_raw_conf_high_get() | (0<<PLP_TIMER_CLOCK_SOURCE_OFFSET));
+  if (hal_is_fc()) plp_fc_timer_raw_conf_high(plp_fc_timer_raw_conf_high_get() | (0<<PLP_TIMER_CLOCK_SOURCE_BIT));
 }
 
 #else
 
 static inline void set_timer_clock_low_32K_no_prescaler() {
-  if (hal_is_fc()) plp_timer_raw_conf_low(plp_timer_raw_conf_low_get() | (1<<PLP_TIMER_CLOCK_SOURCE_OFFSET));
+  if (hal_is_fc()) plp_timer_raw_conf_low(plp_timer_raw_conf_low_get() | (1<<PLP_TIMER_CLOCK_SOURCE_BIT));
 }
 
 static inline void set_timer_clock_high_32K_no_prescaler() {
-  if (hal_is_fc()) plp_timer_raw_conf_high(plp_timer_raw_conf_high_get() | (1<<PLP_TIMER_CLOCK_SOURCE_OFFSET));
+  if (hal_is_fc()) plp_timer_raw_conf_high(plp_timer_raw_conf_high_get() | (1<<PLP_TIMER_CLOCK_SOURCE_BIT));
 }
 
 static inline void set_timer_clock_low_fll_and_prescaler() {
-  if (hal_is_fc()) plp_timer_raw_conf_low(plp_timer_raw_conf_low_get() | (0<<PLP_TIMER_CLOCK_SOURCE_OFFSET));
+  if (hal_is_fc()) plp_timer_raw_conf_low(plp_timer_raw_conf_low_get() | (0<<PLP_TIMER_CLOCK_SOURCE_BIT));
 }
 
 static inline void set_timer_clock_high_fll_and_prescaler() {
-  if (hal_is_fc()) plp_timer_raw_conf_high(plp_timer_raw_conf_high_get() | (0<<PLP_TIMER_CLOCK_SOURCE_OFFSET));
+  if (hal_is_fc()) plp_timer_raw_conf_high(plp_timer_raw_conf_high_get() | (0<<PLP_TIMER_CLOCK_SOURCE_BIT));
 }
 
 #endif
