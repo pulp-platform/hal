@@ -30,16 +30,16 @@ static inline unsigned int hal_timer_conf_prep(
   int one_shot, int clk_source, int prescaler_enable, int prescaler, int mode_64)
 {
   return
-      (enable << PLP_TIMER_ENABLE_OFFSET)
-    | (reset << PLP_TIMER_RESET_OFFSET)
-    | (irq_enable << PLP_TIMER_IRQ_ENABLE_OFFSET)
-    | (event_mask << PLP_TIMER_IEM_OFFSET)
-    | (cmp_clr << PLP_TIMER_CMP_CLR_OFFSET)
-    | (one_shot << PLP_TIMER_ONE_SHOT_OFFSET)
-    | (clk_source << PLP_TIMER_CLOCK_SOURCE_OFFSET)
-    | (prescaler_enable << PLP_TIMER_PRESCALER_ENABLE_OFFSET)
-    | (prescaler << PLP_TIMER_PRESCALER_VALUE_OFFSET)
-    | (mode_64 << PLP_TIMER_64_OFFSET);
+      (enable << PLP_TIMER_ENABLE_BIT)
+    | (reset << PLP_TIMER_RESET_BIT)
+    | (irq_enable << PLP_TIMER_IRQ_ENABLE_BIT)
+    | (event_mask << PLP_TIMER_IEM_BIT)
+    | (cmp_clr << PLP_TIMER_CMP_CLR_BIT)
+    | (one_shot << PLP_TIMER_ONE_SHOT_BIT)
+    | (clk_source << PLP_TIMER_CLOCK_SOURCE_BIT)
+    | (prescaler_enable << PLP_TIMER_PRESCALER_ENABLE_BIT)
+    | (prescaler << PLP_TIMER_PRESCALER_VALUE_BIT)
+    | (mode_64 << PLP_TIMER_64_BIT);
 }
 
 #if defined(ARCHI_FC_TIMER_ADDR)
@@ -51,17 +51,17 @@ static inline unsigned int hal_timer_fc_addr(int id, int sub_id)
 
 static inline unsigned int hal_timer_addr(int id, int sub_id)
 {
-  return ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + id * PLP_TIMER_AREA_SIZE + sub_id * 4;
+  return ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_BIT + id * PLP_TIMER_AREA_SIZE + sub_id * 4;
 }
 
 static inline unsigned int hal_timer_conf_get(unsigned int addr)
 {
-  return pulp_read32(addr + PLP_TIMER_CFG_LO);
+  return pulp_read32(addr + PLP_TIMER_CFG_REG_LO);
 }
 
 static inline void hal_timer_conf_set(unsigned int addr, unsigned int value)
 {
-  pulp_write32(addr + PLP_TIMER_CFG_LO, value);
+  pulp_write32(addr + PLP_TIMER_CFG_REG_LO, value);
 }
 
 static inline void hal_timer_conf(
@@ -73,18 +73,18 @@ static inline void hal_timer_conf(
     enable, reset, irq_enable, event_mask, cmp_clr, one_shot, clk_source,
     prescaler_enable, prescaler, mode_64
   );
-  pulp_write32(timer_base + PLP_TIMER_CFG_LO, conf);
+  pulp_write32(timer_base + PLP_TIMER_CFG_REG_LO, conf);
 }
 
 static inline unsigned int hal_timer_count_get(unsigned int addr)
 {
-  return pulp_read32(addr + PLP_TIMER_CNT_LO);
+  return pulp_read32(addr + PLP_TIMER_VALUE_LO);
 }
 
 static inline void hal_timer_count_set(
   unsigned int addr, unsigned int value)
 {
-  pulp_write32(addr + PLP_TIMER_CNT_LO, value);
+  pulp_write32(addr + PLP_TIMER_VALUE_LO, value);
 }
 
 static inline unsigned long long hal_timer_count_get_64(unsigned int addr)
@@ -96,9 +96,9 @@ static inline unsigned long long hal_timer_count_get_64(unsigned int addr)
   // part could get incremented while we are reading the LSB.
   // To solve that we iterate until we see a stable value in MSB.
   while (1) {
-    msb = pulp_read32(addr + PLP_TIMER_CNT_HI);
-    lsb = pulp_read32(addr + PLP_TIMER_CNT_LO);
-    if (pulp_read32(addr + PLP_TIMER_CNT_HI) == msb) break;
+    msb = pulp_read32(addr + PLP_TIMER_VALUE_HI);
+    lsb = pulp_read32(addr + PLP_TIMER_VALUE_LO);
+    if (pulp_read32(addr + PLP_TIMER_VALUE_HI) == msb) break;
   }
 
   return (((unsigned long long)msb) << 32) | lsb;
@@ -107,8 +107,8 @@ static inline unsigned long long hal_timer_count_get_64(unsigned int addr)
 static inline void hal_timer_count_set_64(
   unsigned int addr, unsigned long long value)
 {
-  pulp_write32(addr + PLP_TIMER_CNT_LO, (int)value);
-  pulp_write32(addr + PLP_TIMER_CNT_HI, (int)(value >> 32));
+  pulp_write32(addr + PLP_TIMER_VALUE_LO, (int)value);
+  pulp_write32(addr + PLP_TIMER_VALUE_HI, (int)(value >> 32));
 }
 
 static inline unsigned int hal_timer_cmp_get(unsigned int addr)
@@ -137,15 +137,15 @@ static inline void hal_timer_start(unsigned int addr)
 static inline unsigned int plp_timer_conf_get(char enable, char reset, char irq_enable, char event_mask, char cmp_clr, char one_shot, char prescaler_enable, char prescaler, char mode_64)
 {
   return
-      (enable << PLP_TIMER_ENABLE_OFFSET)
-    | (reset << PLP_TIMER_RESET_OFFSET)
-    | (irq_enable << PLP_TIMER_IRQ_ENABLE_OFFSET)
-    | (event_mask << PLP_TIMER_IEM_OFFSET)
-    | (cmp_clr << PLP_TIMER_CMP_CLR_OFFSET)
-    | (one_shot << PLP_TIMER_ONE_SHOT_OFFSET)
-    | (prescaler_enable << PLP_TIMER_PRESCALER_ENABLE_OFFSET)
-    | (prescaler << PLP_TIMER_PRESCALER_VALUE_OFFSET)
-    | (mode_64 << PLP_TIMER_64_OFFSET);
+      (enable << PLP_TIMER_ENABLE_BIT)
+    | (reset << PLP_TIMER_RESET_BIT)
+    | (irq_enable << PLP_TIMER_IRQ_ENABLE_BIT)
+    | (event_mask << PLP_TIMER_IEM_BIT)
+    | (cmp_clr << PLP_TIMER_CMP_CLR_BIT)
+    | (one_shot << PLP_TIMER_ONE_SHOT_BIT)
+    | (prescaler_enable << PLP_TIMER_PRESCALER_ENABLE_BIT)
+    | (prescaler << PLP_TIMER_PRESCALER_VALUE_BIT)
+    | (mode_64 << PLP_TIMER_64_BIT);
 }
 
 static inline void __plp_timer_conf(unsigned int addr, char enable, char reset, char irq_enable, char event_mask, char cmp_clr, char one_shot, char prescaler_enable, char prescaler, char mode_64)
@@ -156,70 +156,70 @@ static inline void __plp_timer_conf(unsigned int addr, char enable, char reset, 
 #ifdef ARCHI_HAS_FC
 static inline void plp_fc_timer_raw_conf_low(unsigned int conf)
 {
-  pulp_write32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CFG_LO, conf);
+  pulp_write32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CFG_REG_LO, conf);
 }
 #endif
 
 static inline void plp_timer_raw_conf_low(unsigned int conf)
 {
-  pulp_write32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CFG_LO, conf);
+  pulp_write32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CFG_REG_LO, conf);
 }
 
 #ifdef ARCHI_HAS_FC
 static inline unsigned int plp_fc_timer_raw_conf_low_get()
 {
-  return pulp_read32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CFG_LO);
+  return pulp_read32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CFG_REG_LO);
 }
 #endif
 
 static inline unsigned int plp_timer_raw_conf_low_get()
 {
-  return pulp_read32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CFG_LO);
+  return pulp_read32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CFG_REG_LO);
 }
 
 #ifdef ARCHI_HAS_FC
 static inline void plp_fc_timer_raw_conf_high(unsigned int conf)
 {
-  pulp_write32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CFG_HI, conf);
+  pulp_write32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CFG_REG_HI, conf);
 }
 #endif
 
 static inline void plp_timer_raw_conf_high(unsigned int conf)
 {
-  pulp_write32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CFG_HI, conf);
+  pulp_write32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CFG_REG_HI, conf);
 }
 
 #ifdef ARCHI_HAS_FC
 static inline unsigned int plp_fc_timer_raw_conf_high_get()
 {
-  return pulp_read32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CFG_HI);
+  return pulp_read32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CFG_REG_HI);
 }
 #endif
 
 static inline unsigned int plp_timer_raw_conf_high_get()
 {
-  return pulp_read32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CFG_HI);
+  return pulp_read32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CFG_REG_HI);
 }
 
 static inline void plp_timer_conf_low(char enable, char reset, char irq_enable, char event_mask, char cmp_clr, char one_shot, char prescaler_enable, char prescaler, char mode_64)
 {
-  __plp_timer_conf(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CFG_LO, enable, reset, irq_enable, event_mask, cmp_clr, one_shot, prescaler_enable, prescaler, mode_64);
+  __plp_timer_conf(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CFG_REG_LO, enable, reset, irq_enable, event_mask, cmp_clr, one_shot, prescaler_enable, prescaler, mode_64);
 }
 
 static inline void plp_timer_conf_high(char enable, char reset, char irq_enable, char event_mask, char cmp_clr, char one_shot, char prescaler_enable, char prescaler)
 {
-  __plp_timer_conf(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CFG_HI, enable, reset, irq_enable, event_mask, cmp_clr, one_shot, prescaler_enable, prescaler, 0);
+  __plp_timer_conf(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CFG_REG_HI, enable, reset, irq_enable, event_mask, cmp_clr, one_shot, prescaler_enable, prescaler, 0);
 }
 
 #ifdef ARCHI_HAS_FC
 static inline void plp_fc_timer_conf_low(char enable, char reset, char irq_enable, char event_mask, char cmp_clr, char one_shot, char prescaler_enable, char prescaler, char mode_64)
 {
-  __plp_timer_conf(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CFG_LO, enable, reset, irq_enable, event_mask, cmp_clr, one_shot, prescaler_enable, prescaler, mode_64);
+  __plp_timer_conf(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CFG_REG_LO, enable, reset, irq_enable, event_mask, cmp_clr, one_shot, prescaler_enable, prescaler, mode_64);
 }
 
 static inline void plp_fc_timer_conf_high(char enable, char reset, char irq_enable, char event_mask, char cmp_clr, char one_shot, char prescaler_enable, char prescaler)
 {
-  __plp_timer_conf(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CFG_HI, enable, reset, irq_enable, event_mask, cmp_clr, one_shot, prescaler_enable, prescaler, 0);
+  __plp_timer_conf(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CFG_REG_HI, enable, reset, irq_enable, event_mask, cmp_clr, one_shot, prescaler_enable, prescaler, 0);
 }
 
 #endif
@@ -251,41 +251,41 @@ static inline void plp_fc_timer_cmp_high(int cmp)
 #ifdef ARCHI_HAS_FC
 
 static inline void plp_fc_timer_set_count_low(unsigned int value) {
-  pulp_write32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CNT_LO, value);
+  pulp_write32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_VALUE_LO, value);
 }
 
 static inline void plp_fc_timer_set_count_high(unsigned int value) {
-  pulp_write32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CNT_HI, value);
+  pulp_write32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_VALUE_HI, value);
 }
 
 #endif
 
 static inline void plp_timer_set_count_low(unsigned int value) {
-  pulp_write32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CNT_LO, value);
+  pulp_write32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_VALUE_LO, value);
 }
 
 static inline void plp_timer_set_count_high(unsigned int value) {
-  pulp_write32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CNT_HI, value);
+  pulp_write32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_VALUE_HI, value);
 }
 
 #ifdef ARCHI_HAS_FC
 
 static inline int plp_fc_timer_get_count_low() {
-  return pulp_read32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CNT_LO);
+  return pulp_read32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_VALUE_LO);
 }
 
 static inline int plp_fc_timer_get_count_high() {
-  return pulp_read32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_CNT_HI);
+  return pulp_read32(ARCHI_FC_TIMER_ADDR + PLP_TIMER_VALUE_HI);
 }
 
 #endif
 
 static inline int plp_timer_get_count_low() {
-  return pulp_read32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CNT_LO);
+  return pulp_read32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_VALUE_LO);
 }
 
 static inline int plp_timer_get_count_high() {
-  return pulp_read32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_CNT_HI);
+  return pulp_read32(ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + PLP_TIMER_VALUE_HI);
 }
 
 #if !defined(ARCHI_HAS_FC) || defined(ARCHI_HAS_FC_ALIAS)
