@@ -54,10 +54,12 @@ static inline unsigned int hal_timer_cl_addr(int id, int sub_id)
   return ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_TIMER_OFFSET + id * PLP_TIMER_AREA_SIZE + sub_id * 4;
 }
 
+#ifdef ARCHI_CL_CID
 static inline unsigned int hal_timer_cl_addr_glob(int id, int sub_id)
 {
   return ARCHI_CLUSTER_PERIPHERALS_GLOBAL_ADDR(ARCHI_CL_CID) + ARCHI_TIMER_OFFSET + id * PLP_TIMER_AREA_SIZE + sub_id * 4;
 }
+#endif
 
 static inline unsigned int hal_timer_conf_get(unsigned int addr)
 {
