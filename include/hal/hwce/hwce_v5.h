@@ -26,124 +26,16 @@
 
 #define NB_HWCE 1
 
-/*
- * Control and generic configuration register layout
- * =====================================================================
- *  # reg |  bits   |   bitmask    ||  content
- * -------+---------+--------------++-----------------------------------
- *     0  |  31: 0  |  0xffffffff  ||  TRIGGER
- *     1  |  31: 0  |  0xffffffff  ||  ACQUIRE
- *     2  |  31: 0  |  0xffffffff  ||  EVT_ENABLE
- *     3  |  31: 0  |  0xffffffff  ||  STATUS
- *     4  |  31: 0  |  0xffffffff  ||  RUNNING_JOB
- *     5  |  31: 0  |  0xffffffff  ||  SOFT_CLEAR
- *   6-7  |         |              ||  Reserved
- *     8  |  31:16  |  0xffff0000  ||  WSTRIDE
- *        |  15:13  |  0x0000e000  ||  Reserved
- *        |  12:11  |  0x00001800  ||  CONV
- *        |  10: 9  |  0x00000600  ||  VECT
- *        |      8  |  0x00000100  ||  UNS
- *        |      7  |  0x00000080  ||  NY
- *        |      6  |  0x00000040  ||  LC
- *        |   5: 0  |  0x0000003f  ||  QF
- *     9  |  31: 0  |  0xffffffff  ||  GEN_CONFIG1 (reserved)
- * =====================================================================
- *
- * Register layout in case of NB_Y_STREAMS = 4
- * =====================================================================
- *  # reg |  bits   |   bitmask    ||  content
- * -------+---------+--------------++-----------------------------------
- *     0  |  31: 0  |  0xffffffff  ||  y trans_size
- *     1  |  31:16  |  0xffff0000  ||  y line_stride
- *        |  15: 0  |  0x0000ffff  ||  y line_length
- *     2  |  31:16  |  0xffff0000  ||  y feat_stride
- *        |  15: 0  |  0x0000ffff  ||  y feat_length
- *     3  |  31: 0  |  0xffffffff  ||  y_out[0] base_addr (logic y_out[3])
- *     4  |  31: 0  |  0xffffffff  ||  y_out[1] base_addr (logic y_out[2])
- *     5  |  31: 0  |  0xffffffff  ||  y_out[2] base_addr (logic y_out[1])
- *     6  |  31: 0  |  0xffffffff  ||  y_out[3] base_addr (logic y_out[0])
- *     7  |  31: 0  |  0xffffffff  ||  y_in[0] base_addr (logic y_in[3])
- *     8  |  31: 0  |  0xffffffff  ||  y_in[1] base_addr (logic y_in[2])
- *     9  |  31: 0  |  0xffffffff  ||  y_in[2] base_addr (logic y_in[1])
- *    10  |  31: 0  |  0xffffffff  ||  y_in[3] base_addr (logic y_in[0])
- *    11  |  31: 0  |  0xffffffff  ||  x trans_size
- *    12  |  31:16  |  0xffff0000  ||  x line_stride
- *        |  15: 0  |  0x0000ffff  ||  x line_length
- *    13  |  31:16  |  0xffff0000  ||  x feat_stride
- *        |  15: 0  |  0x0000ffff  ||  x feat_length
- *    14  |  31: 0  |  0xffffffff  ||  x_in base_addr
- *    15  |  31: 0  |  0xffffffff  ||  weight base_addr
- *    16  |  31:16  |  0xffff0000  ||  constant to sum in no y_in mode   
- *        |  15:10  |  0x0000fa00  ||  Reserved
- *        |   9: 0  |  0x0000ffff  ||  linebuffer virtual length
- *    17  |  31:25  |  0xfe000000  ||  Reserved
- *        |     24  |  0x01000000  ||  loop order
- *        |  23:22  |  0x00c00000  ||  Reserved
- *        |  21:16  |  0x003f0000  ||  input feat map rolling parameter
- *        |  15:14  |  0x0000c000  ||  Reserved
- *        |  13: 8  |  0x00003f00  ||  input feat map rolling parameter
- *        |   7: 4  |  0x000000f0  ||  Reserved
- *        |   3: 0  |  0x0000000f  ||  vector disable mask
- * =====================================================================
- *
- */
-
-
-// This data structure represents context-dependent registers
-typedef struct {
-  unsigned       int y_trans_size;
-  unsigned short int y_line_length;
-  unsigned short int y_line_stride;
-  unsigned short int y_feat_length;
-  unsigned short int y_feat_stride;
-           short int *y_out3_ptr;
-           short int *y_out2_ptr;
-           short int *y_out1_ptr;
-           short int *y_out0_ptr;
-           short int *y_in3_ptr;
-           short int *y_in2_ptr;
-           short int *y_in1_ptr;
-           short int *y_in0_ptr;
-  unsigned       int x_trans_size;
-  unsigned short int x_line_length;
-  unsigned short int x_line_stride;
-  unsigned short int x_feat_length;
-  unsigned short int x_feat_stride;
-           short int *x_in_ptr;
-  unsigned       int weight_ptr;
-  unsigned       int constsum_linebuflen;
-  unsigned       int lo_wif_wof_vdis;
-} __attribute__((__packed__)) hwce_config_t;
-
-// This data structure represent other registers + unused mmap space
-typedef struct {
-  unsigned int trigger;
-  unsigned int acquire;
-  unsigned int sync_mode;
-  unsigned int status;
-  unsigned int running_job;
-  unsigned int soft_clear;
-  unsigned int reserved_mandatory_0;
-  unsigned int reserved_mandatory_1;
-  unsigned int wstride_conv_vect_uint_noyin_lin_qf;
-  unsigned int pix_shiftr_mode_shiftl;
-  unsigned int reserved_generic_2;
-  unsigned int reserved_generic_3;
-  unsigned int reserved_generic_4;
-  unsigned int reserved_generic_5;
-  unsigned int reserved_generic_6;
-  unsigned int reserved_generic_7;
-  hwce_config_t hwce_cfg;
-} __attribute__((__packed__)) hwce_mmap_t;
-
-// linebuffer width in 16-bit half-words
-#define HWCE_LBSIZE 32
+// if defined, use builtin bitinsert -- otherwise, implement in SW (slower :)
+#if defined(__riscv__) && !defined(RV_ISA_RV32)
+  #define __hwce_bitinsert __builtin_bitinsert
+#else
+  #define __hwce_bitinsert(a,b,c,d) (a | (((b << (32-c)) >> (32-c)) << d))
+#endif
 
 /* LOW-LEVEL HAL */
 #define HWCE_ADDR_BASE  ARCHI_HWCE_ADDR
 #define HWCE_ADDR_SPACE 0x00000100
-
-static volatile hwce_mmap_t *hwce_memory_map = (hwce_mmap_t *) (HWCE_ADDR_BASE);
 
 // For all the following functions we use __builtin_pulp_OffsetedWrite and __builtin_pulp_OffsetedRead
 // instead of classic load/store because otherwise the compiler is not able to correctly factorize
@@ -237,58 +129,73 @@ static inline void hwce_job_config1_set(unsigned int value) {
   HWCE_WRITE(value, HWCE_JOB_CONFIG1);
 }
 
+static inline void hwce_job_config2_set(unsigned int value) {
+  HWCE_WRITE(value, HWCE_JOB_CONFIG2);
+}
+
+static inline void hwce_th_base_addr_set(unsigned int value) {
+  HWCE_WRITE(value, HWCE_TH_BASE_ADDR);
+}
+
 static inline unsigned int hwce_stride_length_value(unsigned int stride, unsigned int length) {
   unsigned int res = 0;
-#if defined(__riscv__) && !defined(RV_ISA_RV32)
-  res = __builtin_bitinsert(0,   stride, 16, 16);
-  res = __builtin_bitinsert(res, length, 16, 0 );
-#endif
+  res = __hwce_bitinsert(0,   stride, 16, 16);
+  res = __hwce_bitinsert(res, length, 16, 0 );
   return res;
 }
 
 static inline unsigned int hwce_gen_config0_value(unsigned int wstride, unsigned int ncp, unsigned int conv, unsigned vect, unsigned int uns, unsigned int ny, unsigned int nf, unsigned int qf, unsigned int rnd) {
   unsigned int res;
-#if defined(__riscv__) && !defined(RV_ISA_RV32)
-  res = __builtin_bitinsert(0, wstride, 16, 16);
-  res = __builtin_bitinsert(res, rnd    , 1 , 14);
-  res = __builtin_bitinsert(res, ncp    , 1 , 13);
-  res = __builtin_bitinsert(res, conv   , 2 , 11);
-  res = __builtin_bitinsert(res, vect   , 2 , 9);
-  res = __builtin_bitinsert(res, uns    , 1 , 8);
-  res = __builtin_bitinsert(res, ny     , 1 , 7);
-  res = __builtin_bitinsert(res, nf     , 1 , 6);
-  res = __builtin_bitinsert(res, qf     , 6 , 0);
-#endif
+  res = __hwce_bitinsert(0, wstride, 16, 16);
+  res = __hwce_bitinsert(res, rnd    , 1 , 14);
+  res = __hwce_bitinsert(res, ncp    , 1 , 13);
+  res = __hwce_bitinsert(res, conv   , 2 , 11);
+  res = __hwce_bitinsert(res, vect   , 2 , 9);
+  res = __hwce_bitinsert(res, uns    , 1 , 8);
+  res = __hwce_bitinsert(res, ny     , 1 , 7);
+  res = __hwce_bitinsert(res, nf     , 1 , 6);
+  res = __hwce_bitinsert(res, qf     , 6 , 0);
   return res;
 }
  
-static inline unsigned int hwce_gen_config1_value(unsigned int pixshiftr, unsigned int pixmode, unsigned int pixshiftl) {
-  unsigned int res;
-#if defined(__riscv__) && !defined(RV_ISA_RV32)
-  res = __builtin_bitinsert(0, pixshiftr, 5, 16);
-  res = __builtin_bitinsert(res, pixmode  , 2, 8);
-  res = __builtin_bitinsert(res, pixshiftl, 5, 0);
-#endif
-  return res;
-}
- 
-static inline unsigned int hwce_job_config0_value(unsigned int noyconst, unsigned int lbuflen) {
+static inline unsigned int hwce_gen_config1_value(unsigned int qmodex, unsigned int qshiftx, unsigned int qmodey, unsigned int qshifty, unsigned int thstride) {
   unsigned int res = 0;
-#if defined(__riscv__) && !defined(RV_ISA_RV32)
-  res = __builtin_bitinsert(0, noyconst, 16, 16);
-  res = __builtin_bitinsert(res, lbuflen , 10, 0);
-#endif
+  res = __hwce_bitinsert(res, qmodex,   3, 29);
+  res = __hwce_bitinsert(res, qshiftx,  5, 24);
+  res = __hwce_bitinsert(res, qmodey,   3, 21);
+  res = __hwce_bitinsert(res, qshifty,  5, 16);
+  res = __hwce_bitinsert(res, thstride, 16, 0);
   return res;
 }
  
-static inline unsigned int hwce_job_config1_value(unsigned int lo, unsigned int wif, unsigned int wof, unsigned int vect_disable_mask) {
+static inline unsigned int hwce_job_config0_value(unsigned int noyconst, unsigned int lbuflen, unsigned int lbufskiphi,  unsigned int lbufskiplo) {
+  unsigned int res = 0;
+  res = __hwce_bitinsert(res, noyconst,   16, 16);
+  res = __hwce_bitinsert(res, lbufskiphi, 4,  12);
+  res = __hwce_bitinsert(res, lbufskiplo, 4,  8);
+  res = __hwce_bitinsert(res, lbuflen,    8,  0);
+  return res;
+}
+ 
+static inline unsigned int hwce_job_config1_value(unsigned int lo, unsigned int wif, unsigned int wof, unsigned int vect_disable_mask, unsigned int rect) {
   unsigned int res;
-#if defined(__riscv__) && !defined(RV_ISA_RV32)
-  res = __builtin_bitinsert(0, lo                 , 2 , 24);
-  res = __builtin_bitinsert(res, wif              , 6 , 16);
-  res = __builtin_bitinsert(res, wof              , 6, 8);
-  res = __builtin_bitinsert(res, vect_disable_mask, 4, 0);
-#endif
+  res = __hwce_bitinsert(0, lo                 , 2 , 24);
+  res = __hwce_bitinsert(res, rect             , 1 , 22);
+  res = __hwce_bitinsert(res, wif              , 6 , 16);
+  res = __hwce_bitinsert(res, wof              , 6, 8);
+  res = __hwce_bitinsert(res, vect_disable_mask, 4, 0);
+  return res;
+}
+ 
+static inline unsigned int hwce_job_config2_value(unsigned int bynfeat, unsigned int bye, unsigned int s2, unsigned int lbufprecnt, unsigned int xlrem, unsigned int ylrem, unsigned int ylen) {
+  unsigned int res;
+  res = __hwce_bitinsert(0, bynfeat            , 8 , 24);
+  res = __hwce_bitinsert(res, bye              , 1 , 23);
+  res = __hwce_bitinsert(res, s2               , 1 , 22);
+  res = __hwce_bitinsert(res, xlrem            , 2 , 20);
+  res = __hwce_bitinsert(res, ylrem            , 2 , 18);
+  res = __hwce_bitinsert(res, ylen             , 8 , 8);
+  res = __hwce_bitinsert(res, lbufprecnt       , 8 , 0);
   return res;
 }
 
@@ -311,11 +218,11 @@ static inline void hwce_soft_clear() {
   HWCE_WRITE(0, HWCE_SOFT_CLEAR);
 }
 
-static inline void plp_hwce_enable() {
+static inline void hwce_cg_enable() {
   *(volatile int*) (ARCHI_CLUSTER_CTRL_ADDR + (3 << 3)) |=  0xc00;
 }
 
-static inline void plp_hwce_disable() {
+static inline void hwce_cg_disable() {
   *(volatile int*) (ARCHI_CLUSTER_CTRL_ADDR + (3 << 3)) &= ~0xc00;
 }
 
