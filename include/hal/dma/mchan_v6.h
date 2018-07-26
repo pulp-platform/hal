@@ -307,6 +307,13 @@ static inline int plp_dma_memcpy(mchan_ext_t ext, unsigned int loc, unsigned sho
   return counter;
 }
 
+static inline int plp_dma_memcpy_priv(mchan_ext_t ext, unsigned int loc, unsigned short size, int ext2loc) {
+  unsigned int counter = plp_dma_counter_alloc();
+  unsigned int cmd = plp_dma_getCmd(ext2loc, size, PLP_DMA_1D, PLP_DMA_TRIG_EVT, PLP_DMA_NO_TRIG_IRQ, PLP_DMA_PRIV);
+  plp_dma_cmd_push(cmd, loc, ext);
+  return counter;
+}
+
 static inline int plp_dma_l1ToExt(mchan_ext_t ext, unsigned int loc, unsigned short size) {
   unsigned int counter = plp_dma_counter_alloc();
   unsigned int cmd = plp_dma_getCmd(PLP_DMA_LOC2EXT, size, PLP_DMA_1D, PLP_DMA_TRIG_EVT, PLP_DMA_NO_TRIG_IRQ, PLP_DMA_SHARED);
