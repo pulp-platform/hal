@@ -45,7 +45,7 @@ typedef struct {
     rab_l2_set_t    set;
 } rab_cfg_l2_val_t;
 
-/** @name Main RAB entry configuration functions
+/** @name Main RAB TLB entry configuration functions
  *
  * @{
  */
