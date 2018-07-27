@@ -17,6 +17,8 @@
 #ifndef __HAL_MAILBOX_V0_H__
 #define __HAL_MAILBOX_V0_H__
 
+#include "archi/mailbox/mailbox_v0.h"
+
 #define MAILBOX_VALID   (0)
 #define MAILBOX_FAIL    (-1)
 
