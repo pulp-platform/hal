@@ -24,5 +24,6 @@
 #include "hal/cluster_ctrl/cluster_ctrl_v2.h"
 #include "hal/icache/icache_ctrl_v2.h"
 #include "hal/apb_soc/apb_soc_v3.h"
+#include "hal/mailbox/mailbox_v0.h"
 
 #endif
