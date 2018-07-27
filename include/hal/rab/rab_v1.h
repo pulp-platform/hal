@@ -45,54 +45,12 @@ typedef struct {
     rab_l2_set_t    set;
 } rab_cfg_l2_val_t;
 
-/** Print a RAB configuration value to standard output.
+/** @name Main RAB entry configuration functions
+ *
+ * @{
+ */
 
-  \param    cfg_val Pointer to the struct on PULP containing the configuration.
-
-  \return   0 if printing was successful; negative value with an errno on errors.
-*/
-int print_rab_cfg_val(const rab_cfg_val_t* const cfg_val);
-
-/** Read a RAB configuration value to PULP.
-
-  \param    dst Pointer to the PULP struct in which the configuration shall be stored.
-  \param    src Pointer to the RAB configuration entry.
-
-  \return   0 if the RAB configuration value has been read successfully; negative value with an
-            errno on errors.
-*/
-static inline int read_rab_cfg_val(rab_cfg_val_t* const dst, const rab_cfg_t* const src)
-{
-    dst->va_start   = src->word[0];
-    dst->va_end     = src->word[2];
-    copy_phys_addr((phys_addr_t*)&(dst->offset), (phys_addr_t*)&(src->word[4]));
-    dst->flags      = (uint8_t)(src->word[6] & 0xFF);
-
-    return 0;
-}
-
-/** Write a RAB configuration value from PULP.
-
-  \param    dst Pointer to the RAB configuration entry.
-  \param    src Pointer to the PULP struct from which the configuration shall be read.
-
-  \return   0 if the RAB configuration value has been written successfully; negative value with an
-            errno on errors.
-*/
-static inline int write_rab_cfg_val(rab_cfg_t* const dst, const rab_cfg_val_t* const src)
-{
-    // Disable slice before writing the new configuration.
-    dst->word[6]    = 0;
-
-    dst->word[0]    = src->va_start;
-    dst->word[2]    = src->va_end;
-    copy_phys_addr((phys_addr_t*)&(dst->word[4]), (phys_addr_t*)&(src->offset));
-    dst->word[6]    = (0x000000FF) & (uint32_t)(src->flags);
-
-    return 0;
-}
-
-/** Configure a RAB slice.
+/** Configure a RAB L1 TLB slice.
 
   \param    begin           First virtual address to be mapped.
   \param    end             Address of the next byte after the last virtual address to be mapped.
@@ -106,6 +64,170 @@ static inline int write_rab_cfg_val(rab_cfg_t* const dst, const rab_cfg_val_t* c
   \return   0 if the RAB slice has been configured successfully; negative value with an errno on
             errors.
 */
+static inline int config_rab_slice(const virt_addr_t begin, const virt_addr_t const end,
+        const phys_addr_t* const phys_addr, rab_cfg_t* const rab_slice,
+        const unsigned char rdonly, const unsigned char cache_coherent);
+
+/** Configure a RAB L2 TLB entry.
+
+  \param    virt_pfn        Virtual page frame number to be mapped.
+  \param    phys_addr       Physical page frame number to which the L2 TLB entry shall map.
+  \param    l2_set          Index of the set in which the L2 TLB entry shall be configured.
+  \param    l2_set_off      Offset of the L2 TLB entry within the set to be configured.
+  \param    rdonly          Defines memory accesses through the new slice as read-only (if not 0) or
+                            as read-write (if 0).
+  \param    cache_coherent  Defines memory accesses through the new slice as coherent with the
+                            caches of the host (if not 0) or as not necessarily coherent (if 0).
+
+  \return   0 if the RAB L2 TLB entry has been configured successfully; negative value with an errno
+            on errors.
+*/
+static inline int config_rab_l2_entry(const virt_pfn_t virt_pfn,
+        const phys_pfn_t phys_pfn, const l2_set_t set, const unsigned char entry,
+        const unsigned char rdonly, const unsigned char cache_coherent);
+
+//!@}
+
+/** @name RAB TLB entry inspection functions
+ *
+ * @{
+ */
+
+/** Print a RAB L1 TLB configuration value to standard output.
+
+  \param    cfg_val Pointer to the struct on PULP containing the configuration.
+
+  \return   0 if printing was successful; negative value with an errno on errors.
+*/
+int print_rab_cfg_val(const rab_cfg_val_t* const cfg_val);
+
+/** Print the current RAB L1 TLB configuration.
+
+  \param    begin       Pointer to the first RAB slice to be printed.
+  \param    end         Pointer to the RAB slice after the last to be printed.
+  \param    only_valid  If 0, all RAB slices are printed; otherwise, only valid slices are printed.
+
+  \return   0 if the RAB configuration was printed successfully; negative value with an errno on
+            errors.
+*/
+int print_rab_cfg(const rab_cfg_t* const begin, const rab_cfg_t* const end,
+        const unsigned only_valid);
+
+/** Print a RAB L2 TLB configuration value to standard output.
+
+  \param    varam_ptr Pointer to the virtual address RAM of the L2 TLB entry to be configured.
+  \param    param_ptr Pointer to the physical address RAM of the L2 TLB entry to be configured.
+  \param    cfg_val   Pointer to the struct on PULP containing the configuration.
+
+  \return   0 if printing was successful; negative value with an errno on errors.
+*/
+int print_rab_cfg_l2_val(const rab_cfg_l2_varam_t* const varam_ptr,
+        const rab_cfg_l2_param_t* const param_ptr, const rab_cfg_l2_val_t* const cfg_val,
+        const unsigned char entry);
+
+//!@}
+
+/** @name Low-level RAB L1 and L2 TLB entry inspection and manipulation functions
+ *
+ * @{
+ */
+
+/** Read a RAB L1 TLB configuration value to PULP.
+
+  \param    dst Pointer to the PULP struct in which the configuration shall be stored.
+  \param    src Pointer to the RAB configuration entry.
+
+  \return   0 if the RAB configuration value has been read successfully; negative value with an
+            errno on errors.
+*/
+static inline int read_rab_cfg_val(rab_cfg_val_t* const dst, const rab_cfg_t* const src);
+
+/** Write a RAB L1 TLB configuration value from PULP.
+
+  \param    dst Pointer to the RAB configuration entry.
+  \param    src Pointer to the PULP struct from which the configuration shall be read.
+
+  \return   0 if the RAB configuration value has been written successfully; negative value with an
+            errno on errors.
+*/
+static inline int write_rab_cfg_val(rab_cfg_t* const dst, const rab_cfg_val_t* const src);
+
+/** Disable a RAB L1 TLB slice.
+
+  \param    rab_slice   Pointer to the RAB slice to be disabled.
+
+  \return   0 if the RAB slice has been disabled successfully; negative value with an errno on
+            errors.
+*/
+static inline int disable_rab_slice(rab_cfg_t* const rab_slice);
+
+/** Determine if a RAB L1 TLB slice is enabled.
+
+  \param    cfg_val     Pointer to the PULP representation of the RAB slice to be examined.
+
+  \return   0 if the RAB slice is disabled; 1 if the RAB slice is enabled; negative value with an
+            errno on errors.
+*/
+static inline int rab_slice_is_enabled(const rab_cfg_val_t* const cfg_val);
+
+/** Determine if a virtual address is in the address range of a RAB L1 TLB slice.
+
+  \param    cfg_val     Pointer to the PULP representation of the RAB slice to be examined.
+  \param    virt_addr   Virtual address to check for inclusion.
+
+  \return   0 if the virtual address is not in the address range of the RAB slice; 1 if it is;
+            negative value with an errno on errors.
+*/
+static inline int rab_slice_contains_virt_addr(const rab_cfg_val_t* const cfg_val,
+        const virt_addr_t virt_addr);
+
+/** Determine the L2 TLB set index of a virtual page frame number.
+
+  \param    virt_pfn    Virtual page frame number to determine the set index of.
+
+  \return   The L2 set index.
+*/
+static inline l2_set_t page_set(const virt_pfn_t virt_pfn);
+
+/** Write a RAB L2 TLB entry from PULP.
+
+  \param    varam_ptr Pointer to the virtual address RAM of the L2 TLB entry to be configured.
+  \param    param_ptr Pointer to the physical address RAM of the L2 TLB entry to be configured.
+  \param    src       Pointer to the PULP struct from which the configuration shall be read.
+
+  \return   0 if the RAB configuration value has been written successfully; negative value with an
+            errno on errors.
+*/
+static inline int write_rab_cfg_l2_val(rab_cfg_l2_varam_t* const varam_ptr,
+        rab_cfg_l2_param_t* const param_ptr, rab_cfg_l2_val_t * const src);
+
+//!@}
+
+/// @cond IMPLEM
+
+static inline int read_rab_cfg_val(rab_cfg_val_t* const dst, const rab_cfg_t* const src)
+{
+    dst->va_start   = src->word[0];
+    dst->va_end     = src->word[2];
+    copy_phys_addr((phys_addr_t*)&(dst->offset), (phys_addr_t*)&(src->word[4]));
+    dst->flags      = (uint8_t)(src->word[6] & 0xFF);
+
+    return 0;
+}
+
+static inline int write_rab_cfg_val(rab_cfg_t* const dst, const rab_cfg_val_t* const src)
+{
+    // Disable slice before writing the new configuration.
+    dst->word[6]    = 0;
+
+    dst->word[0]    = src->va_start;
+    dst->word[2]    = src->va_end;
+    copy_phys_addr((phys_addr_t*)&(dst->word[4]), (phys_addr_t*)&(src->offset));
+    dst->word[6]    = (0x000000FF) & (uint32_t)(src->flags);
+
+    return 0;
+}
+
 static inline int config_rab_slice(const virt_addr_t begin, const virt_addr_t const end,
         const phys_addr_t* const phys_addr, rab_cfg_t* const rab_slice,
         const unsigned char rdonly, const unsigned char cache_coherent)
@@ -137,89 +259,28 @@ static inline int config_rab_slice(const virt_addr_t begin, const virt_addr_t co
     return 0;
 }
 
-/** Disable a RAB slice.
-
-  \param    rab_slice   Pointer to the RAB slice to be disabled.
-
-  \return   0 if the RAB slice has been disabled successfully; negative value with an errno on
-            errors.
-*/
 static inline int disable_rab_slice(rab_cfg_t* const rab_slice)
 {
     rab_slice->word[6] = 0;
     return 0;
 }
 
-/** Determine if a RAB slice is enabled.
-
-  \param    cfg_val     Pointer to the PULP representation of the RAB slice to be examined.
-
-  \return   0 if the RAB slice is disabled; 1 if the RAB slice is enabled; negative value with an
-            errno on errors.
-*/
 static inline int rab_slice_is_enabled(const rab_cfg_val_t* const cfg_val)
 {
     return (cfg_val->flags & RAB_CFG_FLAG_EN) == RAB_CFG_FLAG_EN;
 }
 
-/** Determine if a virtual address is in the address range of a RAB slice.
-
-  \param    cfg_val     Pointer to the PULP representation of the RAB slice to be examined.
-  \param    virt_addr   Virtual address to check for inclusion.
-
-  \return   0 if the virtual address is not in the address range of the RAB slice; 1 if it is;
-            negative value with an errno on errors.
-*/
 static inline int rab_slice_contains_virt_addr(const rab_cfg_val_t* const cfg_val,
         const virt_addr_t virt_addr)
 {
     return (virt_addr >= cfg_val->va_start) && (virt_addr <= cfg_val->va_end);
 }
 
-/** Print the current RAB configuration.
-
-  \param    begin       Pointer to the first RAB slice to be printed.
-  \param    end         Pointer to the RAB slice after the last to be printed.
-  \param    only_valid  If 0, all RAB slices are printed; otherwise, only valid slices are printed.
-
-  \return   0 if the RAB configuration was printed successfully; negative value with an errno on
-            errors.
-*/
-int print_rab_cfg(const rab_cfg_t* const begin, const rab_cfg_t* const end,
-        const unsigned only_valid);
-
-/** Determine the L2 TLB set index of a virtual page frame number.
-
-  \param    virt_pfn    Virtual page frame number to determine the set index of.
-
-  \return   The L2 set index.
-*/
 static inline l2_set_t page_set(const virt_pfn_t virt_pfn)
 {
     return (l2_set_t)(virt_pfn & RAB_CFG_L2_SET_PFN_MASK);
 }
 
-/** Print a RAB L2 TLB configuration value to standard output.
-
-  \param    varam_ptr Pointer to the virtual address RAM of the L2 TLB entry to be configured.
-  \param    param_ptr Pointer to the physical address RAM of the L2 TLB entry to be configured.
-  \param    cfg_val   Pointer to the struct on PULP containing the configuration.
-
-  \return   0 if printing was successful; negative value with an errno on errors.
-*/
-int print_rab_cfg_l2_val(const rab_cfg_l2_varam_t* const varam_ptr,
-        const rab_cfg_l2_param_t* const param_ptr, const rab_cfg_l2_val_t* const cfg_val,
-        const unsigned char entry);
-
-/** Write a RAB L2 TLB entry from PULP.
-
-  \param    varam_ptr Pointer to the virtual address RAM of the L2 TLB entry to be configured.
-  \param    param_ptr Pointer to the physical address RAM of the L2 TLB entry to be configured.
-  \param    src       Pointer to the PULP struct from which the configuration shall be read.
-
-  \return   0 if the RAB configuration value has been written successfully; negative value with an
-            errno on errors.
-*/
 static inline int write_rab_cfg_l2_val(rab_cfg_l2_varam_t* const varam_ptr,
         rab_cfg_l2_param_t* const param_ptr, rab_cfg_l2_val_t * const src)
 {
@@ -232,20 +293,6 @@ static inline int write_rab_cfg_l2_val(rab_cfg_l2_varam_t* const varam_ptr,
     return 0;
 }
 
-/** Configure a RAB L2 TLB entry.
-
-  \param    virt_pfn        Virtual page frame number to be mapped.
-  \param    phys_addr       Physical page frame number to which the L2 TLB entry shall map.
-  \param    l2_set          Index of the set in which the L2 TLB entry shall be configured.
-  \param    l2_set_off      Offset of the L2 TLB entry within the set to be configured.
-  \param    rdonly          Defines memory accesses through the new slice as read-only (if not 0) or
-                            as read-write (if 0).
-  \param    cache_coherent  Defines memory accesses through the new slice as coherent with the
-                            caches of the host (if not 0) or as not necessarily coherent (if 0).
-
-  \return   0 if the RAB L2 TLB entry has been configured successfully; negative value with an errno
-            on errors.
-*/
 static inline int config_rab_l2_entry(const virt_pfn_t virt_pfn,
         const phys_pfn_t phys_pfn, const l2_set_t set, const unsigned char entry,
         const unsigned char rdonly, const unsigned char cache_coherent)
@@ -277,5 +324,17 @@ static inline int config_rab_l2_entry(const virt_pfn_t virt_pfn,
 
     return 0;
 }
+
+static inline int read_rab_cfg_val(rab_cfg_val_t* const dst, const rab_cfg_t* const src)
+{
+    dst->va_start   = src->word[0];
+    dst->va_end     = src->word[2];
+    copy_phys_addr((phys_addr_t*)&(dst->offset), (phys_addr_t*)&(src->word[4]));
+    dst->flags      = (uint8_t)(src->word[6] & 0xFF);
+
+    return 0;
+}
+
+/// @endcond
 
 #endif
