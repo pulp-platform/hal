@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef __HAL_RAB_V0_H__
-#define __HAL_RAB_V0_H__
+#ifndef __HAL_RAB_V1_H__
+#define __HAL_RAB_V1_H__
 
 #include "archi-host/phys_addr.h"
 #include "archi-host/virt_addr.h"
