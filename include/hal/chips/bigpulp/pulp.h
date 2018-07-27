@@ -26,6 +26,4 @@
 #include "hal/apb_soc/apb_soc_v3.h"
 #include "hal/mailbox/mailbox_v0.h"
 
-//#include "hal/mailbox/mailbox_v0.h"
-
 #endif
