@@ -95,7 +95,7 @@ static inline int config_rab_slice(const virt_addr_t begin, const virt_addr_t co
             on errors.
 */
 static inline int config_rab_l2_entry(const virt_pfn_t virt_pfn,
-        const phys_pfn_t phys_pfn, const l2_set_t set, const unsigned char entry,
+        const phys_pfn_t phys_pfn, const rab_l2_set_t set, const unsigned char entry,
         const unsigned char rdonly, const unsigned char cache_coherent);
 
 //!@}
@@ -199,7 +199,7 @@ static inline int rab_slice_contains_virt_addr(const rab_cfg_val_t* const cfg_va
 
   \return   The L2 set index.
 */
-static inline l2_set_t page_set(const virt_pfn_t virt_pfn);
+static inline rab_l2_set_t page_set(const virt_pfn_t virt_pfn);
 
 /** Write a RAB L2 TLB entry from PULP.
 
@@ -304,9 +304,9 @@ static inline int rab_slice_contains_virt_addr(const rab_cfg_val_t* const cfg_va
     return (virt_addr >= cfg_val->va_start) && (virt_addr <= cfg_val->va_end);
 }
 
-static inline l2_set_t page_set(const virt_pfn_t virt_pfn)
+static inline rab_l2_set_t page_set(const virt_pfn_t virt_pfn)
 {
-    return (l2_set_t)(virt_pfn & RAB_CFG_L2_SET_PFN_MASK);
+    return (rab_l2_set_t)(virt_pfn & RAB_CFG_L2_SET_PFN_MASK);
 }
 
 static inline int write_rab_cfg_l2_val(rab_cfg_l2_varam_t* const varam_ptr,
@@ -322,7 +322,7 @@ static inline int write_rab_cfg_l2_val(rab_cfg_l2_varam_t* const varam_ptr,
 }
 
 static inline int config_rab_l2_entry(const virt_pfn_t virt_pfn,
-        const phys_pfn_t phys_pfn, const l2_set_t set, const unsigned char entry,
+        const phys_pfn_t phys_pfn, const rab_l2_set_t set, const unsigned char entry,
         const unsigned char rdonly, const unsigned char cache_coherent)
 {
     int ret = 0;
