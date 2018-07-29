@@ -27,9 +27,9 @@
 
 #include <stdint.h>     // for uint8_t
 
-#ifndef LOG_LVL_RAB_CFG
-    #define LOG_LVL_RAB_CFG LOG_ERR
-#endif
+//#ifndef LOG_LVL_RAB_CFG
+//    #define LOG_LVL_RAB_CFG LOG_ERR
+//#endif
 
 // This struct represents the L1 TLB entry information for PULP.
 typedef struct {
@@ -278,11 +278,11 @@ static inline int config_rab_slice(const virt_addr_t begin, const virt_addr_t co
     if (ret < 0)
         return ret;
 
-    #if LOG_LVL_RAB_CFG >= LOG_DEBUG
-        printf("[DD] Configured RAB slice:\n");
-        print_rab_cfg_val(&cfg);
-        printf("\n");
-    #endif
+    //#if LOG_LVL_RAB_CFG >= LOG_DEBUG
+    //    printf("[DD] Configured RAB slice:\n");
+    //    print_rab_cfg_val(&cfg);
+    //    printf("\n");
+    //#endif
 
     return 0;
 }
@@ -344,11 +344,11 @@ static inline int config_rab_l2_entry(const virt_pfn_t virt_pfn,
     if (ret < 0)
         return ret;
 
-    #if ( (LOG_LVL_RAB_CFG >= LOG_DEBUG) || (LOG_LVL_VMM >= LOG_TRACE) )
-        printf("[DD] Configured RAB L2 TLB entry:\n");
-        print_rab_cfg_l2_val(varam_ptr, param_ptr, &cfg, entry);
-        printf("\n");
-    #endif
+    //#if ( (LOG_LVL_RAB_CFG >= LOG_DEBUG) || (LOG_LVL_VMM >= LOG_TRACE) )
+    //    printf("[DD] Configured RAB L2 TLB entry:\n");
+    //    print_rab_cfg_l2_val(varam_ptr, param_ptr, &cfg, entry);
+    //    printf("\n");
+    //#endif
 
     return 0;
 }
