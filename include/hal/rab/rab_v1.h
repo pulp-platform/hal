@@ -76,7 +76,7 @@ typedef struct rab_miss_t {
   \return   0 if the RAB slice has been configured successfully; negative value with an errno on
             errors.
 */
-static inline int config_rab_slice(const virt_addr_t begin, const virt_addr_t const end,
+static inline int config_rab_slice(const virt_addr_t begin, const virt_addr_t end,
         const phys_addr_t* const phys_addr, rab_cfg_t* const rab_slice,
         const unsigned char rdonly, const unsigned char cache_coherent);
 
@@ -256,7 +256,7 @@ static inline int write_rab_cfg_val(rab_cfg_t* const dst, const rab_cfg_val_t* c
     return 0;
 }
 
-static inline int config_rab_slice(const virt_addr_t begin, const virt_addr_t const end,
+static inline int config_rab_slice(const virt_addr_t begin, const virt_addr_t end,
         const phys_addr_t* const phys_addr, rab_cfg_t* const rab_slice,
         const unsigned char rdonly, const unsigned char cache_coherent)
 {
