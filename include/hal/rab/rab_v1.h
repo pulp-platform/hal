@@ -22,6 +22,8 @@
 
 #include "archi/rab/rab_v1.h"
 
+#include "hal/pulp.h"   // ARCHI_RAB_CFG_ADDR
+
 #include <stdint.h>     // for uint8_t
 
 #ifndef LOG_LVL_RAB_CFG
@@ -44,6 +46,15 @@ typedef struct {
     uint8_t         flags;
     rab_l2_set_t    set;
 } rab_cfg_l2_val_t;
+
+// This struct represents a miss in the RAB Miss Hardware FIFO.
+typedef struct rab_miss_t {
+    virt_addr_t   virt_addr;
+    int           core_id;
+    int           cluster_id;
+    int           intra_cluster_id;
+    uint8_t       is_prefetch;
+} rab_miss_t;
 
 /** @name Main RAB TLB entry configuration functions
  *
@@ -203,6 +214,22 @@ static inline int write_rab_cfg_l2_val(rab_cfg_l2_varam_t* const varam_ptr,
 
 //!@}
 
+/** @name RAB Miss Hardware FIFO interface functions
+ *
+ * @{
+ */
+
+/** Get miss from RAB Miss FIFO.
+
+  \param    rab_miss    Pointer through which the RAB miss shall be returned.
+
+  \return   0 on success; negative value with an errno on errors.  -ENOENT is returned in case the
+            FIFO is empty; in this case, `rab_miss` is not changed.
+*/
+static inline int get_rab_miss(rab_miss_t* const rab_miss);
+
+//!@}
+
 /// @cond IMPLEM
 
 static inline int read_rab_cfg_val(rab_cfg_val_t* const dst, const rab_cfg_t* const src)
@@ -331,6 +358,28 @@ static inline int read_rab_cfg_val(rab_cfg_val_t* const dst, const rab_cfg_t* co
     dst->va_end     = src->word[2];
     copy_phys_addr((phys_addr_t*)&(dst->offset), (phys_addr_t*)&(src->word[4]));
     dst->flags      = (uint8_t)(src->word[6] & 0xFF);
+
+    return 0;
+}
+
+static inline int get_rab_miss(rab_miss_t* const rab_miss)
+{
+    int ret = 0;
+
+    const uint32_t meta_fifo_val = *(volatile uint32_t*)((unsigned)ARCHI_RAB_CFG_ADDR + 8);
+    if (BF_GET(meta_fifo_val, 31, 1) != 0)
+        return -ENOENT; // FIFO is empty.
+
+    rab_miss->virt_addr = *(volatile virt_addr_t*)(ARCHI_RAB_CFG_ADDR);
+
+    rab_miss->core_id = BF_GET(meta_fifo_val, 0, AXI_ID_WIDTH_CORE);
+    rab_miss->intra_cluster_id = BF_GET(meta_fifo_val, AXI_ID_WIDTH_CORE, AXI_ID_WIDTH_CLUSTER);
+    rab_miss->cluster_id
+            = BF_GET(meta_fifo_val, AXI_ID_WIDTH_CLUSTER + AXI_ID_WIDTH_CORE, AXI_ID_WIDTH_SOC);
+
+    const uint32_t axi_user
+            = BF_GET(meta_fifo_val, AXI_ID_WIDTH + RAB_PORT_ID_WIDTH, AXI_USER_WIDTH);
+    rab_miss->is_prefetch = (axi_user == BIT_MASK_GEN(AXI_USER_WIDTH) ? 1 : 0);
 
     return 0;
 }
