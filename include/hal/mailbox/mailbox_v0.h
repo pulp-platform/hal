@@ -35,77 +35,8 @@ static inline void mailbox_data_write(unsigned int value)
   pulp_write32(MAILBOX_REG_WRDATA, value);
 }
 
-static inline void __sleep(volatile int iter)
-{ 
-  while(iter--);
-}
-
-static inline int mailbox_read(unsigned int *ptr)
-{
-  uint32_t status;
-
-  if ( mailbox_data_read() & 0x1 )
-  {
-    volatile uint32_t timeout = 1000000000;
-    status = 1;
-    // wait for not empty or timeout
-    while ( status && (timeout > 0) )
-    {
-      __sleep(50);
-      timeout--;
-      status = mailbox_status_read() & 0x1;
-    }
-    if ( status )
-      return MAILBOX_FAIL;
-  }
-
-  *ptr = mailbox_data_read();
-  return MAILBOX_VALID;
-}
-
-static inline int mailbox_read_timed(unsigned int *ptr, unsigned int t)
-{
-  uint32_t status;
-
-  if ( mailbox_data_read() & 0x1 )
-  {
-    volatile uint32_t timeout = t;
-    status = 1;
-    // wait for not empty or timeout
-    while ( status && (timeout > 0) )
-    {
-      __sleep(50);
-      timeout--;
-      status = mailbox_status_read() & 0x1;
-    }
-    if ( status )
-      return MAILBOX_FAIL;
-  }
-
-  *ptr = mailbox_data_read();
-  return MAILBOX_VALID;
-}
-
-static int mailbox_write(unsigned int value)
-{
-  uint32_t status;
-
-  if ( mailbox_status_read() & 0x2 )
-  {
-    volatile uint32_t timeout = 1000000000;
-    status = 1;
-    // wait for not full or timeout
-    while ( status && (timeout > 0) ) {
-      __sleep(50);
-      timeout--;
-      status = mailbox_status_read() & 0x2;
-    }
-    if ( status )
-      return MAILBOX_FAIL;
-  }
-
-  mailbox_data_write(value);
-  return MAILBOX_VALID;
-}
+int mailbox_read(unsigned int *ptr);
+int mailbox_read_timed(unsigned int *ptr, unsigned int t);
+int mailbox_write(unsigned int value);
 
 #endif
