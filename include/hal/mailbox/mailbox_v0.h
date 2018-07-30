@@ -17,6 +17,9 @@
 #ifndef __HAL_MAILBOX_V0_H__
 #define __HAL_MAILBOX_V0_H__
 
+#include "hal/pulp.h"
+#include "archi/mailbox/mailbox_v0.h"
+
 #define MAILBOX_VALID   (0)
 #define MAILBOX_FAIL    (-1)
 
@@ -86,7 +89,7 @@ static inline int hal_mailbox_read_timed(unsigned int *ptr, unsigned int t)
   return MAILBOX_VALID;
 }
 
-static int hal_mailbox_write(unsigned int value)
+int hal_mailbox_write(unsigned int value) 
 {
   uint32_t status;
 
