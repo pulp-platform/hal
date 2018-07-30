@@ -20,23 +20,56 @@
 #define MAILBOX_VALID   (0)
 #define MAILBOX_FAIL    (-1)
 
+/** Read the status register of the mailbox.
+
+  \return  The value of the status register of the mailbox.
+ */
 static inline unsigned int mailbox_status_read()
 {
   return pulp_read32(MAILBOX_REG_STATUS);
 }
 
+/** Read one word from the mailbox.
+
+  \return  The value read from the mailbox.
+ */
 static inline unsigned int mailbox_data_read()
 {
   return pulp_read32(MAILBOX_REG_RDDATA);
 }
 
+/** Write one word to the mailbox.
+
+  \param   value  The value to be written to the mailbox.
+ */
 static inline void mailbox_data_write(unsigned int value)
 {
   pulp_write32(MAILBOX_REG_WRDATA, value);
 }
 
+/** Try to read one word from the mailbox.
+
+  \param   ptr  The address to which the value read from the mailbox shall be written.
+
+  \return  MAILBOX_VALID if a value could be read successfully, MAILBOX_FAIL otherwise.
+ */
 int mailbox_read(unsigned int *ptr);
+
+/** Try to read one word from the mailbox. Poll at most t times.
+
+  \param   ptr  The address to which the value read from the mailbox shall be written.
+  \param   t    The maximum number of polling iterations.
+
+  \return  MAILBOX_VALID if a value could be read successfully, MAILBOX_FAIL otherwise.
+ */
 int mailbox_read_timed(unsigned int *ptr, unsigned int t);
+
+/** Try to write one word to the mailbox.
+
+  \param   value  The value to be written to the mailbox.
+
+  \return  MAILBOX_VALID if a value could be written successfully, MAILBOX_FAIL otherwise.
+ */
 int mailbox_write(unsigned int value);
 
 #endif

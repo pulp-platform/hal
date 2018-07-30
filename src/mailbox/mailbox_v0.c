@@ -16,6 +16,10 @@
 
 #include "hal/mailbox/mailbox_v0.h"
 
+/** Wait for 'iter' iterations.
+
+  \param   iter  The number of iterations to wait for. Each iteration is approximately clock 10 cycles.
+ */
 static void __sleep(volatile int iter)
 {
   while(iter--);
