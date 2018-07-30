@@ -20,17 +20,17 @@
 #define MAILBOX_VALID   (0)
 #define MAILBOX_FAIL    (-1)
 
-static inline unsigned int hal_mailbox_status_read()
+static inline unsigned int mailbox_status_read()
 {
   return pulp_read32(MAILBOX_REG_STATUS);
 }
 
-static inline unsigned int hal_mailbox_data_read()
+static inline unsigned int mailbox_data_read()
 {
   return pulp_read32(MAILBOX_REG_RDDATA);
 }
 
-static inline void hal_mailbox_data_write(unsigned int value)
+static inline void mailbox_data_write(unsigned int value)
 {
   pulp_write32(MAILBOX_REG_WRDATA, value);
 }
@@ -40,11 +40,11 @@ static inline void __sleep(volatile int iter)
   while(iter--);
 }
 
-static inline int hal_mailbox_read(unsigned int *ptr)
+static inline int mailbox_read(unsigned int *ptr)
 {
   uint32_t status;
 
-  if ( hal_mailbox_data_read() & 0x1 )
+  if ( mailbox_data_read() & 0x1 )
   {
     volatile uint32_t timeout = 1000000000;
     status = 1;
@@ -53,21 +53,21 @@ static inline int hal_mailbox_read(unsigned int *ptr)
     {
       __sleep(50);
       timeout--;
-      status = hal_mailbox_status_read() & 0x1;
+      status = mailbox_status_read() & 0x1;
     }
     if ( status )
       return MAILBOX_FAIL;
   }
 
-  *ptr = hal_mailbox_data_read();  
+  *ptr = mailbox_data_read();
   return MAILBOX_VALID;
 }
 
-static inline int hal_mailbox_read_timed(unsigned int *ptr, unsigned int t)
+static inline int mailbox_read_timed(unsigned int *ptr, unsigned int t)
 {
   uint32_t status;
 
-  if ( hal_mailbox_data_read() & 0x1 )
+  if ( mailbox_data_read() & 0x1 )
   {
     volatile uint32_t timeout = t;
     status = 1;
@@ -76,21 +76,21 @@ static inline int hal_mailbox_read_timed(unsigned int *ptr, unsigned int t)
     {
       __sleep(50);
       timeout--;
-      status = hal_mailbox_status_read() & 0x1;
+      status = mailbox_status_read() & 0x1;
     }
     if ( status )
       return MAILBOX_FAIL;
   }
 
-  *ptr = hal_mailbox_data_read();  
+  *ptr = mailbox_data_read();
   return MAILBOX_VALID;
 }
 
-static int hal_mailbox_write(unsigned int value)
+static int mailbox_write(unsigned int value)
 {
   uint32_t status;
 
-  if ( hal_mailbox_status_read() & 0x2 )
+  if ( mailbox_status_read() & 0x2 )
   {
     volatile uint32_t timeout = 1000000000;
     status = 1;
@@ -98,13 +98,13 @@ static int hal_mailbox_write(unsigned int value)
     while ( status && (timeout > 0) ) {
       __sleep(50);
       timeout--;
-      status = hal_mailbox_status_read() & 0x2;
+      status = mailbox_status_read() & 0x2;
     }
     if ( status )
       return MAILBOX_FAIL;
   }
 
-  hal_mailbox_data_write(value);
+  mailbox_data_write(value);
   return MAILBOX_VALID;
 }
 
