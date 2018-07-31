@@ -50,13 +50,43 @@ static inline void mailbox_data_write(unsigned int value)
   pulp_write32(MAILBOX_REG_WRDATA, value);
 }
 
+/** Wait for 'iter' iterations.
+
+  \param   iter  The number of iterations to wait for. Each iteration is approximately clock 10 cycles.
+ */
+static inline void __sleep(volatile int iter)
+{
+  while(iter--);
+}
+
 /** Try to read one word from the mailbox.
 
   \param   ptr  The address to which the value read from the mailbox shall be written.
 
   \return  MAILBOX_VALID if a value could be read successfully, MAILBOX_FAIL otherwise.
  */
-int mailbox_read(unsigned int *ptr);
+static inline int mailbox_read(unsigned int *ptr)
+{
+  uint32_t status;
+
+  if ( mailbox_data_read() & 0x1 )
+  {
+    volatile uint32_t timeout = 1000000000;
+    status = 1;
+    // wait for not empty or timeout
+    while ( status && (timeout > 0) )
+    {
+      __sleep(50);
+      timeout--;
+      status = mailbox_status_read() & 0x1;
+    }
+    if ( status )
+      return MAILBOX_FAIL;
+  }
+
+  *ptr = mailbox_data_read();
+  return MAILBOX_VALID;
+}
 
 /** Try to read one word from the mailbox. Poll at most t times.
 
@@ -65,7 +95,28 @@ int mailbox_read(unsigned int *ptr);
 
   \return  MAILBOX_VALID if a value could be read successfully, MAILBOX_FAIL otherwise.
  */
-int mailbox_read_timed(unsigned int *ptr, unsigned int t);
+static inline int mailbox_read_timed(unsigned int *ptr, unsigned int t)
+{
+  uint32_t status;
+
+  if ( mailbox_data_read() & 0x1 )
+  {
+    volatile uint32_t timeout = t;
+    status = 1;
+    // wait for not empty or timeout
+    while ( status && (timeout > 0) )
+    {
+      __sleep(50);
+      timeout--;
+      status = mailbox_status_read() & 0x1;
+    }
+    if ( status )
+      return MAILBOX_FAIL;
+  }
+
+  *ptr = mailbox_data_read();
+  return MAILBOX_VALID;
+}
 
 /** Try to write one word to the mailbox.
 
@@ -73,6 +124,26 @@ int mailbox_read_timed(unsigned int *ptr, unsigned int t);
 
   \return  MAILBOX_VALID if a value could be written successfully, MAILBOX_FAIL otherwise.
  */
-int mailbox_write(unsigned int value);
+static inline int mailbox_write(unsigned int value)
+{
+  uint32_t status;
+
+  if ( mailbox_status_read() & 0x2 )
+  {
+    volatile uint32_t timeout = 1000000000;
+    status = 1;
+    // wait for not full or timeout
+    while ( status && (timeout > 0) ) {
+      __sleep(50);
+      timeout--;
+      status = mailbox_status_read() & 0x2;
+    }
+    if ( status )
+      return MAILBOX_FAIL;
+  }
+
+  mailbox_data_write(value);
+  return MAILBOX_VALID;
+}
 
 #endif
