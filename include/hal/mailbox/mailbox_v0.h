@@ -89,7 +89,7 @@ static inline int hal_mailbox_read_timed(unsigned int *ptr, unsigned int t)
   return MAILBOX_VALID;
 }
 
-int hal_mailbox_write(unsigned int value) 
+static inline int hal_mailbox_write(unsigned int value) 
 {
   uint32_t status;
 
