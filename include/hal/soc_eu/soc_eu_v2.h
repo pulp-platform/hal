@@ -20,6 +20,12 @@
 #include "archi/pulp.h"
 #include "archi/soc_eu/soc_eu_v2.h"
 
+static inline unsigned int hal_soc_eu_addr(void)
+{
+  return ARCHI_SOC_EU_ADDR;
+}
+
+
 static inline void soc_eu_eventMask_set(unsigned int reg, unsigned int value) {
   pulp_write32(ARCHI_SOC_EU_ADDR + reg, value);
 }
@@ -71,10 +77,31 @@ static inline void soc_eu_clEventMask_clearEvent(int clusterId, int evt) {
   soc_eu_eventMask_clearEvent(evt, SOC_CL_FIRST_MASK);
 }
 
-
-
 static inline void soc_eu_genEventMask(unsigned int mask) {
   pulp_write32(ARCHI_SOC_EU_ADDR + SOC_EU_EVENT, mask);
 }
 
+
+
+/** \brief Select event to be propagated to timer unit event input.
+ *
+ * \param timer_id Choice timer Low (1) or High (0).
+ * \param mask Value on 8 bit to select the event id to be forwarded to the selected timer.
+ */
+static inline void soc_eu_selEventTimer(unsigned int timer_id, unsigned int mask) {
+  pulp_write32 (ARCHI_SOC_EU_ADDR + SOC_TIMER_SEL_HI + timer_id * 4
+            ,  (pulp_read32(ARCHI_SOC_EU_ADDR + SOC_TIMER_SEL_HI + timer_id * 4) & ~(SOC_TIMER_SEL_EVT_MASK << SOC_TIMER_SEL_EVT_SHIFT)) 
+              | (mask & SOC_TIMER_SEL_EVT_MASK));
+}
+
+/** \brief Activation of the event forward to timer feature.
+ *
+ * \param timer_id Choice timer Low (1) or High (0).
+ * \param val Value to enable/disable event forwarding to selected timer.
+ */
+static inline void soc_eu_setEnableEventTimer(unsigned int timer_id, unsigned int val) {
+  pulp_write32 (ARCHI_SOC_EU_ADDR + SOC_TIMER_SEL_HI + timer_id * 4
+            ,  (pulp_read32(ARCHI_SOC_EU_ADDR + SOC_TIMER_SEL_HI + timer_id * 4) & ~(1 << SOC_TIMER_SEL_ENABLE_SHIFT)) 
+              | val);
+}
 #endif
