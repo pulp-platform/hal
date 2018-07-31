@@ -23,92 +23,56 @@
 #define MAILBOX_VALID   (0)
 #define MAILBOX_FAIL    (-1)
 
-static inline unsigned int hal_mailbox_status_read()
+/** Read the status register of the mailbox.
+
+  \return  The value of the status register of the mailbox.
+ */
+static inline unsigned int mailbox_status_read()
 {
   return pulp_read32(MAILBOX_REG_STATUS);
 }
 
-static inline unsigned int hal_mailbox_data_read()
+/** Read one word from the mailbox.
+
+  \return  The value read from the mailbox.
+ */
+static inline unsigned int mailbox_data_read()
 {
   return pulp_read32(MAILBOX_REG_RDDATA);
 }
 
-static inline void hal_mailbox_data_write(unsigned int value)
+/** Write one word to the mailbox.
+
+  \param   value  The value to be written to the mailbox.
+ */
+static inline void mailbox_data_write(unsigned int value)
 {
   pulp_write32(MAILBOX_REG_WRDATA, value);
 }
 
-static inline void __sleep(volatile int iter)
-{ 
-  while(iter--);
-}
+/** Try to read one word from the mailbox.
 
-static inline int hal_mailbox_read(unsigned int *ptr)
-{
-  uint32_t status;
+  \param   ptr  The address to which the value read from the mailbox shall be written.
 
-  if ( hal_mailbox_data_read() & 0x1 )
-  {
-    volatile uint32_t timeout = 1000000000;
-    status = 1;
-    // wait for not empty or timeout
-    while ( status && (timeout > 0) )
-    {
-      __sleep(50);
-      timeout--;
-      status = hal_mailbox_status_read() & 0x1;
-    }
-    if ( status )
-      return MAILBOX_FAIL;
-  }
+  \return  MAILBOX_VALID if a value could be read successfully, MAILBOX_FAIL otherwise.
+ */
+int mailbox_read(unsigned int *ptr);
 
-  *ptr = hal_mailbox_data_read();  
-  return MAILBOX_VALID;
-}
+/** Try to read one word from the mailbox. Poll at most t times.
 
-static inline int hal_mailbox_read_timed(unsigned int *ptr, unsigned int t)
-{
-  uint32_t status;
+  \param   ptr  The address to which the value read from the mailbox shall be written.
+  \param   t    The maximum number of polling iterations.
 
-  if ( hal_mailbox_data_read() & 0x1 )
-  {
-    volatile uint32_t timeout = t;
-    status = 1;
-    // wait for not empty or timeout
-    while ( status && (timeout > 0) )
-    {
-      __sleep(50);
-      timeout--;
-      status = hal_mailbox_status_read() & 0x1;
-    }
-    if ( status )
-      return MAILBOX_FAIL;
-  }
+  \return  MAILBOX_VALID if a value could be read successfully, MAILBOX_FAIL otherwise.
+ */
+int mailbox_read_timed(unsigned int *ptr, unsigned int t);
 
-  *ptr = hal_mailbox_data_read();  
-  return MAILBOX_VALID;
-}
+/** Try to write one word to the mailbox.
 
-static inline int hal_mailbox_write(unsigned int value) 
-{
-  uint32_t status;
+  \param   value  The value to be written to the mailbox.
 
-  if ( hal_mailbox_status_read() & 0x2 )
-  {
-    volatile uint32_t timeout = 1000000000;
-    status = 1;
-    // wait for not full or timeout
-    while ( status && (timeout > 0) ) {
-      __sleep(50);
-      timeout--;
-      status = hal_mailbox_status_read() & 0x2;
-    }
-    if ( status )
-      return MAILBOX_FAIL;
-  }
-
-  hal_mailbox_data_write(value);
-  return MAILBOX_VALID;
-}
+  \return  MAILBOX_VALID if a value could be written successfully, MAILBOX_FAIL otherwise.
+ */
+int mailbox_write(unsigned int value);
 
 #endif
