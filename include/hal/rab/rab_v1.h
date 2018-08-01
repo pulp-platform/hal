@@ -233,7 +233,7 @@ static inline int get_rab_miss(rab_miss_t* const rab_miss);
 
 /// @cond IMPLEM
 
-static inline int read_rab_cfg_val(rab_cfg_val_t* const dst, const rab_cfg_t* const src)
+int read_rab_cfg_val(rab_cfg_val_t* const dst, const rab_cfg_t* const src)
 {
     dst->va_start   = src->word[0];
     dst->va_end     = src->word[2];
@@ -243,7 +243,7 @@ static inline int read_rab_cfg_val(rab_cfg_val_t* const dst, const rab_cfg_t* co
     return 0;
 }
 
-static inline int write_rab_cfg_val(rab_cfg_t* const dst, const rab_cfg_val_t* const src)
+int write_rab_cfg_val(rab_cfg_t* const dst, const rab_cfg_val_t* const src)
 {
     // Disable slice before writing the new configuration.
     dst->word[6]    = 0;
@@ -256,7 +256,7 @@ static inline int write_rab_cfg_val(rab_cfg_t* const dst, const rab_cfg_val_t* c
     return 0;
 }
 
-static inline int config_rab_slice(const virt_addr_t begin, const virt_addr_t end,
+int config_rab_slice(const virt_addr_t begin, const virt_addr_t end,
         const phys_addr_t* const phys_addr, rab_cfg_t* const rab_slice,
         const unsigned char rdonly, const unsigned char cache_coherent)
 {
@@ -287,29 +287,29 @@ static inline int config_rab_slice(const virt_addr_t begin, const virt_addr_t en
     return 0;
 }
 
-static inline int disable_rab_slice(rab_cfg_t* const rab_slice)
+int disable_rab_slice(rab_cfg_t* const rab_slice)
 {
     rab_slice->word[6] = 0;
     return 0;
 }
 
-static inline int rab_slice_is_enabled(const rab_cfg_val_t* const cfg_val)
+int rab_slice_is_enabled(const rab_cfg_val_t* const cfg_val)
 {
     return (cfg_val->flags & RAB_CFG_FLAG_EN) == RAB_CFG_FLAG_EN;
 }
 
-static inline int rab_slice_contains_virt_addr(const rab_cfg_val_t* const cfg_val,
+int rab_slice_contains_virt_addr(const rab_cfg_val_t* const cfg_val,
         const virt_addr_t virt_addr)
 {
     return (virt_addr >= cfg_val->va_start) && (virt_addr <= cfg_val->va_end);
 }
 
-static inline rab_l2_set_t page_set(const virt_pfn_t virt_pfn)
+rab_l2_set_t page_set(const virt_pfn_t virt_pfn)
 {
     return (rab_l2_set_t)(virt_pfn & RAB_CFG_L2_SET_PFN_MASK);
 }
 
-static inline int write_rab_cfg_l2_val(rab_cfg_l2_varam_t* const varam_ptr,
+int write_rab_cfg_l2_val(rab_cfg_l2_varam_t* const varam_ptr,
         rab_cfg_l2_param_t* const param_ptr, rab_cfg_l2_val_t * const src)
 {
     // Disable slice before writing the new configuration.
@@ -321,7 +321,7 @@ static inline int write_rab_cfg_l2_val(rab_cfg_l2_varam_t* const varam_ptr,
     return 0;
 }
 
-static inline int config_rab_l2_entry(const virt_pfn_t virt_pfn,
+int config_rab_l2_entry(const virt_pfn_t virt_pfn,
         const phys_pfn_t phys_pfn, const rab_l2_set_t set, const unsigned char entry,
         const unsigned char rdonly, const unsigned char cache_coherent)
 {
@@ -353,7 +353,7 @@ static inline int config_rab_l2_entry(const virt_pfn_t virt_pfn,
     return 0;
 }
 
-static inline int read_rab_cfg_val(rab_cfg_val_t* const dst, const rab_cfg_t* const src)
+int read_rab_cfg_val(rab_cfg_val_t* const dst, const rab_cfg_t* const src)
 {
     dst->va_start   = src->word[0];
     dst->va_end     = src->word[2];
@@ -363,7 +363,7 @@ static inline int read_rab_cfg_val(rab_cfg_val_t* const dst, const rab_cfg_t* co
     return 0;
 }
 
-static inline int get_rab_miss(rab_miss_t* const rab_miss)
+int get_rab_miss(rab_miss_t* const rab_miss)
 {
     int ret = 0;
 
