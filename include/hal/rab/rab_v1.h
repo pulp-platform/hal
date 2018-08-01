@@ -353,16 +353,6 @@ int config_rab_l2_entry(const virt_pfn_t virt_pfn,
     return 0;
 }
 
-int read_rab_cfg_val(rab_cfg_val_t* const dst, const rab_cfg_t* const src)
-{
-    dst->va_start   = src->word[0];
-    dst->va_end     = src->word[2];
-    copy_phys_addr((phys_addr_t*)&(dst->offset), (phys_addr_t*)&(src->word[4]));
-    dst->flags      = (uint8_t)(src->word[6] & 0xFF);
-
-    return 0;
-}
-
 int get_rab_miss(rab_miss_t* const rab_miss)
 {
     int ret = 0;
