@@ -15,6 +15,7 @@
  */
 
 #include "hal/rab/rab_v1.h"
+#include "archi-host/pgtable_hwdef.h"   // virt_pfn2addr()
 #include <inttypes.h>   // printf() identifiers
 #include "stdio.h"      // printf()
 

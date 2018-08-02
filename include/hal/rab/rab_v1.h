@@ -25,6 +25,7 @@
 #include "hal/pulp.h"   // ARCHI_RAB_CFG_ADDR
 #include "hal/utils.h"  // BIT_* functions
 
+#include <errno.h>      // ENOENT
 #include <stdint.h>     // for uint8_t
 
 //#ifndef LOG_LVL_RAB_CFG
