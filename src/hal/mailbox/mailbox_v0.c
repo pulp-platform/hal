@@ -29,7 +29,7 @@ int mailbox_read(unsigned int *ptr)
 {
   uint32_t status;
 
-  if ( mailbox_data_read() & 0x1 )
+  if ( mailbox_status_read() & 0x1 )
   {
     volatile uint32_t timeout = 1000000000;
     status = 1;
@@ -52,7 +52,7 @@ int mailbox_read_timed(unsigned int *ptr, unsigned int t)
 {
   uint32_t status;
 
-  if ( mailbox_data_read() & 0x1 )
+  if ( mailbox_status_read() & 0x1 )
   {
     volatile uint32_t timeout = t;
     status = 1;
