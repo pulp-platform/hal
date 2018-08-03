@@ -14,17 +14,27 @@
  * limitations under the License.
  */
 
-#ifndef __HAL_CHIPS_BIGPULP_PULP_H__
-#define __HAL_CHIPS_BIGPULP_PULP_H__
-
-#include "hal/riscv/riscv_v4.h"
-#include "hal/eu/eu_v3.h"
-#include "hal/dma/mchan_v6.h"
-#include "hal/timer/timer_v2.h"
-#include "hal/cluster_ctrl/cluster_ctrl_v2.h"
-#include "hal/icache/icache_ctrl_v2.h"
-#include "hal/apb_soc/apb_soc_v3.h"
-#include "hal/mailbox/mailbox_v0.h"
 #include "hal/tryx/tryx_v1.h"
 
-#endif
+#include "pulp.h"             // pulp_read32(), eu_evt_mask()
+#include "stdio.h"            // printf()
+
+void pulp_tryx_slowpath()
+{
+  int coreid = get_core_id();
+  unsigned int mask;
+
+  // save event mask
+  mask = pulp_read32(ARCHI_EU_DEMUX_ADDR + EU_CORE_MASK);
+
+  // only listen to wake-up event
+  eu_evt_mask(EVTMASK_RAB_WAKEUP);
+
+  // go to sleep, wait and clear
+  evt_read32(ARCHI_EU_DEMUX_ADDR, EU_CORE_EVENT_WAIT_CLEAR);
+
+  // restore the event mask
+  eu_evt_mask(mask);
+
+  return;
+}
