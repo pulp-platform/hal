@@ -19,9 +19,7 @@
 #include "pulp.h"             // pulp_read32(), eu_evt_mask()
 #include "stdio.h"            // printf()
 
-/** Go to sleep and wait for wake-up event.
- */
-static void pulp_tryx_slowpath()
+void pulp_tryx_slowpath()
 {
   int coreid = get_core_id();
   unsigned int mask;
@@ -39,76 +37,4 @@ static void pulp_tryx_slowpath()
   eu_evt_mask(mask);
 
   return;
-}
-
-unsigned int pulp_tryread(const unsigned int* const addr)
-{
-  unsigned int val;
-
-  int miss = pulp_tryread_noblock(addr, &val);
-  while (miss) {
-    pulp_tryx_slowpath();
-    miss = pulp_tryread_noblock(addr, &val);
-  }
-
-  return val;
-}
-
-int pulp_tryread_prefetch(const unsigned int* const addr)
-{
-  #if DEBUG_TRYX == 1
-    printf("read-prefetch of address 0x%X\n",(unsigned)addr);
-  #endif
-
-  pulp_tryx_set_prefetch();
-
-  // Issue a read through RAB.
-  #pragma GCC diagnostic push
-  #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-    const volatile unsigned int dummy = *(volatile unsigned int*)addr;
-  #pragma GCC diagnostic pop
-
-  if (pulp_tryx_has_slverr()) {
-    #if DEBUG_TRYX == 1
-      printf("miss on address 0x%X\n",(unsigned)addr);
-    #endif
-    return 1;
-  }
-
-  return 0;
-}
-
-void pulp_trywrite(unsigned int* const addr, const unsigned int val)
-{
-  int miss = pulp_trywrite_noblock(addr, val);
-  while (miss) {
-    pulp_tryx_slowpath();
-    miss = pulp_trywrite_noblock(addr, val);
-  }
-
-  return;
-}
-
-int pulp_trywrite_prefetch(unsigned int* const addr)
-{
-  #if DEBUG_TRYX == 1
-    printf("write-prefetch of address 0x%X\n",(unsigned)addr);
-  #endif
-
-  pulp_tryx_set_prefetch();
-
-  // Issue a write through RAB (to be discarded).
-  #pragma GCC diagnostic push
-  #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-    *(volatile unsigned int*)addr = 0x5000BAD1;
-  #pragma GCC diagnostic pop
-
-  if (pulp_tryx_has_slverr()) {
-    #if DEBUG_TRYX == 1
-      printf("miss on address 0x%X\n",(unsigned)addr);
-    #endif
-    return 1;
-  }
-
-  return 0;
 }

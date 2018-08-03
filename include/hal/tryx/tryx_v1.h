@@ -66,13 +66,28 @@ static inline int pulp_trywrite_noblock(unsigned int* const addr, const unsigned
   return pulp_tryx_has_slverr();
 }
 
+/** Go to sleep and wait for wake-up event.
+ */
+void pulp_tryx_slowpath();
+
 /** Read from an address and block until the read completes.
 
   \param   addr  The address that shall be read.
 
   \return  The data stored at that address.
  */
-unsigned int pulp_tryread(const unsigned int* const addr);
+static inline unsigned int pulp_tryread(const unsigned int* const addr)
+{
+  unsigned int val;
+
+  int miss = pulp_tryread_noblock(addr, &val);
+  while (miss) {
+    pulp_tryx_slowpath();
+    miss = pulp_tryread_noblock(addr, &val);
+  }
+
+  return val;
+}
 
 /** Try to read from a memory address without blocking in case it misses in the RAB and without
     causing a memory transaction. This function can be used to trigger the setup of a RAB slice
@@ -83,14 +98,45 @@ unsigned int pulp_tryread(const unsigned int* const addr);
   \return  0 if the read would succeed (i.e., a slice in the RAB exists for this address); 1 if
            the read resulted in a RAB miss; negative value with an errno on errors.
  */
-int pulp_tryread_prefetch(const unsigned int* const addr);
+static inline int pulp_tryread_prefetch(const unsigned int* const addr)
+{
+  #if DEBUG_TRYX == 1
+    printf("read-prefetch of address 0x%X\n",(unsigned)addr);
+  #endif
+
+  pulp_tryx_set_prefetch();
+
+  // Issue a read through RAB.
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+    const volatile unsigned int dummy = *(volatile unsigned int*)addr;
+  #pragma GCC diagnostic pop
+
+  if (pulp_tryx_has_slverr()) {
+    #if DEBUG_TRYX == 1
+      printf("miss on address 0x%X\n",(unsigned)addr);
+    #endif
+    return 1;
+  }
+
+  return 0;
+}
 
 /** Write to an address and block until the write completes.
 
   \param   addr  The address to which data shall be written.
   \param   val   The value that shall be written.
  */
-void pulp_trywrite(unsigned int* const addr, const unsigned int val);
+static inline void pulp_trywrite(unsigned int* const addr, const unsigned int val)
+{
+  int miss = pulp_trywrite_noblock(addr, val);
+  while (miss) {
+    pulp_tryx_slowpath();
+    miss = pulp_trywrite_noblock(addr, val);
+  }
+
+  return;
+}
 
 /** Try to write to a memory address without blocking in case it misses in the RAB and without
     causing a memory transaction. This function can be used to trigger the setup of a RAB slice
@@ -101,6 +147,28 @@ void pulp_trywrite(unsigned int* const addr, const unsigned int val);
   \return  0 if the write would succeed (i.e., a slice in the RAB exists for this address); 1 if
            the write resulted in a RAB miss; negative value with an errno on errors.
  */
-int pulp_trywrite_prefetch(unsigned int* const addr);
+static inline int pulp_trywrite_prefetch(unsigned int* const addr)
+{
+  #if DEBUG_TRYX == 1
+    printf("write-prefetch of address 0x%X\n",(unsigned)addr);
+  #endif
+
+  pulp_tryx_set_prefetch();
+
+  // Issue a write through RAB (to be discarded).
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+    *(volatile unsigned int*)addr = 0x5000BAD1;
+  #pragma GCC diagnostic pop
+
+  if (pulp_tryx_has_slverr()) {
+    #if DEBUG_TRYX == 1
+      printf("miss on address 0x%X\n",(unsigned)addr);
+    #endif
+    return 1;
+  }
+
+  return 0;
+}
 
 #endif
