@@ -59,17 +59,11 @@ static inline void __sleep(volatile int iter)
   while(iter--);
 }
 
-/** Try to read one word from the mailbox.
-
-  \param   ptr  The address to which the value read from the mailbox shall be written.
-
-  \return  MAILBOX_VALID if a value could be read successfully, MAILBOX_FAIL otherwise.
- */
 static inline int mailbox_read(unsigned int *ptr)
 {
   uint32_t status;
 
-  if ( mailbox_data_read() & 0x1 )
+  if ( mailbox_status_read() & 0x1 )
   {
     volatile uint32_t timeout = 1000000000;
     status = 1;
@@ -88,18 +82,11 @@ static inline int mailbox_read(unsigned int *ptr)
   return MAILBOX_VALID;
 }
 
-/** Try to read one word from the mailbox. Poll at most t times.
-
-  \param   ptr  The address to which the value read from the mailbox shall be written.
-  \param   t    The maximum number of polling iterations.
-
-  \return  MAILBOX_VALID if a value could be read successfully, MAILBOX_FAIL otherwise.
- */
 static inline int mailbox_read_timed(unsigned int *ptr, unsigned int t)
 {
   uint32_t status;
 
-  if ( mailbox_data_read() & 0x1 )
+  if ( mailbox_status_read() & 0x1 )
   {
     volatile uint32_t timeout = t;
     status = 1;
@@ -118,12 +105,6 @@ static inline int mailbox_read_timed(unsigned int *ptr, unsigned int t)
   return MAILBOX_VALID;
 }
 
-/** Try to write one word to the mailbox.
-
-  \param   value  The value to be written to the mailbox.
-
-  \return  MAILBOX_VALID if a value could be written successfully, MAILBOX_FAIL otherwise.
- */
 static inline int mailbox_write(unsigned int value)
 {
   uint32_t status;
