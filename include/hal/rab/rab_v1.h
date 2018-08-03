@@ -23,6 +23,7 @@
 #include "archi/rab/rab_v1.h"
 
 #include "hal/pulp.h"   // ARCHI_RAB_CFG_ADDR
+#include "hal/utils.h"  // BIT_* functions
 
 #include <stdint.h>     // for uint8_t
 
@@ -367,19 +368,19 @@ static inline int get_rab_miss(rab_miss_t* const rab_miss)
     int ret = 0;
 
     const uint32_t meta_fifo_val = *(volatile uint32_t*)((unsigned)ARCHI_RAB_CFG_ADDR + 8);
-    if (BF_GET(meta_fifo_val, 31, 1) != 0)
+    if (BIT_GET(meta_fifo_val, 31, 1) != 0)
         return -ENOENT; // FIFO is empty.
 
     rab_miss->virt_addr = *(volatile virt_addr_t*)(ARCHI_RAB_CFG_ADDR);
 
-    rab_miss->core_id = BF_GET(meta_fifo_val, 0, AXI_ID_WIDTH_CORE);
-    rab_miss->intra_cluster_id = BF_GET(meta_fifo_val, AXI_ID_WIDTH_CORE, AXI_ID_WIDTH_CLUSTER);
+    rab_miss->core_id = BIT_GET(meta_fifo_val, 0, AXI_ID_WIDTH_CORE);
+    rab_miss->intra_cluster_id = BIT_GET(meta_fifo_val, AXI_ID_WIDTH_CORE, AXI_ID_WIDTH_CLUSTER);
     rab_miss->cluster_id
-            = BF_GET(meta_fifo_val, AXI_ID_WIDTH_CLUSTER + AXI_ID_WIDTH_CORE, AXI_ID_WIDTH_SOC);
+            = BIT_GET(meta_fifo_val, AXI_ID_WIDTH_CLUSTER + AXI_ID_WIDTH_CORE, AXI_ID_WIDTH_SOC);
 
     const uint32_t axi_user
-            = BF_GET(meta_fifo_val, AXI_ID_WIDTH + RAB_PORT_ID_WIDTH, AXI_USER_WIDTH);
-    rab_miss->is_prefetch = (axi_user == BIT_MASK_GEN(AXI_USER_WIDTH) ? 1 : 0);
+            = BIT_GET(meta_fifo_val, AXI_ID_WIDTH + RAB_PORT_ID_WIDTH, AXI_USER_WIDTH);
+    rab_miss->is_prefetch = (axi_user == BIT_MASK_LSBS(AXI_USER_WIDTH) ? 1 : 0);
 
     return 0;
 }
