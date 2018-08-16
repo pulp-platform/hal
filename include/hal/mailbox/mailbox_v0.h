@@ -50,11 +50,11 @@ static inline void mailbox_data_write(unsigned int value)
   pulp_write32(MAILBOX_REG_WRDATA, value);
 }
 
-/** Try to read one word from the mailbox.
+/** Read one word from the mailbox; block if the mailbox is currently empty.
 
   \param   ptr  The address to which the value read from the mailbox shall be written.
 
-  \return  MAILBOX_VALID if a value could be read successfully, MAILBOX_FAIL otherwise.
+  \return  MAILBOX_VALID.
  */
 int mailbox_read(unsigned int *ptr);
 

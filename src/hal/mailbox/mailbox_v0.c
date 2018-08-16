@@ -31,17 +31,13 @@ int mailbox_read(unsigned int *ptr)
 
   if ( mailbox_status_read() & 0x1 )
   {
-    volatile uint32_t timeout = 1000000000;
     status = 1;
-    // wait for not empty or timeout
-    while ( status && (timeout > 0) )
+    // wait for not empty
+    while ( status )
     {
       __sleep(50);
-      timeout--;
       status = mailbox_status_read() & 0x1;
     }
-    if ( status )
-      return MAILBOX_FAIL;
   }
 
   *ptr = mailbox_data_read();
