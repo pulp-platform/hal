@@ -45,7 +45,7 @@ static inline unsigned int mailbox_data_read()
 
   \param   value  The value to be written to the mailbox.
  */
-static inline void mailbox_data_write(unsigned int value)
+static inline void mailbox_data_write(const unsigned int value)
 {
   pulp_write32(MAILBOX_REG_WRDATA, value);
 }
@@ -56,7 +56,7 @@ static inline void mailbox_data_write(unsigned int value)
 
   \return  MAILBOX_VALID.
  */
-int mailbox_read(unsigned int *ptr);
+int mailbox_read(unsigned int* const ptr);
 
 /** Try to read one word from the mailbox. Poll at most t times.
 
@@ -65,7 +65,7 @@ int mailbox_read(unsigned int *ptr);
 
   \return  MAILBOX_VALID if a value could be read successfully, MAILBOX_FAIL otherwise.
  */
-int mailbox_read_timed(unsigned int *ptr, unsigned int t);
+int mailbox_read_timed(unsigned int* const ptr, const unsigned int t);
 
 /** Write one word to the mailbox; block if the mailbox is currently full.
 
@@ -73,6 +73,6 @@ int mailbox_read_timed(unsigned int *ptr, unsigned int t);
 
   \return  MAILBOX_VALID.
  */
-int mailbox_write(unsigned int value);
+int mailbox_write(const unsigned int value);
 
 #endif

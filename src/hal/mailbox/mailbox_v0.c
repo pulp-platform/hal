@@ -25,7 +25,7 @@ static void __sleep(volatile int iter)
   while(iter--);
 }
 
-int mailbox_read(unsigned int *ptr)
+int mailbox_read(unsigned int* const ptr)
 {
   uint32_t status;
 
@@ -44,7 +44,7 @@ int mailbox_read(unsigned int *ptr)
   return MAILBOX_VALID;
 }
 
-int mailbox_read_timed(unsigned int *ptr, unsigned int t)
+int mailbox_read_timed(unsigned int* const ptr, const unsigned int t)
 {
   uint32_t status;
 
@@ -67,7 +67,7 @@ int mailbox_read_timed(unsigned int *ptr, unsigned int t)
   return MAILBOX_VALID;
 }
 
-int mailbox_write(unsigned int value)
+int mailbox_write(const unsigned int value)
 {
   uint32_t status;
 
