@@ -67,11 +67,11 @@ int mailbox_read(unsigned int *ptr);
  */
 int mailbox_read_timed(unsigned int *ptr, unsigned int t);
 
-/** Try to write one word to the mailbox.
+/** Write one word to the mailbox; block if the mailbox is currently full.
 
   \param   value  The value to be written to the mailbox.
 
-  \return  MAILBOX_VALID if a value could be written successfully, MAILBOX_FAIL otherwise.
+  \return  MAILBOX_VALID.
  */
 int mailbox_write(unsigned int value);
 

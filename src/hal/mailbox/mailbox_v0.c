@@ -73,12 +73,10 @@ int mailbox_write(unsigned int value)
 
   if ( mailbox_status_read() & 0x2 )
   {
-    volatile uint32_t timeout = 1000000000;
     status = 1;
-    // wait for not full or timeout
-    while ( status && (timeout > 0) ) {
+    // wait for not full
+    while ( status ) {
       __sleep(50);
-      timeout--;
       status = mailbox_status_read() & 0x2;
     }
     if ( status )
