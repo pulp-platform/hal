@@ -20,7 +20,7 @@
 #include "hal/cluster_ctrl/cluster_ctrl_v2.h"
 #include "hal/icache/icache_ctrl_v2.h"
 #include "hal/apb_soc/apb_soc_v3.h"
-#include "hal/maestro/pmu_v2.h"
+#include "hal/maestro/pmu_v3.h"
 #include "hal/rom/rom_v2.h"
 #include "hal/fll/fll_v1.h"
 #include "hal/gpio/gpio_v2.h"
