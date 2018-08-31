@@ -15,40 +15,28 @@
  */
 
 #include "hal/mailbox/mailbox_v0.h"
+#include "rt/rt_time.h"             // rt_time_wait_cycles()
 
-/** Wait for 'iter' iterations.
-
-  \param   iter  The number of iterations to wait for. Each iteration is approximately clock 10 cycles.
- */
-static void __sleep(volatile int iter)
-{
-  while(iter--);
-}
-
-int mailbox_read(unsigned int *ptr)
+int mailbox_read(unsigned int* const ptr)
 {
   uint32_t status;
 
   if ( mailbox_status_read() & 0x1 )
   {
-    volatile uint32_t timeout = 1000000000;
     status = 1;
-    // wait for not empty or timeout
-    while ( status && (timeout > 0) )
+    // wait for not empty
+    while ( status )
     {
-      __sleep(50);
-      timeout--;
+      rt_time_wait_cycles(500);
       status = mailbox_status_read() & 0x1;
     }
-    if ( status )
-      return MAILBOX_FAIL;
   }
 
   *ptr = mailbox_data_read();
   return MAILBOX_VALID;
 }
 
-int mailbox_read_timed(unsigned int *ptr, unsigned int t)
+int mailbox_read_timed(unsigned int* const ptr, const unsigned int t)
 {
   uint32_t status;
 
@@ -59,7 +47,7 @@ int mailbox_read_timed(unsigned int *ptr, unsigned int t)
     // wait for not empty or timeout
     while ( status && (timeout > 0) )
     {
-      __sleep(50);
+      rt_time_wait_cycles(500);
       timeout--;
       status = mailbox_status_read() & 0x1;
     }
@@ -71,18 +59,16 @@ int mailbox_read_timed(unsigned int *ptr, unsigned int t)
   return MAILBOX_VALID;
 }
 
-int mailbox_write(unsigned int value)
+int mailbox_write(const unsigned int value)
 {
   uint32_t status;
 
   if ( mailbox_status_read() & 0x2 )
   {
-    volatile uint32_t timeout = 1000000000;
     status = 1;
-    // wait for not full or timeout
-    while ( status && (timeout > 0) ) {
-      __sleep(50);
-      timeout--;
+    // wait for not full
+    while ( status ) {
+      rt_time_wait_cycles(500);
       status = mailbox_status_read() & 0x2;
     }
     if ( status )
