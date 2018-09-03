@@ -24,7 +24,9 @@
 #include "hal/cluster_ctrl/cluster_ctrl_v2.h"
 #include "hal/icache/icache_ctrl_v2.h"
 #include "hal/apb_soc/apb_soc_v3.h"
+#if PULP_CHIP != CHIP_BIGPULP_STANDALONE
 #include "hal/mailbox/mailbox_v0.h"
 #include "hal/tryx/tryx_v1.h"
+#endif
 
 #endif
