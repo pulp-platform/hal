@@ -26,6 +26,4 @@
 #include "hal/gpio/gpio_v2.h"
 #include "hal/hwce/hwce_v5.h"
 
-#include "hal/vendors/iid/quiddikey_v1.h"
-
 #endif
