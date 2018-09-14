@@ -220,7 +220,6 @@ typedef union {
 
 // QUIDDIKEY HAL Handle
 // located in "archi/chip/x/memory_map.h"
-#define QUIDDIKEY_HANDLE ((halQuiddikeyHandle_t *)(ARCHI_QUIDDIKEY_ADDR))
 
 
 // QUIDDIKEY HAL functions prototype
@@ -354,7 +353,7 @@ static inline uint32_t halQuiddikeyHwRUC1Get (halQuiddikeyHandle_t * const handl
     return handle->hw_ruc1;
 }
 
-static inline uint32_t halQuiddikeyHwsettingsGet (halQuiddikeyHandle_t * const handle) {
+static inline uint32_t halQuiddikeyHwSettingsGet (halQuiddikeyHandle_t * const handle) {
     return handle->hw_settings;
 }
 
