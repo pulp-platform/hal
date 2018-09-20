@@ -41,10 +41,30 @@
     reg &= (~mask)
 ///////////////////////////////////////////////////
 
+
+/*
+ * SPIM
+ */
+#ifdef ARCHI_UDMA_HAS_SPIM
+
+#define UDMA_SPIM_OFFSET(id)          UDMA_PERIPH_OFFSET(ARCHI_UDMA_SPIM_ID(id))
+#define UDMA_SPIM_CMD_ADDR(id)        (ARCHI_UDMA_ADDR + UDMA_SPIM_OFFSET(id) + 0x20)
+#define UDMA_SPIM_RX_ADDR(id)         (ARCHI_UDMA_ADDR + UDMA_SPIM_OFFSET(id) + 0x00)
+#define UDMA_SPIM_TX_ADDR(id)         (ARCHI_UDMA_ADDR + UDMA_SPIM_OFFSET(id) + 0x10)
+#define UDMA_SPIM_CUSTOM_ADDR(id)     (ARCHI_UDMA_ADDR + UDMA_SPIM_OFFSET(id) + UDMA_CHANNEL_CUSTOM_OFFSET)
+
+#endif
+
 /*
  * TCDM
  */
 #ifdef ARCHI_UDMA_HAS_TCDM
+
+#define UDMA_TCDM_OFFSET              UDMA_PERIPH_OFFSET(ARCHI_UDMA_TCDM_ID(id))
+
+#define UDMA_TCDM_RX_ADDR             (ARCHI_UDMA_ADDR + UDMA_TCDM_OFFSET + UDMA_CHANNEL_RX_OFFSET)
+#define UDMA_TCDM_TX_ADDR             (ARCHI_UDMA_ADDR + UDMA_TCDM_OFFSET + UDMA_CHANNEL_TX_OFFSET)
+#define UDMA_TCDM_CUSTOM_ADDR         (ARCHI_UDMA_ADDR + UDMA_TCDM_OFFSET + UDMA_CHANNEL_CUSTOM_OFFSET)
 
 static inline void plp_tcdm_setDst(unsigned int addr)
 {
@@ -75,6 +95,12 @@ static inline void plp_udma_enqueue_fromTcdm(unsigned int l2Addr, unsigned int f
  * CAM
  */
 #ifdef ARCHI_UDMA_HAS_CAM
+
+#define UDMA_CAM_OFFSET(id)           UDMA_PERIPH_OFFSET(ARCHI_UDMA_CAM_ID(id))
+
+#define UDMA_CAM_RX_ADDR(id)          (ARCHI_UDMA_ADDR + UDMA_CAM_OFFSET(id) + UDMA_CHANNEL_RX_OFFSET)
+#define UDMA_CAM_CUSTOM_ADDR(id)      (ARCHI_UDMA_ADDR + UDMA_CAM_OFFSET(id) + UDMA_CHANNEL_CUSTOM_OFFSET)
+#define ARCHI_SOC_EVENT_CAM_RX(id)    ARCHI_SOC_EVENT_UDMA_RX(ARCHI_UDMA_CAM_ID(id))
 
 // CAM HAL Registers Structure
 typedef struct {
@@ -234,6 +260,13 @@ static inline uint32_t plpUdmaCamFilterGet (plpUdmaCameraHandle_t * const handle
 
 #ifdef ARCHI_UDMA_HAS_I2S
 
+#define UDMA_I2S_OFFSET(id)           UDMA_PERIPH_OFFSET(ARCHI_UDMA_I2S_ID(id))
+
+#define UDMA_I2S_ADDR(id)             (ARCHI_UDMA_ADDR + UDMA_I2S_OFFSET(id)) //FIXME shall be removed because deprecated
+#define UDMA_I2S_RX0_ADDR(id)         (ARCHI_UDMA_ADDR + UDMA_I2S_OFFSET(id) + UDMA_CHANNEL_RX_OFFSET)
+#define UDMA_I2S_RX1_ADDR(id)         (ARCHI_UDMA_ADDR + UDMA_I2S_OFFSET(id) + UDMA_CHANNEL_TX_OFFSET)
+#define UDMA_I2S_CUSTOM_ADDR(id)      (ARCHI_UDMA_ADDR + UDMA_I2S_OFFSET(id) + UDMA_CHANNEL_CUSTOM_OFFSET)
+
 #include "hal/udma/udma_periph_i2s_v1.h"
 
 #endif
@@ -243,6 +276,13 @@ static inline uint32_t plpUdmaCamFilterGet (plpUdmaCameraHandle_t * const handle
  */
 
 #ifdef ARCHI_UDMA_HAS_UART
+
+#define UDMA_UART_OFFSET(id)          UDMA_PERIPH_OFFSET(ARCHI_UDMA_UART_ID(id))
+#define UDMA_UART_RX_ADDR(id)         (ARCHI_UDMA_ADDR + UDMA_UART_OFFSET(id) + UDMA_CHANNEL_RX_OFFSET)
+#define UDMA_UART_TX_ADDR(id)         (ARCHI_UDMA_ADDR + UDMA_UART_OFFSET(id) + UDMA_CHANNEL_TX_OFFSET)
+#define UDMA_UART_CUSTOM_ADDR(id)     (ARCHI_UDMA_ADDR + UDMA_UART_OFFSET(id) + UDMA_CHANNEL_CUSTOM_OFFSET)
+#define ARCHI_SOC_EVENT_UART_RX(id)    (ARCHI_SOC_EVENT_PERIPH_FIRST_EVT(ARCHI_UDMA_UART_ID(id)) + ARCHI_UDMA_UART_RX_EVT)
+#define ARCHI_SOC_EVENT_UART_TX(id)    (ARCHI_SOC_EVENT_PERIPH_FIRST_EVT(ARCHI_UDMA_UART_ID(id)) + ARCHI_UDMA_UART_TX_EVT)
 
 // UART HAL Registers Structure
 typedef struct {
@@ -361,6 +401,13 @@ static inline void plp_uart_reg_write(int channel, unsigned int addr, unsigned i
  */
 
 #ifdef ARCHI_UDMA_HAS_HYPER
+
+#define UDMA_HYPER_OFFSET(id)         UDMA_PERIPH_OFFSET(ARCHI_UDMA_HYPER_ID(id))
+#define UDMA_HYPER_RX_ADDR(id)         (ARCHI_UDMA_ADDR + UDMA_HYPER_OFFSET(id) + UDMA_CHANNEL_RX_OFFSET)
+#define UDMA_HYPER_TX_ADDR(id)         (ARCHI_UDMA_ADDR + UDMA_HYPER_OFFSET(id) + UDMA_CHANNEL_TX_OFFSET)
+#define UDMA_HYPER_CUSTOM_ADDR(id)     (ARCHI_UDMA_ADDR + UDMA_HYPER_OFFSET(id) + UDMA_CHANNEL_CUSTOM_OFFSET)
+#define ARCHI_SOC_EVENT_HYPER_RX(id)    (ARCHI_SOC_EVENT_PERIPH_FIRST_EVT(ARCHI_UDMA_HYPER_ID(id)) + ARCHI_UDMA_HYPER_RX_EVT)
+#define ARCHI_SOC_EVENT_HYPER_TX(id)    (ARCHI_SOC_EVENT_PERIPH_FIRST_EVT(ARCHI_UDMA_HYPER_ID(id)) + ARCHI_UDMA_HYPER_TX_EVT)
 
 #include "archi/udma/hyper.h"
 #include "hal/udma/udma_periph_hyper_v1.h"
