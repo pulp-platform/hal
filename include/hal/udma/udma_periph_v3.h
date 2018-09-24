@@ -41,6 +41,20 @@
     reg &= (~mask)
 ///////////////////////////////////////////////////
 
+#define ARCHI_SOC_EVENT_UDMA_RX(periph)   ((periph)*2)
+#define ARCHI_SOC_EVENT_UDMA_TX(periph)   ((periph)*2 + 1)
+
+
+#ifdef ARCHI_UDMA_HAS_I2C
+
+#define UDMA_I2C_OFFSET(id)           UDMA_PERIPH_OFFSET(ARCHI_UDMA_I2C_ID(id))
+
+#define UDMA_I2C_DATA_ADDR(id)        (ARCHI_UDMA_ADDR + UDMA_I2C_OFFSET(id) + UDMA_CHANNEL_RX_OFFSET)
+#define UDMA_I2C_CMD_ADDR(id)         (ARCHI_UDMA_ADDR + UDMA_I2C_OFFSET(id) + UDMA_CHANNEL_TX_OFFSET)
+#define UDMA_I2C_CUSTOM_ADDR(id)      (ARCHI_UDMA_ADDR + UDMA_I2C_OFFSET(id) + UDMA_CHANNEL_CUSTOM_OFFSET)
+#endif
+
+
 
 /*
  * SPIM
