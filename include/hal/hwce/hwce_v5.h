@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#ifndef	__HAL_HWCE_HWCE_V5_H__
+#ifndef __HAL_HWCE_HWCE_V5_H__
 #define __HAL_HWCE_HWCE_V5_H__
 
 #include "hal/pulp.h"
@@ -35,7 +35,6 @@
 
 /* LOW-LEVEL HAL */
 #define HWCE_ADDR_BASE  ARCHI_HWCE_ADDR
-#define HWCE_ADDR_SPACE 0x00000100
 
 // For all the following functions we use __builtin_pulp_OffsetedWrite and __builtin_pulp_OffsetedRead
 // instead of classic load/store because otherwise the compiler is not able to correctly factorize
@@ -137,6 +136,10 @@ static inline void hwce_th_base_addr_set(unsigned int value) {
   HWCE_WRITE(value, HWCE_TH_BASE_ADDR);
 }
 
+static inline void hwce_lbufxtranssize_set(unsigned int value) {
+  HWCE_WRITE(value, HWCE_LBUFXTRANSSIZE_ADDR);
+}
+
 static inline unsigned int hwce_stride_length_value(unsigned int stride, unsigned int length) {
   unsigned int res = 0;
   res = __hwce_bitinsert(0,   stride, 16, 16);
@@ -147,6 +150,7 @@ static inline unsigned int hwce_stride_length_value(unsigned int stride, unsigne
 static inline unsigned int hwce_gen_config0_value(unsigned int wstride, unsigned int ncp, unsigned int conv, unsigned vect, unsigned int uns, unsigned int ny, unsigned int nf, unsigned int qf, unsigned int rnd) {
   unsigned int res;
   res = __hwce_bitinsert(0, wstride, 16, 16);
+  // res = __hwce_bitinsert(0, norm_bias, 1, 15);
   res = __hwce_bitinsert(res, rnd    , 1 , 14);
   res = __hwce_bitinsert(res, ncp    , 1 , 13);
   res = __hwce_bitinsert(res, conv   , 2 , 11);
@@ -168,6 +172,13 @@ static inline unsigned int hwce_gen_config1_value(unsigned int qmodex, unsigned 
   return res;
 }
  
+static inline unsigned int hwce_gen_config2_value(unsigned int qmodew, unsigned int qshiftw) {
+  unsigned int res = 0;
+  res = __hwce_bitinsert(res, qmodew,   3, 29);
+  res = __hwce_bitinsert(res, qshiftw,  5, 24);
+  return res;
+}
+ 
 static inline unsigned int hwce_job_config0_value(unsigned int noyconst, unsigned int lbuflen, unsigned int lbufskiphi,  unsigned int lbufskiplo) {
   unsigned int res = 0;
   res = __hwce_bitinsert(res, noyconst,   16, 16);
@@ -177,13 +188,14 @@ static inline unsigned int hwce_job_config0_value(unsigned int noyconst, unsigne
   return res;
 }
  
-static inline unsigned int hwce_job_config1_value(unsigned int lo, unsigned int wif, unsigned int wof, unsigned int vect_disable_mask, unsigned int rect) {
-  unsigned int res;
-  res = __hwce_bitinsert(0, lo                 , 2 , 24);
+static inline unsigned int hwce_job_config1_value(unsigned int lo, unsigned int wif, unsigned int wof, unsigned int vect_disable_mask, unsigned int rect, unsigned int noutfeat) {
+  unsigned int res = 0;
+  res = __hwce_bitinsert(res, noutfeat         , 8 , 24);
+  res = __hwce_bitinsert(res, lo               , 1 , 23);
   res = __hwce_bitinsert(res, rect             , 1 , 22);
   res = __hwce_bitinsert(res, wif              , 6 , 16);
-  res = __hwce_bitinsert(res, wof              , 6, 8);
-  res = __hwce_bitinsert(res, vect_disable_mask, 4, 0);
+  res = __hwce_bitinsert(res, wof              , 6 , 8);
+  res = __hwce_bitinsert(res, vect_disable_mask, 4 , 0);
   return res;
 }
  
