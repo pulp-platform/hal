@@ -27,5 +27,6 @@
 #include "hal/hwce/hwce_v5.h"
 
 #include "hal/vendors/iid/quiddikey_v1.h"
+#include "hal/vendors/lnt/csi2_v1.h"
 
 #endif

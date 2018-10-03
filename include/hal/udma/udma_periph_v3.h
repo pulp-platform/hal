@@ -106,6 +106,44 @@ static inline void plp_udma_enqueue_fromTcdm(unsigned int l2Addr, unsigned int f
 #endif
 
 /*
+ * CSI2
+ */
+#ifdef ARCHI_UDMA_HAS_CSI2
+
+#define UDMA_CSI2_OFFSET(id)           UDMA_PERIPH_OFFSET(ARCHI_UDMA_CSI2_ID(id))
+
+#define UDMA_CSI2_RX_ADDR(id)          (ARCHI_UDMA_ADDR + UDMA_CSI2_OFFSET(id) + UDMA_CHANNEL_RX_OFFSET)
+#define UDMA_CSI2_CUSTOM_ADDR(id)      (ARCHI_UDMA_ADDR + UDMA_CSI2_OFFSET(id) + UDMA_CHANNEL_CUSTOM_OFFSET)
+// NOTE defined in archi/vega/properties.h
+// #define ARCHI_SOC_EVENT_CSI2_RX(id)    ARCHI_SOC_EVENT_UDMA_RX(ARCHI_UDMA_CSI2_ID(id))
+
+// CSI2 HAL Registers Structure
+struct plpUdmaCsi2_struct_t {
+    plpUdmaRxTxChHandle_t udma_rxtx_ch_handle;
+    uint32_t unused;
+    uint32_t cfg_clk;
+};
+typedef volatile struct plpUdmaCsi2_struct_t plpUdmaCsi2Handle_t;
+
+// CSI2 HAL Handle
+// located in "archi/chip/vega/memory_map.h"
+
+// CSI2 HAL functions prototype
+static inline void plpUdmaCsi2ClkCfgSet (plpUdmaCsi2Handle_t * handle, uint32_t data);
+static inline uint32_t plpUdmaCsi2ClkCfgGet (plpUdmaCsi2Handle_t * handle);
+
+// CSI2 HAL functions definition
+static inline void plpUdmaCsi2ClkCfgSet (plpUdmaCsi2Handle_t * handle, uint32_t data) {
+    handle->cfg_clk = data;
+}
+
+static inline uint32_t plpUdmaCsi2ClkCfgGet (plpUdmaCsi2Handle_t * handle) {
+    return handle->cfg_clk;
+}
+
+#endif // ARCHI_UDMA_HAS_CSI2
+
+/*
  * CAM
  */
 #ifdef ARCHI_UDMA_HAS_CAM
