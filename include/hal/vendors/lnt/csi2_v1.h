@@ -60,6 +60,22 @@ struct halDphy_struct_t {
 };
 typedef volatile struct halDphy_struct_t halDphyHandle_t;
 
+// TODO CSI2 HAL Register Fields Structure
+// typedef struct {
+//     uint32_t zeroize       : 1;
+//     uint32_t unused2       : 16;
+// } __attribute__ ((packed)) halQuiddikeyCfg_t;
+
+// TODO CSI2 HAL Register Union definition
+// typedef union {
+//     halQuiddikeyCfg_t             config;
+//     halQuiddikeyStatus_t          status;
+//     uint32_t raw;
+// } __attribute__ ((packed)) halQuiddikey_u;
+
+
+
+
 // CSI2 HAL Handle
 // located in "archi/chip/x/memory_map.h"
 
@@ -67,16 +83,57 @@ typedef volatile struct halDphy_struct_t halDphyHandle_t;
 // located in "archi/chip/x/memory_map.h"
 
 
-// CSI2 HAL functions prototype
-static inline uint32_t halCsi2BaseAddrGet   (halCsi2Handle_t * handle);
-static inline void     halCsi2CfgSet        (halCsi2Handle_t * handle,  uint32_t data);
-static inline uint32_t halCsi2CfgGet        (halCsi2Handle_t * handle);
+//     CSI2   HAL      functions                  prototype
+static inline uint32_t halCsi2BaseAddrGet         (halCsi2Handle_t * handle);
+static inline void     halCsi2CfgSet              (halCsi2Handle_t * handle,  uint32_t data);
+static inline uint32_t halCsi2CfgGet              (halCsi2Handle_t * handle);
+static inline uint32_t halCsi2ErrMsb1Get          (halCsi2Handle_t * handle);
+static inline uint32_t halCsi2ErrMsbGet           (halCsi2Handle_t * handle);
+static inline uint32_t halCsi2ErrLsbGet           (halCsi2Handle_t * handle);
+static inline void     halCsi2HsRxTimeoutMsb2Set  (halCsi2Handle_t * handle,  uint32_t data);
+static inline uint32_t halCsi2HsRxTimeoutMsb2Get  (halCsi2Handle_t * handle);
+static inline void     halCsi2HsRxTimeoutMsb1Set  (halCsi2Handle_t * handle,  uint32_t data);
+static inline uint32_t halCsi2HsRxTimeoutMsb1Get  (halCsi2Handle_t * handle);
+static inline void     halCsi2HsRxTimeoutLsbSet   (halCsi2Handle_t * handle,  uint32_t data);
+static inline uint32_t halCsi2HsRxTimeoutLsbGet   (halCsi2Handle_t * handle);
+static inline void     halCsi2VcCfgSet            (halCsi2Handle_t * handle,  uint32_t data);
+static inline uint32_t halCsi2VcCfgGet            (halCsi2Handle_t * handle);
+static inline void     halCsi2PolaritySet         (halCsi2Handle_t * handle,  uint32_t data);
+static inline uint32_t halCsi2PolarityGet         (halCsi2Handle_t * handle);
+static inline void     halCsi2CciAddressSet       (halCsi2Handle_t * handle,  uint32_t data);
+static inline uint32_t halCsi2CciAddressGet       (halCsi2Handle_t * handle);
+static inline void     halCsi2CciWriteDataSet     (halCsi2Handle_t * handle,  uint32_t data);
+static inline uint32_t halCsi2CciWriteDataGet     (halCsi2Handle_t * handle);
+static inline uint32_t halCsi2CciReadDataGet      (halCsi2Handle_t * handle);
+static inline void     halCsi2CciReadWriteSet     (halCsi2Handle_t * handle,  uint32_t data);
+static inline uint32_t halCsi2CciReadWriteGet     (halCsi2Handle_t * handle);
+static inline uint32_t halCsi2CciStatusGet        (halCsi2Handle_t * handle);
+static inline void     halCsi2CciDeviceAddressSet (halCsi2Handle_t * handle,  uint32_t data);
+static inline uint32_t halCsi2CciDeviceAddressGet (halCsi2Handle_t * handle);
+static inline uint32_t halCsi2UlpsStatusGet       (halCsi2Handle_t * handle);
 
 //     DPHY   HAL      functions            prototype
-static inline uint32_t halDphyBaseAddrGet   (halDphyHandle_t * handle);
-static inline void     halDphyLaneEnableSet (halDphyHandle_t * handle,  uint32_t data);
-static inline uint32_t halDphyLaneEnableGet (halDphyHandle_t * handle);
+static inline uint32_t halDphyBaseAddrGet           (halDphyHandle_t * handle);
+static inline void     halDphyLaneEnableSet         (halDphyHandle_t * handle,  uint32_t data);
+static inline uint32_t halDphyLaneEnableGet         (halDphyHandle_t * handle);
+static inline void     halDphyResetDigLogicSet      (halDphyHandle_t * handle,  uint32_t data);
+static inline uint32_t halDphyResetDigLogicGet      (halDphyHandle_t * handle);
+static inline void     halDphyLaneClkHsCountdownSet (halDphyHandle_t * handle,  uint32_t data);
+static inline uint32_t halDphyLaneClkHsCountdownGet (halDphyHandle_t * handle);
+static inline void     halDphyLaneClkContModeSet    (halDphyHandle_t * handle,  uint32_t data);
+static inline uint32_t halDphyLaneClkContModeGet    (halDphyHandle_t * handle);
+static inline void     halDphyLaneClkRxCalibSet     (halDphyHandle_t * handle,  uint32_t data);
+static inline uint32_t halDphyLaneClkRxCalibGet     (halDphyHandle_t * handle);
+static inline void     halDphyLane0HsCountdownSet   (halDphyHandle_t * handle,  uint32_t data);
+static inline uint32_t halDphyLane0HsCountdownGet   (halDphyHandle_t * handle);
+static inline void     halDphyLane0RxCalibSet       (halDphyHandle_t * handle,  uint32_t data);
+static inline uint32_t halDphyLane0RxCalibGet       (halDphyHandle_t * handle);
+static inline void     halDphyLane1HsCountdownSet   (halDphyHandle_t * handle,  uint32_t data);
+static inline uint32_t halDphyLane1HsCountdownGet   (halDphyHandle_t * handle);
+static inline void     halDphyLane1RxCalibSet       (halDphyHandle_t * handle,  uint32_t data);
+static inline uint32_t halDphyLane1RxCalibGet       (halDphyHandle_t * handle);
 
+// TODO
 
 // CSI2 HAL functions definition
 static inline uint32_t halCsi2BaseAddrGet 			 (halCsi2Handle_t * handle) {
@@ -90,6 +147,103 @@ static inline void halCsi2CfgSet (halCsi2Handle_t * handle, uint32_t data) {
 static inline uint32_t halCsi2CfgGet (halCsi2Handle_t * handle) {
     return handle->cfg;
 }
+
+static inline uint32_t halCsi2ErrMsb1Get          (halCsi2Handle_t * handle) {
+	return handle->err_msb1;
+}
+
+static inline uint32_t halCsi2ErrMsbGet           (halCsi2Handle_t * handle) {
+	return handle->err_msb;
+}
+
+static inline uint32_t halCsi2ErrLsbGet           (halCsi2Handle_t * handle) {
+	return handle->err_lsb;
+}
+
+static inline void     halCsi2HsRxTimeoutMsb2Set  (halCsi2Handle_t * handle,  uint32_t data) {
+	handle->hs_rx_timeout_msb2 = data;
+}
+
+static inline uint32_t halCsi2HsRxTimeoutMsb2Get  (halCsi2Handle_t * handle) {
+	return handle->hs_rx_timeout_msb2;
+}
+
+static inline void     halCsi2HsRxTimeoutMsb1Set  (halCsi2Handle_t * handle,  uint32_t data) {
+	handle->hs_rx_timeout_msb1 = data;
+}
+
+static inline uint32_t halCsi2HsRxTimeoutMsb1Get  (halCsi2Handle_t * handle) {
+	return handle->hs_rx_timeout_msb1;
+}
+
+static inline void     halCsi2HsRxTimeoutLsbSet   (halCsi2Handle_t * handle,  uint32_t data) {
+	handle->hs_rx_timeout_lsb = data;
+}
+
+static inline uint32_t halCsi2HsRxTimeoutLsbGet   (halCsi2Handle_t * handle) {
+	return handle->hs_rx_timeout_lsb;
+}
+
+static inline void     halCsi2VcCfgSet            (halCsi2Handle_t * handle,  uint32_t data) {
+	handle->vccfg = data;
+}
+
+static inline uint32_t halCsi2VcCfgGet            (halCsi2Handle_t * handle) {
+	return handle->vccfg;
+}
+
+static inline void     halCsi2PolaritySet         (halCsi2Handle_t * handle,  uint32_t data) {
+	handle->polarity = data;
+}
+
+static inline uint32_t halCsi2PolarityGet         (halCsi2Handle_t * handle) {
+	return handle->polarity;
+}
+
+static inline void     halCsi2CciAddressSet       (halCsi2Handle_t * handle,  uint32_t data) {
+	handle->cci_addr = data;
+}
+
+static inline uint32_t halCsi2CciAddressGet       (halCsi2Handle_t * handle) {
+	return handle->cci_addr;
+}
+
+static inline void     halCsi2CciWriteDataSet     (halCsi2Handle_t * handle,  uint32_t data) {
+	handle->cci_wr_data = data;
+}
+
+static inline uint32_t halCsi2CciWriteDataGet     (halCsi2Handle_t * handle) {
+	return handle->cci_wr_data;
+}
+
+static inline uint32_t halCsi2CciReadDataGet      (halCsi2Handle_t * handle) {
+	return handle->cci_rd_data;
+}
+
+static inline void     halCsi2CciReadWriteSet     (halCsi2Handle_t * handle,  uint32_t data) {
+	handle->cci_read_write = data;
+}
+
+static inline uint32_t halCsi2CciReadWriteGet     (halCsi2Handle_t * handle) {
+	return handle->cci_read_write;
+}
+
+static inline uint32_t halCsi2CciStatusGet        (halCsi2Handle_t * handle) {
+	return handle->cci_status;
+}
+
+static inline void     halCsi2CciDeviceAddressSet (halCsi2Handle_t * handle,  uint32_t data) {
+	handle->cci_device_addr = data;
+}
+
+static inline uint32_t halCsi2CciDeviceAddressGet (halCsi2Handle_t * handle) {
+	return handle->cci_device_addr;
+}
+
+static inline uint32_t halCsi2UlpsStatusGet       (halCsi2Handle_t * handle) {
+	return handle->ulps_status;
+}
+
 
 
 
@@ -106,44 +260,69 @@ static inline uint32_t halDphyLaneEnableGet                (halDphyHandle_t * ha
     return handle->lane_enable;
 }
 
-// CSI2 HAL Register Fields Structure
-// typedef struct {
-//     uint32_t zeroize       : 1;
-//     uint32_t enroll        : 1;
-//     uint32_t start         : 1;
-//     uint32_t unused        : 2;
-//     uint32_t stop          : 1;
-//     uint32_t get_key       : 1;
-//     uint32_t unwrap        : 1;
-//     uint32_t wrap_gen_rand : 1;
-//     uint32_t wrap          : 1;
-//     uint32_t unused1       : 5;
-//     uint32_t gen_rand      : 1;
-//     uint32_t unused2       : 16;
-// } __attribute__ ((packed)) halQuiddikeyCfg_t;
+static inline void     halDphyResetDigLogicSet (halDphyHandle_t * handle,  uint32_t data) {
+	handle->reset_dig_logic = data;
+}
 
-// CSI2 HAL Register Union definition
-// typedef union {
-//     halQuiddikeyCfg_t             config;
-//     halQuiddikeyStatus_t          status;
-//     halQuiddikeyAllow_t           allow;
-//     halQuiddikeyInterruptEnable_t int_enable;
-//     halQuiddikeyInterruptMask_t   int_mask;
-//     halQuiddikeyInterruptStatus_t int_status;
-//     halQuiddikeyKeyDest_t         key_dest;
-//     halQuiddikeyDataInput_t       data_in;
-//     halQuiddikeyDataOutput_t      data_out;
-//     halQuiddikeyEndianness_t      endianness;
-//     halQuiddikeyInterfaceStatus_t apb_itf_status;
-//     halQuiddikeyTest_t            test_cfg;
-//     halQuiddikeyHwRUC0_t          hw_ruc0;
-//     halQuiddikeyHwRUC1_t          hw_ruc1;
-//     halQuiddikeyHwSettings_t      hw_settings;
-//     halQuiddikeyInfo_t            info;
-//     halQuiddikeyID_t              id;
-//     halQuiddikeyVersion_t         version;
-//     uint32_t raw;
-// } __attribute__ ((packed)) halQuiddikey_u;
+static inline uint32_t halDphyResetDigLogicGet (halDphyHandle_t * handle) {
+	return handle->reset_dig_logic;
+}
+
+static inline void     halDphyLaneClkHsCountdownSet (halDphyHandle_t * handle,  uint32_t data) {
+	handle->lane_ck_hs_countdown = data;
+}
+
+static inline uint32_t halDphyLaneClkHsCountdownGet (halDphyHandle_t * handle) {
+	return handle->lane_ck_hs_countdown;
+}
+
+static inline void     halDphyLaneClkContModeSet (halDphyHandle_t * handle,  uint32_t data) {
+	handle->lane_ck_cont_mode = data;
+}
+
+static inline uint32_t halDphyLaneClkContModeGet (halDphyHandle_t * handle) {
+	return handle->lane_ck_cont_mode;
+}
+
+static inline void     halDphyLaneClkRxCalibSet (halDphyHandle_t * handle,  uint32_t data) {
+	handle->lane_ck_rx_calib_enable = data;
+}
+
+static inline uint32_t halDphyLaneClkRxCalibGet (halDphyHandle_t * handle) {
+	return handle->lane_ck_rx_calib_enable;
+}
+
+static inline void     halDphyLane0HsCountdownSet (halDphyHandle_t * handle,  uint32_t data) {
+	handle->lane_0_hs_countdown = data;
+}
+
+static inline uint32_t halDphyLane0HsCountdownGet (halDphyHandle_t * handle) {
+	return handle->lane_0_hs_countdown;
+}
+
+static inline void     halDphyLane0RxCalibSet (halDphyHandle_t * handle,  uint32_t data) {
+	handle->lane_0_rx_calib_enable = data;
+}
+
+static inline uint32_t halDphyLane0RxCalibGet (halDphyHandle_t * handle) {
+	return handle->lane_0_rx_calib_enable;
+}
+
+static inline void     halDphyLane1HsCountdownSet (halDphyHandle_t * handle,  uint32_t data) {
+	handle->lane_1_hs_countdown = data;
+}
+
+static inline uint32_t halDphyLane1HsCountdownGet (halDphyHandle_t * handle) {
+	return handle->lane_1_hs_countdown;
+}
+
+static inline void     halDphyLane1RxCalibSet (halDphyHandle_t * handle,  uint32_t data) {
+	handle->lane_1_rx_calib_enable = data;
+}
+
+static inline uint32_t halDphyLane1RxCalibGet (halDphyHandle_t * handle) {
+	return handle->lane_1_rx_calib_enable;
+}
 
 
 #endif
