@@ -27,36 +27,46 @@
 
 // CSI2 HAL Registers Structure
 struct halCsi2_struct_t {
-    uint32_t cfg;
-    uint32_t err_msb1;
-    uint32_t err_msb;
-    uint32_t err_lsb;
-    uint32_t hs_rx_timeout_msb2;
-    uint32_t hs_rx_timeout_msb1;
-    uint32_t hs_rx_timeout_lsb;
-    uint32_t vccfg;
-    uint32_t polarity;
-    uint32_t cci_addr;
-    uint32_t cci_wr_data;
-    uint32_t cci_rd_data;
-    uint32_t cci_read_write;
-    uint32_t cci_status;
-    uint32_t cci_device_addr;
-    uint32_t ulps_status;
+	uint32_t unused[96];		// offset to start reg access @ 0x60<<2
+    uint32_t cfg;				// default value 0x0
+    uint32_t err_msb1;				// default value 0x0
+    uint32_t err_msb;				// default value 0x0
+    uint32_t err_lsb;				// default value 0x0
+    uint32_t hs_rx_timeout_msb2;				// default value 0xff
+    uint32_t hs_rx_timeout_msb1;				// default value 0xff
+    uint32_t hs_rx_timeout_lsb;				// default value 0xff
+    uint32_t vccfg;				// default value 0x1
+    uint32_t polarity;				// default value 0x0
+    uint32_t cci_addr;				// default value 0x0
+    uint32_t cci_wr_data;				// default value 0x0
+    uint32_t cci_rd_data;				// default value 0x0
+    uint32_t cci_read_write;				// default value 0x0
+    uint32_t cci_status;				// default value 0x0
+    uint32_t cci_device_addr;				// default value 0x3c
+    uint32_t ulps_status;				// default value 0x0
 };
 typedef volatile struct halCsi2_struct_t halCsi2Handle_t;
 
 // DPHY HAL Registers Structure
 struct halDphy_struct_t {
-    uint32_t lane_enable;
-    uint32_t reset_dig_logic;
-    uint32_t lane_ck_hs_countdown;
-    uint32_t lane_ck_cont_mode;
-    uint32_t lane_ck_rx_calib_enable;
-    uint32_t lane_0_hs_countdown;
-    uint32_t lane_0_rx_calib_enable;
-    uint32_t lane_1_hs_countdown;
-    uint32_t lane_1_rx_calib_enable;
+    uint32_t lane_enable;				// default value 0x1
+    uint32_t unused[31];
+    //TODO add missing new registers visible in v1.6
+    uint32_t reset_dig_logic;				// default value 0x1f
+    uint32_t unused1[41];
+    uint32_t lane_ck_cont_mode;				// default value 0x0f  
+    uint32_t unused2[13];
+    uint32_t lane_ck_hs_countdown;				// default value 0x1b
+    uint32_t unused3[1];
+    uint32_t lane_ck_rx_calib_enable;				// default value 0x7f
+    uint32_t unused4[29];
+    uint32_t lane_0_hs_countdown;				// default value 0x1b
+    uint32_t unused5[1];
+    uint32_t lane_0_rx_calib_enable;				// default value 0x7f
+    uint32_t unused6[29];
+    uint32_t lane_1_hs_countdown;				// default value 0x1b
+    uint32_t unused7[1];
+    uint32_t lane_1_rx_calib_enable;				// default value 0x7f
 };
 typedef volatile struct halDphy_struct_t halDphyHandle_t;
 
