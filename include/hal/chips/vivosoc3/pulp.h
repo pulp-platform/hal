@@ -30,4 +30,8 @@
 #include "hal/rom/rom_v2.h"
 #include "hal/gpio/gpio_v2.h"
 
+#include "hal/udma/i2c/udma_i2c_v2.h"
+#include "hal/udma/spim/udma_spim_v2.h"
+#include "hal/udma/uart/udma_uart_v1.h"
+
 #endif

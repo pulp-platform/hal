@@ -17,6 +17,16 @@
 #ifndef __HAL_UDMA_UDMA_PERIPH_I2S_V2_H__
 #define __HAL_UDMA_UDMA_PERIPH_I2S_V2_H__
 
+#define UDMA_I2S_OFFSET(id)           UDMA_PERIPH_OFFSET(ARCHI_UDMA_I2S_ID(id))
+
+#define UDMA_I2S_ADDR(id)             (ARCHI_UDMA_ADDR + UDMA_I2S_OFFSET(id)) //FIXME shall be removed because deprecated
+#define UDMA_I2S_RX0_ADDR(id)         (ARCHI_UDMA_ADDR + UDMA_I2S_OFFSET(id) + UDMA_CHANNEL_RX_OFFSET)
+#define UDMA_I2S_RX1_ADDR(id)         (ARCHI_UDMA_ADDR + UDMA_I2S_OFFSET(id) + UDMA_CHANNEL_TX_OFFSET)
+#define UDMA_I2S_CUSTOM_ADDR(id)      (ARCHI_UDMA_ADDR + UDMA_I2S_OFFSET(id) + UDMA_CHANNEL_CUSTOM_OFFSET)
+
+#include "archi/udma/i2s/udma_i2s_v2.h"
+
+
 
 static inline void hal_i2s_ext_clk_set(int i2s, unsigned int value);
 
@@ -89,5 +99,6 @@ static inline unsigned int hal_i2s_clkgen_en_update(unsigned int reg_value, unsi
 
 
 /// @endcond
+
 
 #endif

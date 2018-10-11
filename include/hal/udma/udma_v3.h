@@ -156,8 +156,6 @@ static inline uint32_t plpUdmaTxChSizeGet (plpUdmaRxTxChHandle_t * handle);
 static inline void plpUdmaTxChCfgSet (plpUdmaRxTxChHandle_t * handle, uint32_t data);
 static inline uint32_t plpUdmaTxChCfgGet (plpUdmaRxTxChHandle_t * handle);
 
-#include "hal/udma/udma_periph_v3.h"
-
 //!@}
 
 /// @cond IMPLEM
