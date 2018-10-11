@@ -24,8 +24,8 @@
 #include "hal/udma/udma_v2.h"
 #include "hal/cluster_ctrl/cluster_ctrl_v2.h"
 #include "hal/icache/icache_ctrl_v2.h"
-#include "hal/apb_soc/apb_soc_v3.h"
+#include "hal/chips/usoc_v1/apb_soc.h"
+#include "hal/chips/usoc_v1/gpio.h"
 #include "hal/rom/rom_v2.h"
-#include "hal/gpio/gpio_v2.h"
 
 #endif
