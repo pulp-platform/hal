@@ -17,7 +17,6 @@
 #ifndef __HAL_UDMA_UDMA_UART_V1_H__
 #define __HAL_UDMA_UDMA_UART_V1_H__
 
-#include "hal/udma/udma_v2.h"
 #include "archi/udma/uart/udma_uart_v1.h"
 
 #define UDMA_UART_OFFSET(id)          UDMA_PERIPH_OFFSET(ARCHI_UDMA_UART_ID(id))
@@ -27,9 +26,21 @@
 #define ARCHI_SOC_EVENT_UART_RX(id)    (ARCHI_SOC_EVENT_PERIPH_FIRST_EVT(ARCHI_UDMA_UART_ID(id)) + ARCHI_UDMA_UART_RX_EVT)
 #define ARCHI_SOC_EVENT_UART_TX(id)    (ARCHI_SOC_EVENT_PERIPH_FIRST_EVT(ARCHI_UDMA_UART_ID(id)) + ARCHI_UDMA_UART_TX_EVT)
 
+// UDMA RX/TX Channels HAL Registers Structure
+typedef struct {
+    uint32_t rx_ch_saddr;
+    uint32_t rx_ch_size;
+    uint32_t rx_ch_cfg;
+    uint32_t rx_ch_initcfg_unused;
+    uint32_t tx_ch_saddr;
+    uint32_t tx_ch_size;
+    uint32_t tx_ch_cfg;
+    uint32_t tx_ch_initcfg_unused;
+} plpUdmaRxTxChHandle3_t;
+
 // UART HAL Registers Structure
 typedef struct {
-    plpUdmaRxTxChHandle_t udma_rxtx_ch_handle;
+    plpUdmaRxTxChHandle3_t udma_rxtx_ch_handle;
     uint32_t status;
     uint32_t setup;
 } plpUdmaUartHandle_t;

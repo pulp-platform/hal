@@ -17,7 +17,6 @@
 #ifndef __HAL_UDMA_UDMA_CPI_V1_H__
 #define __HAL_UDMA_UDMA_CPI_V1_H__
 
-#include "hal/udma/udma_v2.h"
 #include "archi/udma/cpi/udma_cpi_v1.h"
 
 #define UDMA_CAM_OFFSET(id)           UDMA_PERIPH_OFFSET(ARCHI_UDMA_CAM_ID(id))
@@ -26,9 +25,22 @@
 #define UDMA_CAM_CUSTOM_ADDR(id)      (ARCHI_UDMA_ADDR + UDMA_CAM_OFFSET(id) + UDMA_CHANNEL_CUSTOM_OFFSET)
 #define ARCHI_SOC_EVENT_CAM_RX(id)    ARCHI_SOC_EVENT_UDMA_RX(ARCHI_UDMA_CAM_ID(id))
 
+
+// UDMA RX/TX Channels HAL Registers Structure
+typedef struct {
+    uint32_t rx_ch_saddr;
+    uint32_t rx_ch_size;
+    uint32_t rx_ch_cfg;
+    uint32_t rx_ch_initcfg_unused;
+    uint32_t tx_ch_saddr;
+    uint32_t tx_ch_size;
+    uint32_t tx_ch_cfg;
+    uint32_t tx_ch_initcfg_unused;
+} plpUdmaRxTxChHandle2_t;
+
 // CAM HAL Registers Structure
 typedef struct {
-    plpUdmaRxTxChHandle_t udma_rxtx_ch_handle;
+    plpUdmaRxTxChHandle2_t udma_rxtx_ch_handle;
     uint32_t cfg_glob;
     uint32_t cfg_ll;
     uint32_t cfg_ur;
