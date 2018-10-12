@@ -22,11 +22,8 @@
 #include "hal/timer/timer_v2.h"
 #include "hal/soc_eu/soc_eu_v1.h"
 #include "hal/udma/udma_v2.h"
-#include "hal/cluster_ctrl/cluster_ctrl_v2.h"
-#include "hal/icache/icache_ctrl_v2.h"
 #include "hal/chips/usoc_v1/apb_soc.h"
 #include "hal/chips/usoc_v1/gpio.h"
-#include "hal/rom/rom_v2.h"
 
 #include "hal/udma/hyper/udma_hyper_v1.h"
 #include "hal/udma/i2c/udma_i2c_v2.h"
