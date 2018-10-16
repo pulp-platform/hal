@@ -19,4 +19,9 @@
 
 #include "archi/udma/i2s/udma_i2s_v2.h"
 
+static inline uint32_t udma_i2s_addr(int itf)
+{
+  return ARCHI_UDMA_ADDR + UDMA_PERIPH_OFFSET(ARCHI_UDMA_I2S_ID(itf));
+}
+
 #endif

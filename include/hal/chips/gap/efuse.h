@@ -81,6 +81,9 @@
 #define GAP_EFUSE_INFO2_SPIM_CLKDIV_BIT    3
 #define GAP_EFUSE_INFO2_SPIM_CLKDIV_WIDTH  2
 
+#define GAP_EFUSE_INFO2_LOCK_JTAG_SPIS_BIT    5
+#define GAP_EFUSE_INFO2_LOCK_JTAG_SPIS_WIDTH    1
+
 static inline unsigned int plp_efuse_info_get() {
   return plp_efuse_readByte(GAP_EFUSE_INFO_REG);
 }
@@ -155,6 +158,10 @@ static inline unsigned int plp_efuse_fll_tolerance_get() {
 
 static inline unsigned int plp_efuse_fll_assert_cycles_get() {
   return plp_efuse_readByte(GAP_EFUSE_FLL_ASSERT_CYCLES);
+}
+
+static inline unsigned int plp_efuse_lock_jtag_spis_get(unsigned int infoValue) {
+  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO2_LOCK_JTAG_SPIS_BIT, GAP_EFUSE_INFO2_LOCK_JTAG_SPIS_WIDTH);
 }
 
 #endif
