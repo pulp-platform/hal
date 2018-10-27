@@ -323,4 +323,3 @@ static inline unsigned int plp_efuse_ref_clk_wait_cycles_get() {
 #endif
 
 #endif
-#endif
