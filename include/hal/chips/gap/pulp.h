@@ -25,7 +25,7 @@
 #include "hal/udma/udma_v2.h"
 #include "hal/cluster_ctrl/cluster_ctrl_v2.h"
 #include "hal/icache/icache_ctrl_v2.h"
-#include "hal/apb_soc/apb_soc_v2.h"
+#include "hal/chips/gap/apb_soc.h"
 #include "hal/maestro/pmu_v1.h"
 #include "hal/rom/rom_v2.h"
 #include "hal/fll/fll_v1.h"
