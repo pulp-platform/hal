@@ -94,4 +94,9 @@ static inline void apb_soc_padsleep_set(unsigned int value)
   pulp_write32(ARCHI_APB_SOC_CTRL_ADDR + APB_SOC_SAFE_PADSLEEP, value);  
 }
 
+static inline unsigned int apb_soc_sleep_control_get()
+{
+  return pulp_read32(ARCHI_APB_SOC_CTRL_ADDR + APB_SOC_SLEEP_CONTROL);  
+}
+
 #endif
