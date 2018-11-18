@@ -235,6 +235,9 @@ static inline unsigned int plp_efuse_fll_assert_cycles_get() {
 #define GAP_EFUSE_INFO3_FLASH_TYPE_BIT      0
 #define GAP_EFUSE_INFO3_FLASH_TYPE_WIDTH    1
 
+#define GAP_EFUSE_INFO3_CLKDIV_BIT      1
+#define GAP_EFUSE_INFO3_CLKDIV_WIDTH    1
+
 static inline unsigned int plp_efuse_info_get() {
   return plp_efuse_readByte(GAP_EFUSE_INFO_REG);
 }
@@ -329,6 +332,10 @@ static inline unsigned int plp_efuse_pad_config_get(unsigned int infoValue) {
 
 static inline unsigned int plp_efuse_flash_type_get(unsigned int infoValue) {
   return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO3_FLASH_TYPE_BIT, GAP_EFUSE_INFO3_FLASH_TYPE_WIDTH);
+}
+
+static inline unsigned int plp_efuse_clkdiv_get(unsigned int infoValue) {
+  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO3_CLKDIV_BIT, GAP_EFUSE_INFO3_CLKDIV_WIDTH);
 }
 
 static inline unsigned int plp_efuse_ref_clk_wait_cycles_get() {
