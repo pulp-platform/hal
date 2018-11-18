@@ -26,6 +26,8 @@
 #include "hal/gpio/gpio_v2.h"
 #include "hal/hwce/hwce_v5.h"
 #include "hal/pwm/pwm_v1.h"
+#include "hal/efuse/efuse_v1.h"
+#include "hal/chips/vega/efuse.h"
 
 #include "hal/vendors/iid/quiddikey_v1.h"
 #include "hal/vendors/lnt/csi2_v1.h"

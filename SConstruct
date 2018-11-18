@@ -64,6 +64,8 @@ for config in configs:
   # Chip specific files can be included here
   if chip == 'vega':
     append_file('hal/pwm/pwm_v1.h')
+    append_file('hal/chips/vega/efuse.h')
+    append_file('hal/chips/vega/pulp.h')
   elif chip == 'gap':
     append_file('hal/pwm/pwm_v1.h')
   elif chip == 'wolfe':
