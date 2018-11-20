@@ -161,6 +161,79 @@ static inline unsigned int plp_efuse_fll_assert_cycles_get() {
 
 #else
 
+typedef struct {
+  union {
+    struct {
+      unsigned int platform:3;
+      unsigned int bootmode:3;
+      unsigned int encrypted:1;
+      unsigned int wait_xtal:1;
+    };
+    uint8_t raw;
+  } info;
+  union {
+    struct {
+      unsigned int fll_freq_set:1;
+      unsigned int fll_conf:1;
+      unsigned int fll_bypass_lock:1;
+      unsigned int spim_clkdiv:2;
+      unsigned int jtag_spis_lock:1;
+      unsigned int ref_clk_wait:1;
+      unsigned int pad_config:1;
+    };
+    uint8_t raw;
+  } info2;
+  uint8_t Key[4][4];
+  uint8_t IV[2][4];
+  uint16_t wait_xtal_delta;
+  uint8_t wait_xtal_min;
+  uint8_t wait_xtal_max;
+  uint8_t hyper_rds_delay;
+  uint8_t fll_freq;
+  uint8_t fll_lock_tolerance;
+  uint8_t fll_assert_cycles;
+  uint8_t periph_div;
+  uint16_t ref_clk_wait_cycles;
+  union {
+    struct {
+      unsigned int flash_type:1;
+      unsigned int set_clkdiv:1;
+      unsigned int flash_reset:1;
+      unsigned int flash_wait:1;
+      unsigned int flash_wakeup:1;
+      unsigned int flash_init:1;
+    };
+    uint8_t raw;
+  } info3;
+  union {
+    struct {
+      unsigned int flash_cmd:1;
+      unsigned int flash_cmd_ds:1;
+      unsigned int flash_cmd2:1;
+      unsigned int flash_cmd2_ds:1;
+      unsigned int flash_cmd3:1;
+      unsigned int flash_cmd3_ds:1;
+      unsigned int flash_cmd4:1;
+      unsigned int flash_cmd4_ds:1;
+    };
+    uint8_t raw;
+  } info4;
+  union {
+    struct {
+      unsigned int flash_cs:1;
+      unsigned int flash_itf:2;
+      unsigned int flash_pad:2;
+    };
+    uint8_t raw;
+  } info5;
+  uint8_t flash_cmd;
+  uint8_t flash_cmd2;
+  uint8_t flash_cmd3;
+  uint8_t flash_cmd4;
+  uint8_t flash_wait;
+  uint8_t padding[8];
+} __attribute__((packed)) efuse_t;
+
 #define PLP_EFUSE_PLT_OTHER   0
 #define PLP_EFUSE_PLT_FPGA    1
 #define PLP_EFUSE_PLT_RTL     2
@@ -168,15 +241,19 @@ static inline unsigned int plp_efuse_fll_assert_cycles_get() {
 #define PLP_EFUSE_PLT_CHIP    4
 
 
-#define PLP_EFUSE_BOOT_JTAG_MODE 0
-#define PLP_EFUSE_BOOT_JTAG      1
+#define PLP_EFUSE_BOOT_JTAG      0
+#define PLP_EFUSE_BOOT_STOP      1
 #define PLP_EFUSE_BOOT_FLASH     2
 #define PLP_EFUSE_BOOT_SPIS      3
+#define PLP_EFUSE_BOOT_WAIT      4
+#define PLP_EFUSE_BOOT_WAIT_END  5
 
 
 #define GAP_EFUSE_INFO_REG          0
 #define GAP_EFUSE_INFO2_REG         1
 #define GAP_EFUSE_INFO3_REG         37
+#define GAP_EFUSE_INFO4_REG         38
+#define GAP_EFUSE_INFO5_REG         39
 #define GAP_EFUSE_AES_KEY_FIRST_REG 2
 #define GAP_EFUSE_AES_KEY_NB_REGS   16
 #define GAP_EFUSE_AES_IV_FIRST_REG  18
@@ -198,6 +275,12 @@ static inline unsigned int plp_efuse_fll_assert_cycles_get() {
 
 #define GAP_EFUSE_REF_CLK_WAIT_CYCLES_LSB      35
 #define GAP_EFUSE_REF_CLK_WAIT_CYCLES_MSB      36
+
+#define GAP_EFUSE_FLASH_CMD      40
+#define GAP_EFUSE_FLASH_CMD2     41
+#define GAP_EFUSE_FLASH_CMD3     42
+#define GAP_EFUSE_FLASH_CMD4     43
+#define GAP_EFUSE_FLASH_WAIT     44
 
 #define GAP_EFUSE_INFO_PLT_BIT    0
 #define GAP_EFUSE_INFO_PLT_WIDTH  3
@@ -238,6 +321,48 @@ static inline unsigned int plp_efuse_fll_assert_cycles_get() {
 #define GAP_EFUSE_INFO3_CLKDIV_BIT      1
 #define GAP_EFUSE_INFO3_CLKDIV_WIDTH    1
 
+#define GAP_EFUSE_INFO3_FLASH_RESET_BIT      2
+#define GAP_EFUSE_INFO3_FLASH_RESET_WIDTH    1
+
+#define GAP_EFUSE_INFO3_FLASH_WAIT_BIT      3
+#define GAP_EFUSE_INFO3_FLASH_WAIT_WIDTH    1
+
+#define GAP_EFUSE_INFO3_FLASH_WAKEUP_BIT      4
+#define GAP_EFUSE_INFO3_FLASH_WAKEUP_WIDTH    1
+
+#define GAP_EFUSE_INFO3_FLASH_INIT_BIT      5
+#define GAP_EFUSE_INFO3_FLASH_INIT_WIDTH    1
+
+#define GAP_EFUSE_INFO4_FLASH_CMD_BIT      0
+#define GAP_EFUSE_INFO4_FLASH_CMD_WIDTH    1
+
+#define GAP_EFUSE_INFO4_FLASH_CMD_DS_BIT      1
+#define GAP_EFUSE_INFO4_FLASH_CMD_DS_WIDTH    1
+
+#define GAP_EFUSE_INFO4_FLASH_CMD2_BIT      2
+#define GAP_EFUSE_INFO4_FLASH_CMD2_WIDTH    1
+
+#define GAP_EFUSE_INFO4_FLASH_CMD2_DS_BIT      3
+#define GAP_EFUSE_INFO4_FLASH_CMD2_DS_WIDTH    1
+
+#define GAP_EFUSE_INFO4_FLASH_CMD3_BIT      4
+#define GAP_EFUSE_INFO4_FLASH_CMD3_WIDTH    1
+
+#define GAP_EFUSE_INFO4_FLASH_CMD3_DS_BIT      5
+#define GAP_EFUSE_INFO4_FLASH_CMD3_DS_WIDTH    1
+
+#define GAP_EFUSE_INFO4_FLASH_CMD4_BIT      6
+#define GAP_EFUSE_INFO4_FLASH_CMD4_WIDTH    1
+
+#define GAP_EFUSE_INFO4_FLASH_CMD4_DS_BIT      7
+#define GAP_EFUSE_INFO4_FLASH_CMD4_DS_WIDTH    1
+
+#define GAP_EFUSE_INFO5_FLASH_CS_BIT      0
+#define GAP_EFUSE_INFO5_FLASH_CS_WIDTH    1
+
+#define GAP_EFUSE_INFO5_FLASH_ITF_BIT      1
+#define GAP_EFUSE_INFO5_FLASH_ITF_WIDTH    2
+
 static inline unsigned int plp_efuse_info_get() {
   return plp_efuse_readByte(GAP_EFUSE_INFO_REG);
 }
@@ -248,6 +373,14 @@ static inline unsigned int plp_efuse_info2_get() {
 
 static inline unsigned int plp_efuse_info3_get() {
   return plp_efuse_readByte(GAP_EFUSE_INFO3_REG);
+}
+
+static inline unsigned int plp_efuse_info4_get() {
+  return plp_efuse_readByte(GAP_EFUSE_INFO4_REG);
+}
+
+static inline unsigned int plp_efuse_info5_get() {
+  return plp_efuse_readByte(GAP_EFUSE_INFO5_REG);
 }
 
 static inline unsigned int plp_efuse_platform_get(unsigned int infoValue) {
@@ -338,8 +471,32 @@ static inline unsigned int plp_efuse_clkdiv_get(unsigned int infoValue) {
   return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO3_CLKDIV_BIT, GAP_EFUSE_INFO3_CLKDIV_WIDTH);
 }
 
+static inline unsigned int plp_efuse_flash_reset_get(unsigned int infoValue) {
+  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO3_FLASH_RESET_BIT, GAP_EFUSE_INFO3_FLASH_RESET_WIDTH);
+}
+
 static inline unsigned int plp_efuse_ref_clk_wait_cycles_get() {
   return plp_efuse_readByte(GAP_EFUSE_REF_CLK_WAIT_CYCLES_LSB) | (plp_efuse_readByte(GAP_EFUSE_REF_CLK_WAIT_CYCLES_MSB) << 8);
+}
+
+static inline unsigned int plp_efuse_flash_cmd_value_get() {
+  return plp_efuse_readByte(GAP_EFUSE_FLASH_CMD);
+}
+
+static inline unsigned int plp_efuse_flash_cmd2_value_get() {
+  return plp_efuse_readByte(GAP_EFUSE_FLASH_CMD2);
+}
+
+static inline unsigned int plp_efuse_flash_cmd3_value_get() {
+  return plp_efuse_readByte(GAP_EFUSE_FLASH_CMD3);
+}
+
+static inline unsigned int plp_efuse_flash_cmd4_value_get() {
+  return plp_efuse_readByte(GAP_EFUSE_FLASH_CMD4);
+}
+
+static inline unsigned int plp_efuse_flash_wait_value_get() {
+  return plp_efuse_readByte(GAP_EFUSE_FLASH_WAIT);
 }
 
 #endif
