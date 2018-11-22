@@ -223,6 +223,7 @@ typedef struct {
       unsigned int flash_cs:1;
       unsigned int flash_itf:2;
       unsigned int flash_pad:2;
+      unsigned int hyperchip_size:1;
     };
     uint8_t raw;
   } info5;
@@ -231,6 +232,7 @@ typedef struct {
   uint8_t flash_cmd3;
   uint8_t flash_cmd4;
   uint8_t flash_wait;
+  uint8_t hyperchip_size;
   uint8_t padding[8];
 } __attribute__((packed)) efuse_t;
 
@@ -281,6 +283,8 @@ typedef struct {
 #define GAP_EFUSE_FLASH_CMD3     42
 #define GAP_EFUSE_FLASH_CMD4     43
 #define GAP_EFUSE_FLASH_WAIT     44
+
+#define GAP_EFUSE_HYPERCHIP_SIZE     45
 
 #define GAP_EFUSE_INFO_PLT_BIT    0
 #define GAP_EFUSE_INFO_PLT_WIDTH  3
@@ -497,6 +501,10 @@ static inline unsigned int plp_efuse_flash_cmd4_value_get() {
 
 static inline unsigned int plp_efuse_flash_wait_value_get() {
   return plp_efuse_readByte(GAP_EFUSE_FLASH_WAIT);
+}
+
+static inline unsigned int plp_efuse_hyperchip_size_get() {
+  return plp_efuse_readByte(GAP_EFUSE_HYPERCHIP_SIZE);
 }
 
 #endif
