@@ -51,7 +51,7 @@
 #define GAP_EFUSE_WAIT_XTAL_MIN_REG        28
 #define GAP_EFUSE_WAIT_XTAL_MAX_REG        29
 
-#define GAP_EFUSE_HYPER_RDS_DELAY          30	/* Eric: added a new efuse location for the hyper rds delay, one byte is enough */
+#define GAP_EFUSE_HYPER_RDS_DELAY          30 /* Eric: added a new efuse location for the hyper rds delay, one byte is enough */
 
 #define GAP_EFUSE_FLL_FREQ                 31
 #define GAP_EFUSE_FLL_TOLERANCE            32
@@ -83,6 +83,13 @@
 #define GAP_EFUSE_INFO2_SPIM_CLKDIV_BIT    3
 #define GAP_EFUSE_INFO2_SPIM_CLKDIV_WIDTH  2
 
+static inline unsigned int plp_efuse_info_get() {
+  return plp_efuse_readByte(GAP_EFUSE_INFO_REG);
+}
+
+static inline unsigned int plp_efuse_info2_get() {
+  return plp_efuse_readByte(GAP_EFUSE_INFO2_REG);
+}
 
 static inline unsigned int plp_efuse_platform_get(unsigned int infoValue) {
   return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO_PLT_BIT, GAP_EFUSE_INFO_PLT_WIDTH);
@@ -108,7 +115,19 @@ static inline unsigned int plp_efuse_wait_xtal_get(unsigned int infoValue) {
   return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO_WAIT_XTAL_BIT, GAP_EFUSE_INFO_WAIT_XTAL_WIDTH);
 }
 
-static inline unsigned int plp_efuse_hyper_rds_delay_get() {	/* Eric: added new function to read hyper rds delay */
+static inline unsigned int plp_efuse_wait_xtal_delta_get() {
+  return plp_efuse_readByte(GAP_EFUSE_WAIT_XTAL_DELTA_REG_LSB) | (plp_efuse_readByte(GAP_EFUSE_WAIT_XTAL_DELTA_REG_MSB) << 8);
+}
+
+static inline unsigned int plp_efuse_wait_xtal_min_get() {
+  return plp_efuse_readByte(GAP_EFUSE_WAIT_XTAL_MIN_REG);
+}
+
+static inline unsigned int plp_efuse_wait_xtal_max_get() {
+  return plp_efuse_readByte(GAP_EFUSE_WAIT_XTAL_MAX_REG);
+}
+
+static inline unsigned int plp_efuse_hyper_rds_delay_get() {  /* Eric: added new function to read hyper rds delay */
   return plp_efuse_readByte(GAP_EFUSE_HYPER_RDS_DELAY);
 }
 
