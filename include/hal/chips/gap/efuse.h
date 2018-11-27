@@ -83,13 +83,6 @@
 #define GAP_EFUSE_INFO2_SPIM_CLKDIV_BIT    3
 #define GAP_EFUSE_INFO2_SPIM_CLKDIV_WIDTH  2
 
-static inline unsigned int plp_efuse_info_get() {
-  return plp_efuse_readByte(GAP_EFUSE_INFO_REG);
-}
-
-static inline unsigned int plp_efuse_info2_get() {
-  return plp_efuse_readByte(GAP_EFUSE_INFO2_REG);
-}
 
 static inline unsigned int plp_efuse_platform_get(unsigned int infoValue) {
   return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO_PLT_BIT, GAP_EFUSE_INFO_PLT_WIDTH);
@@ -113,18 +106,6 @@ static inline unsigned int plp_efuse_aesIv_get(int word) {
 
 static inline unsigned int plp_efuse_wait_xtal_get(unsigned int infoValue) {
   return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO_WAIT_XTAL_BIT, GAP_EFUSE_INFO_WAIT_XTAL_WIDTH);
-}
-
-static inline unsigned int plp_efuse_wait_xtal_delta_get() {
-  return plp_efuse_readByte(GAP_EFUSE_WAIT_XTAL_DELTA_REG_LSB) | (plp_efuse_readByte(GAP_EFUSE_WAIT_XTAL_DELTA_REG_MSB) << 8);
-}
-
-static inline unsigned int plp_efuse_wait_xtal_min_get() {
-  return plp_efuse_readByte(GAP_EFUSE_WAIT_XTAL_MIN_REG);
-}
-
-static inline unsigned int plp_efuse_wait_xtal_max_get() {
-  return plp_efuse_readByte(GAP_EFUSE_WAIT_XTAL_MAX_REG);
 }
 
 static inline unsigned int plp_efuse_hyper_rds_delay_get() {	/* Eric: added new function to read hyper rds delay */
@@ -269,298 +250,43 @@ typedef struct {
 #define PLP_EFUSE_BOOT_WAIT_END  5
 
 
-#define GAP_EFUSE_INFO_REG          0
-#define GAP_EFUSE_INFO2_REG         1
-#define GAP_EFUSE_INFO3_REG         37
-#define GAP_EFUSE_INFO4_REG         38
-#define GAP_EFUSE_INFO5_REG         39
-#define GAP_EFUSE_INFO6_REG         40
-#define GAP_EFUSE_AES_KEY_FIRST_REG 2
-#define GAP_EFUSE_AES_KEY_NB_REGS   16
-#define GAP_EFUSE_AES_IV_FIRST_REG  18
-#define GAP_EFUSE_AES_IV_NB_REGS    8
-
-#define GAP_EFUSE_WAIT_XTAL_DELTA_REG_LSB     26
-#define GAP_EFUSE_WAIT_XTAL_DELTA_REG_MSB     27
-
-#define GAP_EFUSE_WAIT_XTAL_MIN_REG        28
-#define GAP_EFUSE_WAIT_XTAL_MAX_REG        29
-
-#define GAP_EFUSE_HYPER_RDS_DELAY          30 /* Eric: added a new efuse location for the hyper rds delay, one byte is enough */
-
-#define GAP_EFUSE_FLL_FREQ                 31
-#define GAP_EFUSE_FLL_TOLERANCE            32
-#define GAP_EFUSE_FLL_ASSERT_CYCLES        33
-
-#define GAP_EFUSE_PERIPH_DIV               34
-
-#define GAP_EFUSE_REF_CLK_WAIT_CYCLES_LSB      35
-#define GAP_EFUSE_REF_CLK_WAIT_CYCLES_MSB      36
-
-#define GAP_EFUSE_FLASH_CMD      41
-#define GAP_EFUSE_FLASH_CMD2     42
-#define GAP_EFUSE_FLASH_CMD3     43
-#define GAP_EFUSE_FLASH_CMD4     44
-#define GAP_EFUSE_FLASH_WAIT     45
-
-#define GAP_EFUSE_HYPERCHIP_SIZE     46
-
-#define GAP_EFUSE_I2C_DIV_MSB    47
-#define GAP_EFUSE_I2C_DIV_LSB    48
-
-#define GAP_EFUSE_I2C_CS     49
-
-#define GAP_EFUSE_FLASH_RESET_WAIT     50
-
-#define GAP_EFUSE_HYPER_LATENCY     51
-
-#define GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_LSB      52
-#define GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_MSB      53
-
-#define GAP_EFUSE_INFO_PLT_BIT    0
-#define GAP_EFUSE_INFO_PLT_WIDTH  3
-
-#define GAP_EFUSE_INFO_BOOT_BIT    3
-#define GAP_EFUSE_INFO_BOOT_WIDTH  3
-
-#define GAP_EFUSE_INFO_ENCRYPTED_BIT     6
-#define GAP_EFUSE_INFO_ENCRYPTED_WIDTH   1
-
-#define GAP_EFUSE_INFO_WAIT_XTAL_BIT     7
-#define GAP_EFUSE_INFO_WAIT_XTAL_WIDTH   1
-
-#define GAP_EFUSE_INFO2_FLL_FREQ_SET_BIT    0
-#define GAP_EFUSE_INFO2_FLL_FREQ_SET_WIDTH  1
-
-#define GAP_EFUSE_INFO2_FLL_CONF_BIT    1
-#define GAP_EFUSE_INFO2_FLL_CONF_WIDTH  1
-
-#define GAP_EFUSE_INFO2_FLL_BYPASS_LOCK_BIT    2
-#define GAP_EFUSE_INFO2_FLL_BYPASS_LOCK_WIDTH  1
-
-#define GAP_EFUSE_INFO2_SPIM_CLKDIV_BIT    3
-#define GAP_EFUSE_INFO2_SPIM_CLKDIV_WIDTH  2
-
-#define GAP_EFUSE_INFO2_LOCK_JTAG_SPIS_BIT    5
-#define GAP_EFUSE_INFO2_LOCK_JTAG_SPIS_WIDTH    1
-
-#define GAP_EFUSE_INFO2_REF_CLK_WAIT_BIT    6
-#define GAP_EFUSE_INFO2_REF_CLK_WAIT_WIDTH    1
-
-#define GAP_EFUSE_INFO2_PAD_CONFIG_BIT      7
-#define GAP_EFUSE_INFO2_PAD_CONFIG_WIDTH    1
-
-#define GAP_EFUSE_INFO3_FLASH_TYPE_BIT      0
-#define GAP_EFUSE_INFO3_FLASH_TYPE_WIDTH    1
-
-#define GAP_EFUSE_INFO3_CLKDIV_BIT      1
-#define GAP_EFUSE_INFO3_CLKDIV_WIDTH    1
-
-#define GAP_EFUSE_INFO3_FLASH_RESET_BIT      2
-#define GAP_EFUSE_INFO3_FLASH_RESET_WIDTH    1
-
-#define GAP_EFUSE_INFO3_FLASH_WAIT_BIT      3
-#define GAP_EFUSE_INFO3_FLASH_WAIT_WIDTH    1
-
-#define GAP_EFUSE_INFO3_FLASH_WAKEUP_BIT      4
-#define GAP_EFUSE_INFO3_FLASH_WAKEUP_WIDTH    1
-
-#define GAP_EFUSE_INFO3_FLASH_INIT_BIT      5
-#define GAP_EFUSE_INFO3_FLASH_INIT_WIDTH    1
-
-#define GAP_EFUSE_INFO4_FLASH_CMD_BIT      0
-#define GAP_EFUSE_INFO4_FLASH_CMD_WIDTH    1
-
-#define GAP_EFUSE_INFO4_FLASH_CMD_DS_BIT      1
-#define GAP_EFUSE_INFO4_FLASH_CMD_DS_WIDTH    1
-
-#define GAP_EFUSE_INFO4_FLASH_CMD2_BIT      2
-#define GAP_EFUSE_INFO4_FLASH_CMD2_WIDTH    1
-
-#define GAP_EFUSE_INFO4_FLASH_CMD2_DS_BIT      3
-#define GAP_EFUSE_INFO4_FLASH_CMD2_DS_WIDTH    1
-
-#define GAP_EFUSE_INFO4_FLASH_CMD3_BIT      4
-#define GAP_EFUSE_INFO4_FLASH_CMD3_WIDTH    1
-
-#define GAP_EFUSE_INFO4_FLASH_CMD3_DS_BIT      5
-#define GAP_EFUSE_INFO4_FLASH_CMD3_DS_WIDTH    1
-
-#define GAP_EFUSE_INFO4_FLASH_CMD4_BIT      6
-#define GAP_EFUSE_INFO4_FLASH_CMD4_WIDTH    1
-
-#define GAP_EFUSE_INFO4_FLASH_CMD4_DS_BIT      7
-#define GAP_EFUSE_INFO4_FLASH_CMD4_DS_WIDTH    1
-
-#define GAP_EFUSE_INFO5_FLASH_CS_BIT      0
-#define GAP_EFUSE_INFO5_FLASH_CS_WIDTH    1
-
-#define GAP_EFUSE_INFO5_FLASH_ITF_BIT      1
-#define GAP_EFUSE_INFO5_FLASH_ITF_WIDTH    2
-
-static inline unsigned int plp_efuse_info_get() {
-  return plp_efuse_readByte(GAP_EFUSE_INFO_REG);
-}
-
-static inline unsigned int plp_efuse_info2_get() {
-  return plp_efuse_readByte(GAP_EFUSE_INFO2_REG);
-}
-
-static inline unsigned int plp_efuse_info3_get() {
-  return plp_efuse_readByte(GAP_EFUSE_INFO3_REG);
-}
-
-static inline unsigned int plp_efuse_info4_get() {
-  return plp_efuse_readByte(GAP_EFUSE_INFO4_REG);
-}
-
-static inline unsigned int plp_efuse_info5_get() {
-  return plp_efuse_readByte(GAP_EFUSE_INFO5_REG);
-}
-
-static inline unsigned int plp_efuse_info6_get() {
-  return plp_efuse_readByte(GAP_EFUSE_INFO6_REG);
-}
-
-
-static inline unsigned int plp_efuse_platform_get(unsigned int infoValue) {
-  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO_PLT_BIT, GAP_EFUSE_INFO_PLT_WIDTH);
-}
-
-static inline unsigned int plp_efuse_bootmode_get(unsigned int infoValue) {
-  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO_BOOT_BIT, GAP_EFUSE_INFO_BOOT_WIDTH);
-}
-
-static inline unsigned int plp_efuse_encrypted_get(unsigned int infoValue) {
-  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO_ENCRYPTED_BIT, GAP_EFUSE_INFO_ENCRYPTED_WIDTH);
-}
-
-static inline unsigned int plp_efuse_aesKey_get(int word) {
-  return plp_efuse_readByte(GAP_EFUSE_AES_KEY_FIRST_REG + word);
-}
-
-static inline unsigned int plp_efuse_aesIv_get(int word) {
-  return plp_efuse_readByte(GAP_EFUSE_AES_IV_FIRST_REG + word);
-}
-
-static inline unsigned int plp_efuse_wait_xtal_get(unsigned int infoValue) {
-  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO_WAIT_XTAL_BIT, GAP_EFUSE_INFO_WAIT_XTAL_WIDTH);
-}
-
-static inline unsigned int plp_efuse_wait_xtal_delta_get() {
-  return plp_efuse_readByte(GAP_EFUSE_WAIT_XTAL_DELTA_REG_LSB) | (plp_efuse_readByte(GAP_EFUSE_WAIT_XTAL_DELTA_REG_MSB) << 8);
-}
-
-static inline unsigned int plp_efuse_wait_xtal_min_get() {
-  return plp_efuse_readByte(GAP_EFUSE_WAIT_XTAL_MIN_REG);
-}
-
-static inline unsigned int plp_efuse_wait_xtal_max_get() {
-  return plp_efuse_readByte(GAP_EFUSE_WAIT_XTAL_MAX_REG);
-}
-
-static inline unsigned int plp_efuse_hyper_rds_delay_get() {  /* Eric: added new function to read hyper rds delay */
-  return plp_efuse_readByte(GAP_EFUSE_HYPER_RDS_DELAY);
-}
-
-static inline unsigned int plp_efuse_fll_set_freq_get(unsigned int infoValue) {
-  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO2_FLL_FREQ_SET_BIT, GAP_EFUSE_INFO2_FLL_FREQ_SET_WIDTH);
-}
-
-static inline unsigned int plp_efuse_fll_conf_get(unsigned int infoValue) {
-  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO2_FLL_CONF_BIT, GAP_EFUSE_INFO2_FLL_CONF_WIDTH);
-}
-
-static inline unsigned int plp_efuse_fll_bypass_lock_get(unsigned int infoValue) {
-  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO2_FLL_BYPASS_LOCK_BIT, GAP_EFUSE_INFO2_FLL_BYPASS_LOCK_WIDTH);
-}
-
-static inline unsigned int plp_efuse_spim_clkdiv_get(unsigned int infoValue) {
-  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO2_SPIM_CLKDIV_BIT, GAP_EFUSE_INFO2_SPIM_CLKDIV_WIDTH);
-}
-
-static inline unsigned int plp_efuse_fll_freq_get() {
-  return plp_efuse_readByte(GAP_EFUSE_FLL_FREQ);
-}
-
-static inline unsigned int plp_efuse_fll_tolerance_get() {
-  return plp_efuse_readByte(GAP_EFUSE_FLL_TOLERANCE);
-}
-
-static inline unsigned int plp_efuse_fll_assert_cycles_get() {
-  return plp_efuse_readByte(GAP_EFUSE_FLL_ASSERT_CYCLES);
-}
-
-static inline unsigned int plp_efuse_lock_jtag_spis_get(unsigned int infoValue) {
-  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO2_LOCK_JTAG_SPIS_BIT, GAP_EFUSE_INFO2_LOCK_JTAG_SPIS_WIDTH);
-}
-
-static inline unsigned int plp_efuse_ref_clk_wait_get(unsigned int infoValue) {
-  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO2_REF_CLK_WAIT_BIT, GAP_EFUSE_INFO2_REF_CLK_WAIT_WIDTH);
-}
-
-static inline unsigned int plp_efuse_pad_config_get(unsigned int infoValue) {
-  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO2_PAD_CONFIG_BIT, GAP_EFUSE_INFO2_PAD_CONFIG_WIDTH);
-}
-
-static inline unsigned int plp_efuse_flash_type_get(unsigned int infoValue) {
-  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO3_FLASH_TYPE_BIT, GAP_EFUSE_INFO3_FLASH_TYPE_WIDTH);
-}
-
-static inline unsigned int plp_efuse_clkdiv_get(unsigned int infoValue) {
-  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO3_CLKDIV_BIT, GAP_EFUSE_INFO3_CLKDIV_WIDTH);
-}
-
-static inline unsigned int plp_efuse_flash_reset_get(unsigned int infoValue) {
-  return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO3_FLASH_RESET_BIT, GAP_EFUSE_INFO3_FLASH_RESET_WIDTH);
-}
-
-static inline unsigned int plp_efuse_ref_clk_wait_cycles_get() {
-  return plp_efuse_readByte(GAP_EFUSE_REF_CLK_WAIT_CYCLES_LSB) | (plp_efuse_readByte(GAP_EFUSE_REF_CLK_WAIT_CYCLES_MSB) << 8);
-}
-
-static inline unsigned int plp_efuse_ref_clk_wait_cycles_deep_sleep_get() {
-  return plp_efuse_readByte(GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_LSB) | (plp_efuse_readByte(GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_MSB) << 8);
-}
-
-static inline unsigned int plp_efuse_flash_cmd_value_get() {
-  return plp_efuse_readByte(GAP_EFUSE_FLASH_CMD);
-}
-
-static inline unsigned int plp_efuse_flash_cmd2_value_get() {
-  return plp_efuse_readByte(GAP_EFUSE_FLASH_CMD2);
-}
-
-static inline unsigned int plp_efuse_flash_cmd3_value_get() {
-  return plp_efuse_readByte(GAP_EFUSE_FLASH_CMD3);
-}
-
-static inline unsigned int plp_efuse_flash_cmd4_value_get() {
-  return plp_efuse_readByte(GAP_EFUSE_FLASH_CMD4);
-}
-
-static inline unsigned int plp_efuse_flash_wait_value_get() {
-  return plp_efuse_readByte(GAP_EFUSE_FLASH_WAIT);
-}
-
-static inline unsigned int plp_efuse_hyperchip_size_get() {
-  return plp_efuse_readByte(GAP_EFUSE_HYPERCHIP_SIZE);
-}
-
-static inline unsigned int plp_efuse_i2c_div_get() {
-  return plp_efuse_readByte(GAP_EFUSE_I2C_DIV_LSB) | (plp_efuse_readByte(GAP_EFUSE_I2C_DIV_MSB) << 8);
-}
-
-static inline unsigned int plp_efuse_i2c_cs_get() {
-  return plp_efuse_readByte(GAP_EFUSE_I2C_CS);
-}
-
-static inline unsigned int plp_efuse_flash_reset_wait_get() {
-  return plp_efuse_readByte(GAP_EFUSE_FLASH_RESET_WAIT);
-}
-
-static inline unsigned int plp_efuse_hyper_latency_get() {
-  return plp_efuse_readByte(GAP_EFUSE_HYPER_LATENCY);
+#define GAP_EFUSE_INFO_REG                           0
+#define GAP_EFUSE_INFO2_REG                          1
+#define GAP_EFUSE_AES_KEY_FIRST_REG                  2
+#define GAP_EFUSE_AES_KEY_NB_REGS                    16
+#define GAP_EFUSE_AES_IV_FIRST_REG                   18
+#define GAP_EFUSE_AES_IV_NB_REGS                     8
+#define GAP_EFUSE_WAIT_XTAL_DELTA_REG_LSB            26
+#define GAP_EFUSE_WAIT_XTAL_DELTA_REG_MSB            27
+#define GAP_EFUSE_WAIT_XTAL_MIN_REG                  28
+#define GAP_EFUSE_WAIT_XTAL_MAX_REG                  29
+#define GAP_EFUSE_HYPER_RDS_DELAY                    30
+#define GAP_EFUSE_FLL_FREQ                           31
+#define GAP_EFUSE_FLL_TOLERANCE                      32
+#define GAP_EFUSE_FLL_ASSERT_CYCLES                  33
+#define GAP_EFUSE_PERIPH_DIV                         34
+#define GAP_EFUSE_REF_CLK_WAIT_CYCLES_LSB            35
+#define GAP_EFUSE_REF_CLK_WAIT_CYCLES_MSB            36
+#define GAP_EFUSE_INFO3_REG                          37
+#define GAP_EFUSE_INFO4_REG                          38
+#define GAP_EFUSE_INFO5_REG                          39
+#define GAP_EFUSE_INFO6_REG                          40
+#define GAP_EFUSE_FLASH_CMD                          41
+#define GAP_EFUSE_FLASH_CMD2                         42
+#define GAP_EFUSE_FLASH_CMD3                         43
+#define GAP_EFUSE_FLASH_CMD4                         44
+#define GAP_EFUSE_FLASH_WAIT                         45
+#define GAP_EFUSE_HYPERCHIP_SIZE                     46
+#define GAP_EFUSE_I2C_DIV_LSB                        47
+#define GAP_EFUSE_I2C_DIV_MSB                        48
+#define GAP_EFUSE_I2C_CS                             49
+#define GAP_EFUSE_FLASH_RESET_WAIT                   50
+#define GAP_EFUSE_HYPER_LATENCY                      51
+#define GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_LSB 52
+#define GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_MSB 53
+
+static inline unsigned int plp_efuse_readShort(int lsb, int msb) {
+  return plp_efuse_readByte(lsb) | (plp_efuse_readByte(msb) << 8);
 }
 
 #endif
