@@ -202,6 +202,8 @@ typedef struct {
       unsigned int flash_wait:1;
       unsigned int flash_wakeup:1;
       unsigned int flash_init:1;
+      unsigned int flash_reset_wait:1;
+      unsigned int ref_clk_wait_deep_sleep:1;
     };
     uint8_t raw;
   } info3;
@@ -224,15 +226,31 @@ typedef struct {
       unsigned int flash_itf:2;
       unsigned int flash_pad:2;
       unsigned int hyperchip_size:1;
+      unsigned int hyper_delay:1;
+      unsigned int hyper_latency:1;
     };
     uint8_t raw;
   } info5;
+  union {
+    struct {
+      unsigned int i2c_loader:1;
+      unsigned int i2c_itf:1;
+      unsigned int i2c_pad_config:2;
+      unsigned int signature:1;
+    };
+    uint8_t raw;
+  } info6;
   uint8_t flash_cmd;
   uint8_t flash_cmd2;
   uint8_t flash_cmd3;
   uint8_t flash_cmd4;
   uint8_t flash_wait;
   uint8_t hyperchip_size;
+  uint16_t i2c_div;
+  uint8_t i2c_cs;
+  uint8_t flash_reset_wait;
+  uint8_t hyper_latency;
+  uint16_t ref_clk_wait_cycles_deep_sleep;
   uint8_t padding[8];
 } __attribute__((packed)) efuse_t;
 
@@ -256,6 +274,7 @@ typedef struct {
 #define GAP_EFUSE_INFO3_REG         37
 #define GAP_EFUSE_INFO4_REG         38
 #define GAP_EFUSE_INFO5_REG         39
+#define GAP_EFUSE_INFO6_REG         40
 #define GAP_EFUSE_AES_KEY_FIRST_REG 2
 #define GAP_EFUSE_AES_KEY_NB_REGS   16
 #define GAP_EFUSE_AES_IV_FIRST_REG  18
@@ -278,13 +297,25 @@ typedef struct {
 #define GAP_EFUSE_REF_CLK_WAIT_CYCLES_LSB      35
 #define GAP_EFUSE_REF_CLK_WAIT_CYCLES_MSB      36
 
-#define GAP_EFUSE_FLASH_CMD      40
-#define GAP_EFUSE_FLASH_CMD2     41
-#define GAP_EFUSE_FLASH_CMD3     42
-#define GAP_EFUSE_FLASH_CMD4     43
-#define GAP_EFUSE_FLASH_WAIT     44
+#define GAP_EFUSE_FLASH_CMD      41
+#define GAP_EFUSE_FLASH_CMD2     42
+#define GAP_EFUSE_FLASH_CMD3     43
+#define GAP_EFUSE_FLASH_CMD4     44
+#define GAP_EFUSE_FLASH_WAIT     45
 
-#define GAP_EFUSE_HYPERCHIP_SIZE     45
+#define GAP_EFUSE_HYPERCHIP_SIZE     46
+
+#define GAP_EFUSE_I2C_DIV_MSB    47
+#define GAP_EFUSE_I2C_DIV_LSB    48
+
+#define GAP_EFUSE_I2C_CS     49
+
+#define GAP_EFUSE_FLASH_RESET_WAIT     50
+
+#define GAP_EFUSE_HYPER_LATENCY     51
+
+#define GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_LSB      52
+#define GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_MSB      53
 
 #define GAP_EFUSE_INFO_PLT_BIT    0
 #define GAP_EFUSE_INFO_PLT_WIDTH  3
@@ -387,6 +418,11 @@ static inline unsigned int plp_efuse_info5_get() {
   return plp_efuse_readByte(GAP_EFUSE_INFO5_REG);
 }
 
+static inline unsigned int plp_efuse_info6_get() {
+  return plp_efuse_readByte(GAP_EFUSE_INFO6_REG);
+}
+
+
 static inline unsigned int plp_efuse_platform_get(unsigned int infoValue) {
   return ARCHI_REG_FIELD_GET(infoValue, GAP_EFUSE_INFO_PLT_BIT, GAP_EFUSE_INFO_PLT_WIDTH);
 }
@@ -483,6 +519,10 @@ static inline unsigned int plp_efuse_ref_clk_wait_cycles_get() {
   return plp_efuse_readByte(GAP_EFUSE_REF_CLK_WAIT_CYCLES_LSB) | (plp_efuse_readByte(GAP_EFUSE_REF_CLK_WAIT_CYCLES_MSB) << 8);
 }
 
+static inline unsigned int plp_efuse_ref_clk_wait_cycles_deep_sleep_get() {
+  return plp_efuse_readByte(GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_LSB) | (plp_efuse_readByte(GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_MSB) << 8);
+}
+
 static inline unsigned int plp_efuse_flash_cmd_value_get() {
   return plp_efuse_readByte(GAP_EFUSE_FLASH_CMD);
 }
@@ -505,6 +545,22 @@ static inline unsigned int plp_efuse_flash_wait_value_get() {
 
 static inline unsigned int plp_efuse_hyperchip_size_get() {
   return plp_efuse_readByte(GAP_EFUSE_HYPERCHIP_SIZE);
+}
+
+static inline unsigned int plp_efuse_i2c_div_get() {
+  return plp_efuse_readByte(GAP_EFUSE_I2C_DIV_LSB) | (plp_efuse_readByte(GAP_EFUSE_I2C_DIV_MSB) << 8);
+}
+
+static inline unsigned int plp_efuse_i2c_cs_get() {
+  return plp_efuse_readByte(GAP_EFUSE_I2C_CS);
+}
+
+static inline unsigned int plp_efuse_flash_reset_wait_get() {
+  return plp_efuse_readByte(GAP_EFUSE_FLASH_RESET_WAIT);
+}
+
+static inline unsigned int plp_efuse_hyper_latency_get() {
+  return plp_efuse_readByte(GAP_EFUSE_HYPER_LATENCY);
 }
 
 #endif
