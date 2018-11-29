@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-#ifndef __HAL_CHIPS_PULPISSIMO_PULP_H__
-#define __HAL_CHIPS_PULPISSIMO_PULP_H__
+#ifndef __HAL_UDMA_UDMA_I2C_V1_H__
+#define __HAL_UDMA_UDMA_I2C_V1_H__
 
-#include "hal/riscv/riscv_v4.h"
-#include "hal/itc/itc_v1.h"
-#include "hal/timer/timer_v2.h"
-#include "hal/soc_eu/soc_eu_v1.h"
-#include "hal/udma/udma_v2.h"
-#include "hal/apb_soc/apb_soc_v3.h"
-#include "hal/fll/fll_v1.h"
-#include "archi/stdout/stdout_v3.h"
-#include "hal/gpio/gpio_v2.h"
-#include "hal/rom/rom_v2.h"
+#include "archi/udma/i2c/udma_i2c_v1.h"
 
-#include "hal/udma/cpi/udma_cpi_v1.h"
-#include "hal/udma/i2c/udma_i2c_v2.h"
-#include "hal/udma/i2s/udma_i2s_v1.h"
-#include "hal/udma/spim/udma_spim_v2.h"
-#include "hal/udma/uart/udma_uart_v1.h"
+static inline uint32_t hal_udma_i2c_setup_compute(int en, int div)
+{
+  return (en << I2C_CMD_SETUP_ENABLE_BIT) | ( div << I2C_CMD_SETUP_DIV_BIT);
+}
+
+static inline void hal_udma_i2c_setup_set(uint32_t periph_base, uint32_t value)
+{
+  pulp_write32(periph_base + UDMA_CHANNEL_CUSTOM_OFFSET + ARCHI_I2C_SETUP_OFFSET, value);
+}
+
+static inline uint32_t hal_udma_i2c_setup_get(uint32_t periph_base)
+{
+  return pulp_read32(periph_base + UDMA_CHANNEL_CUSTOM_OFFSET + ARCHI_I2C_SETUP_OFFSET);
+}
 
 #endif

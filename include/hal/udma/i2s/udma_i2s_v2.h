@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-#ifndef __HAL_CHIPS_PULPISSIMO_PULP_H__
-#define __HAL_CHIPS_PULPISSIMO_PULP_H__
+#ifndef __HAL_UDMA_UDMA_PERIPH_I2S_V2_H__
+#define __HAL_UDMA_UDMA_PERIPH_I2S_V2_H__
 
-#include "hal/riscv/riscv_v4.h"
-#include "hal/itc/itc_v1.h"
-#include "hal/timer/timer_v2.h"
-#include "hal/soc_eu/soc_eu_v1.h"
-#include "hal/udma/udma_v2.h"
-#include "hal/apb_soc/apb_soc_v3.h"
-#include "hal/fll/fll_v1.h"
-#include "archi/stdout/stdout_v3.h"
-#include "hal/gpio/gpio_v2.h"
-#include "hal/rom/rom_v2.h"
+#include "archi/udma/i2s/udma_i2s_v2.h"
 
-#include "hal/udma/cpi/udma_cpi_v1.h"
-#include "hal/udma/i2c/udma_i2c_v2.h"
-#include "hal/udma/i2s/udma_i2s_v1.h"
-#include "hal/udma/spim/udma_spim_v2.h"
-#include "hal/udma/uart/udma_uart_v1.h"
+static inline uint32_t udma_i2s_addr(int itf)
+{
+  return ARCHI_UDMA_ADDR + UDMA_PERIPH_OFFSET(ARCHI_UDMA_I2S_ID(itf));
+}
 
 #endif

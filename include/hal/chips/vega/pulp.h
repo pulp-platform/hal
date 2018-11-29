@@ -25,7 +25,20 @@
 #include "hal/fll/fll_v1.h"
 #include "hal/gpio/gpio_v2.h"
 #include "hal/hwce/hwce_v5.h"
+#include "hal/pwm/pwm_v1.h"
+#include "hal/efuse/efuse_v1.h"
+#include "hal/chips/vega/efuse.h"
 
 #include "hal/vendors/iid/quiddikey_v1.h"
+#include "hal/vendors/lnt/csi2_v1.h"
+
+#include "hal/udma/cpi/udma_cpi_v1.h"
+#include "hal/udma/csi2/udma_csi2_v1.h"
+#include "hal/udma/hyper/udma_hyper_v1.h"
+#include "hal/udma/i2c/udma_i2c_v2.h"
+#include "hal/udma/i2s/udma_i2s_v2.h"
+#include "hal/udma/spim/udma_spim_v3.h"
+#include "hal/udma/uart/udma_uart_v1.h"
+#include "hal/vendors/dolphin/rtc.h"
 
 #endif

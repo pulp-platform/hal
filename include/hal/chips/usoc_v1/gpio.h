@@ -14,50 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef __HAL_GPIO_GPIO_V2_H__
-#define __HAL_GPIO_GPIO_V2_H__
+#ifndef __HAL_CHIPS_USOC_V1_GPIO_H__
+#define __HAL_CHIPS_USOC_V1_GPIO_H__
 
-#include "archi/gpio/gpio_v2.h"
-
-
-static inline uint32_t gpio_padcfg_get(int group)
-{
-  return IP_READ(ARCHI_SOC_PERIPHERALS_ADDR + ARCHI_GPIO_OFFSET, ARCHI_GPIO_PADCFG(group));
-}
-
-static inline void gpio_padcfg_set(int group, uint32_t value)
-{
-  IP_WRITE(ARCHI_SOC_PERIPHERALS_ADDR + ARCHI_GPIO_OFFSET, ARCHI_GPIO_PADCFG(group), value);
-}
-
-static inline void gpio_padcfg_strength_pin_set(int gpio, unsigned int val)
-{
-  int reg_id = ARCHI_GPIO_PADCFG_REG(gpio);
-  int group = ARCHI_GPIO_PADCFG_GROUP(gpio);
-  gpio_reg_padcfg_t reg = { .raw=gpio_padcfg_get(reg_id) };
-  reg.pin[group].strength = val;
-  gpio_padcfg_set(reg_id, reg.raw);
-}
-
-static inline void gpio_padcfg_pull_pin_set(int gpio, unsigned int val)
-{
-  int reg_id = ARCHI_GPIO_PADCFG_REG(gpio);
-  int group = ARCHI_GPIO_PADCFG_GROUP(gpio);
-  gpio_reg_padcfg_t reg = { .raw=gpio_padcfg_get(reg_id) };
-  reg.pin[group].pull = val;
-  gpio_padcfg_set(reg_id, reg.raw);
-}
-
-
-static inline void hal_gpio_paddir_set(unsigned int value)
-{
-  pulp_write32(ARCHI_GPIO_ADDR + ARCHI_GPIO_PADDIR, value);
-}
-
-static inline unsigned int hal_gpio_paddir_get()
-{
-  return pulp_read32(ARCHI_GPIO_ADDR + ARCHI_GPIO_PADDIR);
-}
+#include "archi/chips/usoc_v1/gpio.h"
 
 static inline unsigned int hal_gpio_padin_get()
 {
@@ -67,6 +27,16 @@ static inline unsigned int hal_gpio_padin_get()
 static inline void hal_gpio_padout_set(unsigned int value)
 {
   pulp_write32(ARCHI_GPIO_ADDR + ARCHI_GPIO_PADOUT, value);
+}
+
+static inline void hal_gpio_padoutset_set(unsigned int value)
+{
+  pulp_write32(ARCHI_GPIO_ADDR + ARCHI_GPIO_PADOUTSET, value);
+}
+
+static inline void hal_gpio_padoutclr_set(unsigned int value)
+{
+  pulp_write32(ARCHI_GPIO_ADDR + ARCHI_GPIO_PADOUTCLR, value);
 }
 
 static inline unsigned int hal_gpio_padout_get()
@@ -111,32 +81,16 @@ static inline void hal_gpio_en_set(unsigned int value)
 
 
 
-static inline void hal_gpio_set_dir(uint32_t mask, uint8_t is_out)
-{
-  uint32_t current = hal_gpio_paddir_get();
-  if (is_out)
-  {
-    current |= mask;
-  }
-  else
-  {
-    current &= ~mask;
-  }
-  hal_gpio_paddir_set(current);
-}
-
 static inline void hal_gpio_set_value(uint32_t mask, uint8_t value)
 {
-  uint32_t current = hal_gpio_padout_get();
   if (value)
   {
-    current |= mask;
+    hal_gpio_padoutset_set(mask);
   }
   else
   {
-    current &= ~mask;
+    hal_gpio_padoutclr_set(mask);
   }
-  hal_gpio_padout_set(current);
 }
 
 static inline uint32_t hal_gpio_get_value()
@@ -146,16 +100,14 @@ static inline uint32_t hal_gpio_get_value()
 
 static inline void hal_gpio_set_pin_value(uint32_t pin, uint8_t value)
 {
-  uint32_t current = hal_gpio_padout_get();
   if (value)
   {
-    current |= 1<<pin;
+    hal_gpio_padoutset_set(1<<pin);
   }
   else
   {
-    current &= ~(1<<pin);
+    hal_gpio_padoutclr_set(1<<pin);
   }
-  hal_gpio_padout_set(current);
 }
 
 #endif

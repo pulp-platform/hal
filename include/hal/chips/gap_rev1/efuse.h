@@ -19,8 +19,6 @@
 
 #include "hal/pulp.h"
 
-#if PULP_CHIP == CHIP_GAP
-
 #define PLP_EFUSE_PLT_OTHER   0
 #define PLP_EFUSE_PLT_FPGA    1
 #define PLP_EFUSE_PLT_RTL     2
@@ -51,7 +49,7 @@
 #define GAP_EFUSE_WAIT_XTAL_MIN_REG        28
 #define GAP_EFUSE_WAIT_XTAL_MAX_REG        29
 
-#define GAP_EFUSE_HYPER_RDS_DELAY          30 /* Eric: added a new efuse location for the hyper rds delay, one byte is enough */
+#define GAP_EFUSE_HYPER_RDS_DELAY          30	/* Eric: added a new efuse location for the hyper rds delay, one byte is enough */
 
 #define GAP_EFUSE_FLL_FREQ                 31
 #define GAP_EFUSE_FLL_TOLERANCE            32
@@ -127,7 +125,7 @@ static inline unsigned int plp_efuse_wait_xtal_max_get() {
   return plp_efuse_readByte(GAP_EFUSE_WAIT_XTAL_MAX_REG);
 }
 
-static inline unsigned int plp_efuse_hyper_rds_delay_get() {  /* Eric: added new function to read hyper rds delay */
+static inline unsigned int plp_efuse_hyper_rds_delay_get() {	/* Eric: added new function to read hyper rds delay */
   return plp_efuse_readByte(GAP_EFUSE_HYPER_RDS_DELAY);
 }
 
@@ -158,156 +156,5 @@ static inline unsigned int plp_efuse_fll_tolerance_get() {
 static inline unsigned int plp_efuse_fll_assert_cycles_get() {
   return plp_efuse_readByte(GAP_EFUSE_FLL_ASSERT_CYCLES);
 }
-
-#else
-
-typedef struct {
-  union {
-    struct {
-      unsigned int platform:3;
-      unsigned int bootmode:3;
-      unsigned int encrypted:1;
-      unsigned int wait_xtal:1;
-    };
-    uint8_t raw;
-  } info;
-  union {
-    struct {
-      unsigned int fll_freq_set:1;
-      unsigned int fll_conf:1;
-      unsigned int fll_bypass_lock:1;
-      unsigned int spim_clkdiv:2;
-      unsigned int jtag_spis_lock:1;
-      unsigned int ref_clk_wait:1;
-      unsigned int pad_config:1;
-    };
-    uint8_t raw;
-  } info2;
-  uint8_t Key[4][4];
-  uint8_t IV[2][4];
-  uint16_t wait_xtal_delta;
-  uint8_t wait_xtal_min;
-  uint8_t wait_xtal_max;
-  uint8_t hyper_rds_delay;
-  uint8_t fll_freq;
-  uint8_t fll_lock_tolerance;
-  uint8_t fll_assert_cycles;
-  uint8_t periph_div;
-  uint16_t ref_clk_wait_cycles;
-  union {
-    struct {
-      unsigned int flash_type:1;
-      unsigned int set_clkdiv:1;
-      unsigned int flash_reset:1;
-      unsigned int flash_wait:1;
-      unsigned int flash_wakeup:1;
-      unsigned int flash_init:1;
-      unsigned int flash_reset_wait:1;
-      unsigned int ref_clk_wait_deep_sleep:1;
-    };
-    uint8_t raw;
-  } info3;
-  union {
-    struct {
-      unsigned int flash_cmd:1;
-      unsigned int flash_cmd_ds:1;
-      unsigned int flash_cmd2:1;
-      unsigned int flash_cmd2_ds:1;
-      unsigned int flash_cmd3:1;
-      unsigned int flash_cmd3_ds:1;
-      unsigned int flash_cmd4:1;
-      unsigned int flash_cmd4_ds:1;
-    };
-    uint8_t raw;
-  } info4;
-  union {
-    struct {
-      unsigned int flash_cs:1;
-      unsigned int flash_itf:2;
-      unsigned int flash_pad:2;
-      unsigned int hyperchip_size:1;
-      unsigned int hyper_delay:1;
-      unsigned int hyper_latency:1;
-    };
-    uint8_t raw;
-  } info5;
-  union {
-    struct {
-      unsigned int i2c_loader:1;
-      unsigned int i2c_itf:1;
-      unsigned int i2c_pad_config:2;
-      unsigned int signature:1;
-    };
-    uint8_t raw;
-  } info6;
-  uint8_t flash_cmd;
-  uint8_t flash_cmd2;
-  uint8_t flash_cmd3;
-  uint8_t flash_cmd4;
-  uint8_t flash_wait;
-  uint8_t hyperchip_size;
-  uint16_t i2c_div;
-  uint8_t i2c_cs;
-  uint8_t flash_reset_wait;
-  uint8_t hyper_latency;
-  uint16_t ref_clk_wait_cycles_deep_sleep;
-  uint8_t padding[8];
-} __attribute__((packed)) efuse_t;
-
-#define PLP_EFUSE_PLT_OTHER   0
-#define PLP_EFUSE_PLT_FPGA    1
-#define PLP_EFUSE_PLT_RTL     2
-#define PLP_EFUSE_PLT_VP      3
-#define PLP_EFUSE_PLT_CHIP    4
-
-
-#define PLP_EFUSE_BOOT_JTAG      0
-#define PLP_EFUSE_BOOT_STOP      1
-#define PLP_EFUSE_BOOT_FLASH     2
-#define PLP_EFUSE_BOOT_SPIS      3
-#define PLP_EFUSE_BOOT_WAIT      4
-#define PLP_EFUSE_BOOT_WAIT_END  5
-
-
-#define GAP_EFUSE_INFO_REG                           0
-#define GAP_EFUSE_INFO2_REG                          1
-#define GAP_EFUSE_AES_KEY_FIRST_REG                  2
-#define GAP_EFUSE_AES_KEY_NB_REGS                    16
-#define GAP_EFUSE_AES_IV_FIRST_REG                   18
-#define GAP_EFUSE_AES_IV_NB_REGS                     8
-#define GAP_EFUSE_WAIT_XTAL_DELTA_REG_LSB            26
-#define GAP_EFUSE_WAIT_XTAL_DELTA_REG_MSB            27
-#define GAP_EFUSE_WAIT_XTAL_MIN_REG                  28
-#define GAP_EFUSE_WAIT_XTAL_MAX_REG                  29
-#define GAP_EFUSE_HYPER_RDS_DELAY                    30
-#define GAP_EFUSE_FLL_FREQ                           31
-#define GAP_EFUSE_FLL_TOLERANCE                      32
-#define GAP_EFUSE_FLL_ASSERT_CYCLES                  33
-#define GAP_EFUSE_PERIPH_DIV                         34
-#define GAP_EFUSE_REF_CLK_WAIT_CYCLES_LSB            35
-#define GAP_EFUSE_REF_CLK_WAIT_CYCLES_MSB            36
-#define GAP_EFUSE_INFO3_REG                          37
-#define GAP_EFUSE_INFO4_REG                          38
-#define GAP_EFUSE_INFO5_REG                          39
-#define GAP_EFUSE_INFO6_REG                          40
-#define GAP_EFUSE_FLASH_CMD                          41
-#define GAP_EFUSE_FLASH_CMD2                         42
-#define GAP_EFUSE_FLASH_CMD3                         43
-#define GAP_EFUSE_FLASH_CMD4                         44
-#define GAP_EFUSE_FLASH_WAIT                         45
-#define GAP_EFUSE_HYPERCHIP_SIZE                     46
-#define GAP_EFUSE_I2C_DIV_LSB                        47
-#define GAP_EFUSE_I2C_DIV_MSB                        48
-#define GAP_EFUSE_I2C_CS                             49
-#define GAP_EFUSE_FLASH_RESET_WAIT                   50
-#define GAP_EFUSE_HYPER_LATENCY                      51
-#define GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_LSB 52
-#define GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_MSB 53
-
-static inline unsigned int plp_efuse_readShort(int lsb, int msb) {
-  return plp_efuse_readByte(lsb) | (plp_efuse_readByte(msb) << 8);
-}
-
-#endif
 
 #endif

@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-#ifndef __HAL_CHIPS_PULP_PULP_H__
-#define __HAL_CHIPS_PULP_PULP_H__
+#ifndef __HAL_CHIPS_USOC_V1_PULP_H__
+#define __HAL_CHIPS_USOC_V1_PULP_H__
 
 #include "hal/riscv/riscv_v4.h"
-#include "hal/eu/eu_v3.h"
 #include "hal/itc/itc_v1.h"
-#include "hal/dma/mchan_v6.h"
 #include "hal/timer/timer_v2.h"
 #include "hal/soc_eu/soc_eu_v1.h"
 #include "hal/udma/udma_v2.h"
-#include "hal/cluster_ctrl/cluster_ctrl_v2.h"
-#include "hal/icache/icache_ctrl_v2.h"
-#include "hal/apb_soc/apb_soc_v3.h"
-#include "hal/fll/fll_v1.h"
-#include "hal/gpio/gpio_v2.h"
-#include "hal/rom/rom_v2.h"
+#include "hal/chips/usoc_v1/apb_soc.h"
+#include "hal/chips/usoc_v1/gpio.h"
 
-#include "hal/udma/cpi/udma_cpi_v1.h"
+#include "hal/udma/hyper/udma_hyper_v1.h"
 #include "hal/udma/i2c/udma_i2c_v2.h"
 #include "hal/udma/i2s/udma_i2s_v1.h"
 #include "hal/udma/spim/udma_spim_v2.h"

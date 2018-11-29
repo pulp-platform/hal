@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef __HAL_CHIPS_PULPISSIMO_PULP_H__
-#define __HAL_CHIPS_PULPISSIMO_PULP_H__
+#ifndef __HAL_UDMA_UDMA_SPIM_V3_H__
+#define __HAL_UDMA_UDMA_SPIM_V3_H__
 
-#include "hal/riscv/riscv_v4.h"
-#include "hal/itc/itc_v1.h"
-#include "hal/timer/timer_v2.h"
-#include "hal/soc_eu/soc_eu_v1.h"
-#include "hal/udma/udma_v2.h"
-#include "hal/apb_soc/apb_soc_v3.h"
-#include "hal/fll/fll_v1.h"
-#include "archi/stdout/stdout_v3.h"
-#include "hal/gpio/gpio_v2.h"
-#include "hal/rom/rom_v2.h"
+#include "archi/udma/spim/udma_spim_v3.h"
 
-#include "hal/udma/cpi/udma_cpi_v1.h"
-#include "hal/udma/i2c/udma_i2c_v2.h"
-#include "hal/udma/i2s/udma_i2s_v1.h"
-#include "hal/udma/spim/udma_spim_v2.h"
-#include "hal/udma/uart/udma_uart_v1.h"
+#define UDMA_SPIM_OFFSET(id)          UDMA_PERIPH_OFFSET(ARCHI_UDMA_SPIM_ID(id))
+#define UDMA_SPIM_CMD_ADDR(id)        (ARCHI_UDMA_ADDR + UDMA_SPIM_OFFSET(id) + 0x20)
+#define UDMA_SPIM_RX_ADDR(id)         (ARCHI_UDMA_ADDR + UDMA_SPIM_OFFSET(id) + 0x00)
+#define UDMA_SPIM_TX_ADDR(id)         (ARCHI_UDMA_ADDR + UDMA_SPIM_OFFSET(id) + 0x10)
+#define UDMA_SPIM_CUSTOM_ADDR(id)     (ARCHI_UDMA_ADDR + UDMA_SPIM_OFFSET(id) + UDMA_CHANNEL_CUSTOM_OFFSET)
 
 #endif
