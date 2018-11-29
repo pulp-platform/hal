@@ -120,6 +120,10 @@ static inline void hwce_gen_config1_set(unsigned int value) {
   HWCE_WRITE(value, HWCE_GEN_CONFIG1);
 }
  
+static inline void hwce_gen_config2_set(unsigned int value) {
+  HWCE_WRITE(value, HWCE_GEN_CONFIG2);
+}
+ 
 static inline void hwce_job_config0_set(unsigned int value) {
   HWCE_WRITE(value, HWCE_JOB_CONFIG0);
 }
