@@ -39,7 +39,7 @@ static inline hal_bridge_t *hal_bridge_get()
 }
 
 
-#define HAL_DEBUG_STRUCT_INIT { PROTOCOL_VERSION_3, {0, 0}, {0}, 0, 1, 0 ,0, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+#define HAL_DEBUG_STRUCT_INIT { PROTOCOL_VERSION_4, {0, 0}, {0}, 0, 1, 0 ,0, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 
 static inline int hal_bridge_is_connected(hal_bridge_t *bridge) {
