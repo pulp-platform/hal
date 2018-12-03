@@ -237,6 +237,7 @@ typedef struct {
       unsigned int i2c_itf:1;
       unsigned int i2c_pad_config:2;
       unsigned int signature:1;
+      unsigned int flash_id:1;
     };
     uint8_t raw;
   } info6;
@@ -251,6 +252,7 @@ typedef struct {
   uint8_t flash_reset_wait;
   uint8_t hyper_latency;
   uint16_t ref_clk_wait_cycles_deep_sleep;
+  uint16_t flash_id;
   uint8_t padding[8];
 } __attribute__((packed)) efuse_t;
 
@@ -303,6 +305,8 @@ typedef struct {
 #define GAP_EFUSE_HYPER_LATENCY                      51
 #define GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_LSB 52
 #define GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_MSB 53
+#define GAP_EFUSE_FLASH_ID_LSB                       54
+#define GAP_EFUSE_FLASH_ID_MSB                       55
 
 static inline unsigned int plp_efuse_readShort(int lsb, int msb) {
   return plp_efuse_readByte(lsb) | (plp_efuse_readByte(msb) << 8);
