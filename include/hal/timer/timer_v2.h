@@ -47,6 +47,8 @@ static inline unsigned int hal_timer_fc_addr(int id, int sub_id)
 {
   return ARCHI_FC_TIMER_ADDR + id * PLP_TIMER_AREA_SIZE + sub_id * 4;
 }
+#else
+#define hal_timer_fc_addr hal_timer_cl_addr
 #endif
 
 static inline unsigned int hal_timer_cl_addr(int id, int sub_id)
