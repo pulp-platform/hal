@@ -108,19 +108,7 @@ static inline void hal_itc_wait_for_event_noirq(unsigned int mask) {
 
 
 static inline void hal_itc_wait_for_event(unsigned int mask) {
-  hal_itc_enable_set(mask);
-
-  int end = 0;
-  do {
-    unsigned int state = hal_irq_disable();
-    if ((hal_itc_ack_value_get() & mask) == 0) {
-      asm volatile ("wfi");
-    } else {
-      end = 1;
-    }
-    hal_irq_restore(state);
-  } while (!end);
-  hal_itc_ack_clr(mask);
+  hal_itc_wait_for_event_noirq(mask);
 }
 
 
