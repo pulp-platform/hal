@@ -34,4 +34,7 @@
 #include "hal/udma/spim/udma_spim_v2.h"
 #include "hal/udma/uart/udma_uart_v1.h"
 
+#include "hal/chips/vivosoc3/fll.h"
+#include "hal/chips/vivosoc3/freq.h"
+
 #endif
