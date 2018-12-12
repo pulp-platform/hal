@@ -15,8 +15,8 @@ if target_install_dir is None:
 
 files = [ 'hal/pulp.h', 'hal/utils.h', 'hal/pulp_io.h', 'hal/debug_bridge/debug_bridge.h' ]
 
-files += subprocess.check_output(shlex.split('plpfiles copy --item=hal_files')).split()
-src_files = subprocess.check_output(shlex.split('plpfiles copy --item=hal_src_files')).split()
+files += subprocess.check_output(shlex.split('plpfiles copy --item=hal_files')).decode('UTF-8').split()
+src_files = subprocess.check_output(shlex.split('plpfiles copy --item=hal_src_files')).decode('UTF-8').split()
 
 
 configs = plpconfig.get_configs_from_env()
