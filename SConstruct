@@ -70,6 +70,9 @@ for config in configs:
     append_file('hal/pwm/pwm_v1.h')
   elif chip == 'wolfe':
     append_file('hal/pwm/pwm_v1.h')
+  elif chip == 'vivosoc3':
+    append_file('hal/chips/vivosoc3/fll.h')
+    append_file('hal/chips/vivosoc3/freq.h')
 
 
 targets = []
