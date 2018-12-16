@@ -168,7 +168,7 @@ typedef struct {
       unsigned int bootmode:3;
       unsigned int encrypted:1;
       unsigned int wait_xtal:1;
-    };
+    } __attribute__((packed));
     uint8_t raw;
   } info;
   union {
@@ -180,7 +180,7 @@ typedef struct {
       unsigned int jtag_spis_lock:1;
       unsigned int ref_clk_wait:1;
       unsigned int pad_config:1;
-    };
+    } __attribute__((packed));
     uint8_t raw;
   } info2;
   uint8_t Key[4][4];
@@ -204,7 +204,7 @@ typedef struct {
       unsigned int flash_init:1;
       unsigned int flash_reset_wait:1;
       unsigned int ref_clk_wait_deep_sleep:1;
-    };
+    } __attribute__((packed));
     uint8_t raw;
   } info3;
   union {
@@ -217,7 +217,7 @@ typedef struct {
       unsigned int flash_cmd3_ds:1;
       unsigned int flash_cmd4:1;
       unsigned int flash_cmd4_ds:1;
-    };
+    } __attribute__((packed));
     uint8_t raw;
   } info4;
   union {
@@ -228,7 +228,7 @@ typedef struct {
       unsigned int hyperchip_size:1;
       unsigned int hyper_delay:1;
       unsigned int hyper_latency:1;
-    };
+    } __attribute__((packed));
     uint8_t raw;
   } info5;
   union {
@@ -238,7 +238,7 @@ typedef struct {
       unsigned int i2c_pad_config:2;
       unsigned int signature:1;
       unsigned int flash_id:1;
-    };
+    } __attribute__((packed));
     uint8_t raw;
   } info6;
   uint8_t flash_cmd;
