@@ -1,7 +1,7 @@
 import os
 import subprocess
 import shlex
-import plpconfig
+import pulp_config as plpconfig
 import SCons.Util
 
 install_dir = os.environ.get('INSTALL_DIR')
@@ -34,7 +34,7 @@ for config in configs:
   # json file and this build system is them copying the archi files according
   # to the IP information found in the json file.
 
-  chip = config.get_child_str('**/pulp_chip_family')
+  chip = config.get('**/chip/pulp_chip_family').get()
 
 
   append_file('hal/chips/%s/pulp.h' % chip)
@@ -46,6 +46,8 @@ for config in configs:
 
   # RTC
   rtc = config.get('**/soc/rtc')
+  if rtc is None:
+    rtc = config.get('**/chip/rtc')
   if rtc is not None:
     append_file('hal/vendors/dolphin/rtc.h')
 
