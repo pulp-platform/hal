@@ -55,9 +55,9 @@ for config in configs:
   pmu = config.get_child_int('**/soc/pmu/version')
   if pmu is None:
     pmu = config.get_child_int('**/chip/pmu/version')
+
   if pmu is not None:
-    if pmu == 3:
-      append_file('hal/maestro/pmu_v%d.h' % pmu)
+    append_file('hal/maestro/pmu_v%d.h' % pmu)
 
   # ITC
   itc = config.get_child_int('**/soc/fc_itc/version')
