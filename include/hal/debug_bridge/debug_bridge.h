@@ -143,6 +143,16 @@ static inline void hal_debug_putchar(hal_debug_struct_t *debug_struct, char c) {
   }
 }
 
+static inline int hal_debug_putchar_nopoll(hal_debug_struct_t *debug_struct, char c) {
+  if (*(volatile uint32_t *)&debug_struct->pending_putchar)
+    return -1;
+  *(volatile uint8_t *)&(debug_struct->putc_buffer[debug_struct->putc_current++]) = c;
+  if (*(volatile uint32_t *)&debug_struct->putc_current == HAL_PRINTF_BUF_SIZE || c == '\n') {
+    hal_debug_send_printf(debug_struct);
+  }
+  return 0;
+}
+
 static inline void hal_debug_step(hal_debug_struct_t *debug_struct, unsigned int value) {
   *(volatile uint32_t *)&debug_struct->debug_step = value;
   *(volatile uint32_t *)&debug_struct->debug_step_pending = 1;
