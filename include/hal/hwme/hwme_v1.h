@@ -63,6 +63,7 @@
  *     6  |  0x0058  |  31:16  |  0xffff0000  ||  SHIFT
  *        |          |   0: 0  |  0x00000001  ||  SIMPLEMUL
  *     7  |  0x005c  |  31: 0  |  0xffffffff  ||  VECTSTRIDE
+ *     8  |  0x0060  |  31: 0  |  0xffffffff  ||  VECTSTRIDE2
  * ================================================================================
  *
  */
@@ -117,6 +118,10 @@ static inline void hwme_shift_simplemul_set(unsigned int value) {
 
 static inline void hwme_vectstride_set(unsigned int value) {
   HWME_WRITE(value, HWME_VECTSTRIDE);
+}
+
+static inline void hwme_vectstride2_set(unsigned int value) {
+  HWME_WRITE(value, HWME_VECTSTRIDE2);
 }
 
 static inline unsigned int hwme_shift_simplemul_value(
