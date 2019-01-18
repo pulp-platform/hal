@@ -1,5 +1,5 @@
 build:
-	scons | grep -v "is up to date"
+	scons
 
 clean:
 	scons -c
