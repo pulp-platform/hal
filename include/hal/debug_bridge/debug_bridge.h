@@ -39,7 +39,7 @@ static inline hal_bridge_t *hal_bridge_get()
 }
 
 
-#define HAL_DEBUG_STRUCT_INIT { PROTOCOL_VERSION_4, {0, 0}, {0}, 0, 1, 0 ,0, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+#define HAL_DEBUG_STRUCT_INIT { PROTOCOL_VERSION_4, {0}, {0}, 0, 1, 0 ,0, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 
 static inline int hal_bridge_is_connected(hal_bridge_t *bridge) {
@@ -125,6 +125,16 @@ static inline void hal_debug_flush_printf(hal_debug_struct_t *debug_struct) {
 
 static inline void hal_debug_exit(hal_debug_struct_t *debug_struct, int status) {
   *(volatile uint32_t *)&debug_struct->exit_status = 0x80000000 | status;
+}
+
+static inline int hal_debug_is_empty(hal_debug_struct_t *debug_struct)
+{
+  return *(volatile uint32_t *)&debug_struct->putc_current == 0;
+}
+
+static inline int hal_debug_is_busy(hal_debug_struct_t *debug_struct)
+{
+  return *(volatile uint32_t *)&debug_struct->pending_putchar;
 }
 
 static inline void hal_debug_send_printf(hal_debug_struct_t *debug_struct) {
