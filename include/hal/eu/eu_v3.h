@@ -347,7 +347,11 @@ static inline unsigned int eu_soc_events_pop()
 #ifdef ARCHI_HAS_FC
 static inline unsigned int fc_eu_soc_events_pop()
 {
+#ifdef ARCHI_FC_PERIPHERALS_ADDR
   return pulp_read32(ARCHI_FC_PERIPHERALS_ADDR + ARCHI_EU_OFFSET + EU_SOC_EVENTS_AREA_OFFSET + EU_SOC_EVENTS_CURRENT_EVENT);
+#else
+  return pulp_read32(ARCHI_SOC_PERIPHERALS_ADDR + ARCHI_EU_OFFSET + EU_SOC_EVENTS_AREA_OFFSET + EU_SOC_EVENTS_CURRENT_EVENT);
+#endif
 }
 #endif
 

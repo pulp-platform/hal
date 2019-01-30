@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef __HAL_CHIPS_PULP_V2_PULP_H__
-#define __HAL_CHIPS_PULP_V2_PULP_H__
+#ifndef __HAL_CHIPS_PULP_V1_PULP_H__
+#define __HAL_CHIPS_PULP_V1_PULP_H__
 
 #include "hal/riscv/riscv_v4.h"
 #include "hal/eu/eu_v3.h"
