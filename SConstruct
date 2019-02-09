@@ -38,6 +38,7 @@ for config in configs:
 
 
   append_file('hal/chips/%s/pulp.h' % chip)
+  append_file('hal/gvsoc/gvsoc.h')
 
   # UDMA I2S
   udma_i2s = config.get_child_int('**/udma/i2s/version')
