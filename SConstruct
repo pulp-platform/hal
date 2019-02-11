@@ -14,9 +14,19 @@ if target_install_dir is None:
   target_install_dir = 'install'
 
 files = [ 'hal/pulp.h', 'hal/utils.h', 'hal/pulp_io.h', 'hal/debug_bridge/debug_bridge.h' ]
+files.append('hal/gvsoc/gvsoc.h')
 
-files += subprocess.check_output(shlex.split('plpfiles copy --item=hal_files')).decode('UTF-8').split()
-src_files = subprocess.check_output(shlex.split('plpfiles copy --item=hal_src_files')).decode('UTF-8').split()
+try:
+  files += subprocess.check_output(shlex.split('plpfiles copy --item=hal_files')).decode('UTF-8').split()
+except subprocess.CalledProcessError as e:
+  print (e.output)
+  raise
+
+try:
+  src_files = subprocess.check_output(shlex.split('plpfiles copy --item=hal_src_files')).decode('UTF-8').split()
+except subprocess.CalledProcessError as e:
+  print (e.output)
+  raise
 
 
 configs = plpconfig.get_configs_from_env()
@@ -38,7 +48,6 @@ for config in configs:
 
 
   append_file('hal/chips/%s/pulp.h' % chip)
-  append_file('hal/gvsoc/gvsoc.h')
 
   # UDMA I2S
   udma_i2s = config.get_child_int('**/udma/i2s/version')
