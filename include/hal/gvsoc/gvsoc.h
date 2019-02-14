@@ -49,7 +49,7 @@ static inline void gv_vcd_conf_trace(int trace, int active) {
 }
 
 static inline void gv_vcd_dump_trace(int trace, unsigned int value) {
-  __rt_semihosting_call(GV_SEMIHOSTING_VCD_DUMP_TRACE, trace, value);
+  __rt_semihosting_call(GV_SEMIHOSTING_VCD_DUMP_TRACE, trace, 0, 0, value);
 }
 
 static inline void gv_vcd_dump_trace_string(int trace, char *str) {
