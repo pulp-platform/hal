@@ -139,11 +139,13 @@ static inline unsigned int hal_cluster_id() {
   //return __builtin_pulp_ClusterId();
 }
 
-extern unsigned char __FC;
-extern unsigned char __ZERO;
 // TODO replace by compiler builtin
 static inline __attribute__((always_inline)) unsigned int hal_has_fc() {
-  return (unsigned int)&__FC != (unsigned int)&__ZERO;
+#ifdef ARCHI_HAS_FC
+  return 1;
+#else
+  return 0;
+#endif
 }
 
 static inline __attribute__((always_inline)) unsigned int hal_is_fc() {
