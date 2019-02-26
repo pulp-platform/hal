@@ -286,6 +286,11 @@ static inline void eu_evt_trig(unsigned int evtAddr, unsigned int coreSet)
   pulp_write32(evtAddr, coreSet);
 }
 
+static inline void eu_evt_trig_from_id(unsigned int event, unsigned int coreSet)
+{
+  IP_WRITE(ARCHI_EU_DEMUX_ADDR, EU_SW_EVENTS_DEMUX_OFFSET + EU_CORE_TRIGG_SW_EVENT + (event << 2), coreSet);
+}
+
 //!@}
 
 
@@ -386,10 +391,22 @@ static inline void eu_mutex_lock(unsigned int mutexAddr)
   evt_read32(mutexAddr, 0);
 }
 
+static inline void eu_mutex_lock_from_id(unsigned int id)
+{
+  evt_read32(ARCHI_EU_DEMUX_ADDR, EU_MUTEX_DEMUX_OFFSET + (id << 2));
+}
+
 static inline void eu_mutex_unlock(unsigned int mutexAddr)
 {
   __asm__ __volatile__ ("" : : : "memory");
   pulp_write32(mutexAddr, 0);
+  __asm__ __volatile__ ("" : : : "memory");
+}
+
+static inline void eu_mutex_unlock_from_id(int id)
+{
+  __asm__ __volatile__ ("" : : : "memory");
+  IP_WRITE(ARCHI_EU_DEMUX_ADDR, EU_MUTEX_DEMUX_OFFSET + (id<<2), 0);
   __asm__ __volatile__ ("" : : : "memory");
 }
 
