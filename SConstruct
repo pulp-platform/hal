@@ -54,6 +54,10 @@ for config in configs:
   if udma_i2s is not None:
     append_file('hal/udma/i2s/udma_i2s_v%d.h' % udma_i2s)
 
+  udma_hyper = config.get_child_int('**/udma/hyper/version')
+  if udma_hyper is not None:
+    append_file('hal/udma/hyper/udma_hyper_v%d.h' % udma_hyper)
+
   # RTC
   rtc = config.get('**/soc/rtc')
   if rtc is None:
