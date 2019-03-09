@@ -41,4 +41,6 @@
 #include "hal/udma/uart/udma_uart_v1.h"
 #include "hal/vendors/dolphin/rtc.h"
 
+#include "hal/chips/vega/efuse.h"
+
 #endif
