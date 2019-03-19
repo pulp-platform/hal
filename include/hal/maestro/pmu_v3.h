@@ -30,11 +30,37 @@
 #define PMU_READ(offset) IP_READ(ARCHI_PMU_ADDR, offset)
 
 
-static inline void hal_pmu_state_set(unsigned int state) {
-  unsigned int picl_reg = PMU_PICL_PACK(MAESTRO_WIU_OFFSET, MAESTRO_WIU_IFR_0_OFFSET);
-  unsigned int dlc_reg = PMU_DLC_PACK(state, picl_reg);
+
+static inline void maestro_picl_write(unsigned int island, unsigned int addr, unsigned int value)
+{
+  unsigned int picl_reg = PMU_PICL_PACK(island, addr);
+  unsigned int dlc_reg = PMU_DLC_PACK(value, picl_reg);
   PMU_WRITE(MAESTRO_DLC_PCTRL_OFFSET, dlc_reg);
 }
+
+
+static inline void maestro_trigger_sequence(unsigned int seq)
+{
+  maestro_picl_write(MAESTRO_WIU_OFFSET, MAESTRO_WIU_IFR_0_OFFSET, seq);
+}
+
+
+static inline void maestro_icu_set_state(int island, unsigned int state)
+{
+  maestro_picl_write(island, MAESTRO_ICU_CTRL_OFFSET, state);
+}
+
+
+
+#define ARCHI_PMU_SAFE_ID     2
+#define ARCHI_PMU_MRAMIO_ID   3
+#define ARCHI_PMU_MRAMCORE_ID 4
+#define ARCHI_PMU_IO_LS_ID    5
+#define ARCHI_PMU_SWAFE_ID    6
+#define ARCHI_PMU_SOC_ID      7
+#define ARCHI_PMU_CLU_ID      8
+#define ARCHI_PMU_IO_HS_ID    9
+#define ARCHI_PMU_CSI2_ID     10
 
 
 
