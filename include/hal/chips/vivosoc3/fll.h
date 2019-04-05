@@ -86,12 +86,8 @@ static inline fll_reg_fcr2_t hal_fll_set_config_get(hal_fll_e fll, hal_fll_reg_s
 
 static inline unsigned int hal_fll_check_ref_fast(void)
 {
-  if (rt_platform() != ARCHI_PLATFORM_RTL) {
-    if(0x7 & IP_READ(ARCHI_ANALOG_ADDR, FLL_ANALOG_CLKIPC_OFFSET)) return 1;
-    else return 0;
-  } else {
-    return 0;
-  }
+  if(0x7 & IP_READ(ARCHI_ANALOG_ADDR, FLL_ANALOG_CLKIPC_OFFSET)) return 1;
+  else return 0;
 }
 
 static inline unsigned int hal_fll_status_get(hal_fll_e fll)
