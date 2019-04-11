@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef __HAL_RISCV_RISCV_V4_H__
-#define __HAL_RISCV_RISCV_V4_H__
+#ifndef __HAL_RISCV_RISCV_V5_H__
+#define __HAL_RISCV_RISCV_V5_H__
 
 #include "archi/pulp.h"
 
@@ -261,7 +261,7 @@ static inline void hal_irq_enable()
 static inline void cpu_perf_conf_events(unsigned int eventMask)
 {
 #ifndef PLP_NO_PERF_COUNTERS
-  asm volatile ("csrw 0x7A0, %0" : "+r" (eventMask));
+  asm volatile ("csrw 0xCC0, %0" : "+r" (eventMask));
 #endif
 }
 
@@ -270,7 +270,7 @@ static inline unsigned int cpu_perf_conf_events_get()
 {
 #ifndef PLP_NO_PERF_COUNTERS
   unsigned int result;
-  asm volatile ("csrr %0, 0x7A0" : "=r" (result));
+  asm volatile ("csrr %0, 0xCC0" : "=r" (result));
   return result;
 #else
   return 0;
@@ -281,7 +281,7 @@ static inline unsigned int cpu_perf_conf_events_get()
 static inline void cpu_perf_conf(unsigned int confMask)
 {
 #ifndef PLP_NO_PERF_COUNTERS
-  asm volatile ("csrw 0x7A1, %0" :: "r" (confMask));
+  asm volatile ("csrw 0xCC1, %0" :: "r" (confMask));
 #endif
 }
 
