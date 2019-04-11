@@ -17,7 +17,7 @@
 #ifndef __HAL_CHIPS_PULPISSIMO_PULP_H__
 #define __HAL_CHIPS_PULPISSIMO_PULP_H__
 
-#include "hal/riscv/riscv_v4.h"
+#include "hal/riscv/riscv_v5.h"
 #include "hal/itc/itc_v1.h"
 #include "hal/timer/timer_v2.h"
 #include "hal/soc_eu/soc_eu_v2.h"

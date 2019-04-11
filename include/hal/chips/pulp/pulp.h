@@ -17,7 +17,7 @@
 #ifndef __HAL_CHIPS_PULP_PULP_H__
 #define __HAL_CHIPS_PULP_PULP_H__
 
-#include "hal/riscv/riscv_v4.h"
+#include "hal/riscv/riscv_v5.h"
 #include "hal/eu/eu_v3.h"
 #include "hal/itc/itc_v1.h"
 #include "hal/dma/mchan_v6.h"
