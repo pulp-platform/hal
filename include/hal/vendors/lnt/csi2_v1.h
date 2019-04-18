@@ -49,24 +49,29 @@ typedef volatile struct halCsi2_struct_t halCsi2Handle_t;
 
 // DPHY HAL Registers Structure
 struct halDphy_struct_t {
-    uint32_t lane_enable;				// default value 0x1
-    uint32_t unused[31];
-    //TODO add missing new registers visible in v1.6
+    uint32_t lane_enable;					// default value 0x1
+    uint32_t unused[12];
+    uint32_t dig_clk_sample;				// default value 0xc0
+    uint32_t reg_0e;						// default value 0x36
+    uint32_t reg_0f;						// default value 0xdb
+    uint32_t unused00[2];
+    uint32_t rev_dig_sample_clk;			// default value  0x20
+    uint32_t unused0[13];
     uint32_t reset_dig_logic;				// default value 0x1f
     uint32_t unused1[41];
     uint32_t lane_ck_cont_mode;				// default value 0x0f  
     uint32_t unused2[13];
-    uint32_t lane_ck_hs_countdown;				// default value 0x1b
+    uint32_t lane_ck_hs_countdown;			// default value 0x1b
     uint32_t unused3[1];
-    uint32_t lane_ck_rx_calib_enable;				// default value 0x7f
+    uint32_t lane_ck_rx_calib_enable;		// default value 0x7f
     uint32_t unused4[29];
-    uint32_t lane_0_hs_countdown;				// default value 0x1b
+    uint32_t lane_0_hs_countdown;			// default value 0x1b
     uint32_t unused5[1];
-    uint32_t lane_0_rx_calib_enable;				// default value 0x7f
+    uint32_t lane_0_rx_calib_enable;		// default value 0x7f
     uint32_t unused6[29];
-    uint32_t lane_1_hs_countdown;				// default value 0x1b
+    uint32_t lane_1_hs_countdown;			// default value 0x1b
     uint32_t unused7[1];
-    uint32_t lane_1_rx_calib_enable;				// default value 0x7f
+    uint32_t lane_1_rx_calib_enable;		// default value 0x7f
 };
 typedef volatile struct halDphy_struct_t halDphyHandle_t;
 
@@ -126,6 +131,14 @@ static inline uint32_t halCsi2UlpsStatusGet       (halCsi2Handle_t * handle);
 static inline uint32_t halDphyBaseAddrGet           (halDphyHandle_t * handle);
 static inline void     halDphyLaneEnableSet         (halDphyHandle_t * handle,  uint32_t data);
 static inline uint32_t halDphyLaneEnableGet         (halDphyHandle_t * handle);
+static inline void     halDphyDigClkSampleSet         (halDphyHandle_t * handle,  uint32_t data);
+static inline uint32_t halDphyDigClkSampleGet         (halDphyHandle_t * handle);
+static inline void     halDphyReg0ESet         (halDphyHandle_t * handle,  uint32_t data);
+static inline uint32_t halDphyReg0EGet         (halDphyHandle_t * handle);
+static inline void     halDphyReg0FSet         (halDphyHandle_t * handle,  uint32_t data);
+static inline uint32_t halDphyReg0FGet         (halDphyHandle_t * handle);
+static inline void     halDphyReverseDigSampleClkSet         (halDphyHandle_t * handle,  uint32_t data);
+static inline uint32_t halDphyReverseDigSampleClkGet         (halDphyHandle_t * handle);
 static inline void     halDphyResetDigLogicSet      (halDphyHandle_t * handle,  uint32_t data);
 static inline uint32_t halDphyResetDigLogicGet      (halDphyHandle_t * handle);
 static inline void     halDphyLaneClkHsCountdownSet (halDphyHandle_t * handle,  uint32_t data);
@@ -269,6 +282,39 @@ static inline void     halDphyLaneEnableSet                (halDphyHandle_t * ha
 static inline uint32_t halDphyLaneEnableGet                (halDphyHandle_t * handle) {
     return handle->lane_enable;
 }
+
+static inline void     halDphyDigClkSampleSet         (halDphyHandle_t * handle,  uint32_t data) {
+    handle->dig_clk_sample = data;
+}
+
+static inline uint32_t halDphyDigClkSampleGet         (halDphyHandle_t * handle) {
+    return handle->dig_clk_sample;
+}
+
+static inline void     halDphyReg0ESet         (halDphyHandle_t * handle,  uint32_t data) {
+    handle->reg_0e = data;	
+}
+
+static inline uint32_t halDphyReg0EGet         (halDphyHandle_t * handle) {
+    return handle->reg_0e;	
+}
+
+static inline void     halDphyReg0FSet         (halDphyHandle_t * handle,  uint32_t data) {
+    handle->reg_0f = data;	
+}
+
+static inline uint32_t halDphyReg0FGet         (halDphyHandle_t * handle) {
+    return handle->reg_0f;	
+}
+
+static inline void     halDphyReverseDigSampleClkSet         (halDphyHandle_t * handle,  uint32_t data) {
+    handle->rev_dig_sample_clk = data;	
+}
+
+static inline uint32_t halDphyReverseDigSampleClkGet         (halDphyHandle_t * handle) {
+    return handle->rev_dig_sample_clk;	
+}
+
 
 static inline void     halDphyResetDigLogicSet (halDphyHandle_t * handle,  uint32_t data) {
 	handle->reset_dig_logic = data;
