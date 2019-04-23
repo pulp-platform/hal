@@ -96,6 +96,7 @@ typedef struct {
       unsigned int i2c_pad_config:2;
       unsigned int signature:1;
       unsigned int flash_id:1;
+      unsigned int mram_trim:1;
     } __attribute__((packed));
     uint8_t raw;
   } info6;
@@ -111,6 +112,7 @@ typedef struct {
   uint8_t hyper_latency;
   uint16_t ref_clk_wait_cycles_deep_sleep;
   uint16_t flash_id;
+  uint16_t mram_trim_size;
   uint8_t padding[8];
 } __attribute__((packed)) efuse_t;
 
@@ -165,6 +167,9 @@ typedef struct {
 #define EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_MSB 53
 #define EFUSE_FLASH_ID_LSB                       54
 #define EFUSE_FLASH_ID_MSB                       55
+#define EFUSE_MRAM_TRIM_SIZE                     56
+#define EFUSE_MRAM_TRIM_START                    57
+// DONT PUT ANYTHING AFTER THIS EFUSE AS IT IS A VARIABLE SIZE ARRAY
 
 static inline unsigned int plp_efuse_readShort(int lsb, int msb) {
   return plp_efuse_readByte(lsb) | (plp_efuse_readByte(msb) << 8);
