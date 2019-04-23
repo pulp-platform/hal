@@ -88,9 +88,9 @@ static inline void soc_eu_genEventMask(unsigned int mask) {
  * \param timer_id Choice timer Low (1) or High (0).
  * \param mask Value on 8 bit to select the event id to be forwarded to the selected timer.
  */
-static inline void soc_eu_selEventTimer(unsigned int timer_id, unsigned int mask) {
-  pulp_write32 (ARCHI_SOC_EU_ADDR + SOC_TIMER_SEL_HI + timer_id * 4
-            ,  (pulp_read32(ARCHI_SOC_EU_ADDR + SOC_TIMER_SEL_HI + timer_id * 4) & ~(SOC_TIMER_SEL_EVT_MASK << SOC_TIMER_SEL_EVT_SHIFT)) 
+static inline void soc_eu_selEventTimer(unsigned int timer_idx, unsigned int timer_id, unsigned int mask) {
+  pulp_write32 (ARCHI_SOC_EU_ADDR + SOC_TIMER_SEL_HI + timer_idx * 8 + timer_id * 4
+            ,  (pulp_read32(ARCHI_SOC_EU_ADDR + SOC_TIMER_SEL_HI + timer_idx * 8 + timer_id * 4) & ~(SOC_TIMER_SEL_EVT_MASK << SOC_TIMER_SEL_EVT_SHIFT)) 
               | (mask & SOC_TIMER_SEL_EVT_MASK));
 }
 
@@ -99,9 +99,9 @@ static inline void soc_eu_selEventTimer(unsigned int timer_id, unsigned int mask
  * \param timer_id Choice timer Low (1) or High (0).
  * \param val Value to enable/disable event forwarding to selected timer.
  */
-static inline void soc_eu_setEnableEventTimer(unsigned int timer_id, unsigned int val) {
-  pulp_write32 (ARCHI_SOC_EU_ADDR + SOC_TIMER_SEL_HI + timer_id * 4
-            ,  (pulp_read32(ARCHI_SOC_EU_ADDR + SOC_TIMER_SEL_HI + timer_id * 4) & ~(1 << SOC_TIMER_SEL_ENABLE_SHIFT)) 
+static inline void soc_eu_setEnableEventTimer(unsigned int timer_idx, unsigned int timer_id, unsigned int val) {
+  pulp_write32 (ARCHI_SOC_EU_ADDR + SOC_TIMER_SEL_HI + timer_idx * 8 + timer_id * 4
+            ,  (pulp_read32(ARCHI_SOC_EU_ADDR + SOC_TIMER_SEL_HI + timer_idx * 8 + timer_id * 4) & ~(1 << SOC_TIMER_SEL_ENABLE_SHIFT)) 
               | val);
 }
 #endif
