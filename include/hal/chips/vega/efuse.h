@@ -54,8 +54,7 @@ typedef struct {
   uint16_t ref_clk_wait_cycles;
   union {
     struct {
-      unsigned int flash_type:1;
-      unsigned int set_clkdiv:1;
+      unsigned int flash_type:2;
       unsigned int flash_reset:1;
       unsigned int flash_wait:1;
       unsigned int flash_wakeup:1;
@@ -86,6 +85,7 @@ typedef struct {
       unsigned int hyperchip_size:1;
       unsigned int hyper_delay:1;
       unsigned int hyper_latency:1;
+      unsigned int set_clkdiv:1;
     } __attribute__((packed));
     uint8_t raw;
   } info5;
