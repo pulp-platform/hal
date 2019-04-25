@@ -85,7 +85,6 @@ typedef struct {
       unsigned int hyperchip_size:1;
       unsigned int hyper_delay:1;
       unsigned int hyper_latency:1;
-      unsigned int set_clkdiv:1;
     } __attribute__((packed));
     uint8_t raw;
   } info5;
@@ -97,6 +96,7 @@ typedef struct {
       unsigned int signature:1;
       unsigned int flash_id:1;
       unsigned int mram_trim:1;
+      unsigned int set_clkdiv:1;
     } __attribute__((packed));
     uint8_t raw;
   } info6;
