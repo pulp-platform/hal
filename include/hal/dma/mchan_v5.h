@@ -25,26 +25,26 @@
 #define MCHAN_COMMAND_QUEUE (ARCHI_MCHAN_ADDR + MCHAN_COMMAND_QUEUE_OFFSET)
 #define MCHAN_STATUS_REGISTER (ARCHI_MCHAN_ADDR + MCHAN_STATUS_REGISTER_OFFSET)
 
-static inline int mchan_transfer(unsigned int len, char type, char incr, char twd, unsigned int ext_addr, unsigned int tcdm_addr, unsigned short int count, unsigned short int stride){
+// static inline int mchan_transfer(unsigned int len, char type, char incr, char twd, unsigned int ext_addr, unsigned int tcdm_addr, unsigned short int count, unsigned short int stride){
   
-  int id = *(volatile int*) MCHAN_COMMAND_QUEUE;
+//   int id = *(volatile int*) MCHAN_COMMAND_QUEUE;
   
-  *(volatile int*) MCHAN_COMMAND_QUEUE = (1<<19) | len | (type << MCHAN_LEN_WIDTH) | ( incr <<  (MCHAN_LEN_WIDTH + 1) ) | ( twd <<  (MCHAN_LEN_WIDTH + 2) );
-  *(volatile int*) MCHAN_COMMAND_QUEUE = tcdm_addr;
-  *(volatile int*) MCHAN_COMMAND_QUEUE = ext_addr;
+//   *(volatile int*) MCHAN_COMMAND_QUEUE = (1<<19) | len | (type << MCHAN_LEN_WIDTH) | ( incr <<  (MCHAN_LEN_WIDTH + 1) ) | ( twd <<  (MCHAN_LEN_WIDTH + 2) );
+//   *(volatile int*) MCHAN_COMMAND_QUEUE = tcdm_addr;
+//   *(volatile int*) MCHAN_COMMAND_QUEUE = ext_addr;
   
-  if (twd == 1)
-    *(volatile int*) MCHAN_COMMAND_QUEUE = count | (stride << 16);
+//   if (twd == 1)
+//     *(volatile int*) MCHAN_COMMAND_QUEUE = count | (stride << 16);
   
-  return id;
+//   return id;
   
-}
+// }
 
-static inline void mchan_barrier(int id) {
-  while(((*(volatile int*)(MCHAN_STATUS_REGISTER)) >> id ) & 0x1 ) {
-    eu_evt_maskWaitAndClr(1<<8);
-  }
-}
+// static inline void mchan_barrier(int id) {
+//   while(((*(volatile int*)(MCHAN_STATUS_REGISTER)) >> id ) & 0x1 ) {
+//     eu_evt_maskWaitAndClr(1<<8);
+//   }
+// }
 
 
 
