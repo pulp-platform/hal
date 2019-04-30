@@ -41,6 +41,7 @@ static inline void maestro_picl_write(unsigned int island, unsigned int addr, un
 
 static inline __attribute__((always_inline)) void maestro_trigger_sequence(unsigned int seq)
 {
+  // Compute the right register ID / bit shift as each WIU IFR register is 8 bits wide
   int reg_id = MAESTRO_WIU_IFR_0_OFFSET + (seq >> 3);
   int seq_id = seq & 0x7;
 
