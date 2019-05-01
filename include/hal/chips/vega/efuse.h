@@ -26,6 +26,7 @@ typedef struct {
       unsigned int bootmode:8;
       unsigned int encrypted:1;
       unsigned int wait_xtal:1;
+      unsigned int icache_enabled:1;
     } __attribute__((packed));
     uint32_t raw;
   } info;
