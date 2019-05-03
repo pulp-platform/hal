@@ -86,8 +86,6 @@ static inline void maestro_icu_set_state(int island, unsigned int state)
 #define ARCHI_PMU_CS_ICU1     0x03
 #define ARCHI_PMU_CS_ICU2     0x04
 #define ARCHI_PMU_CS_ICU3     0x05
-#define ARCHI_PMU_CS_DMU0     0x20
-#define ARCHI_PMU_CS_DMU1     0x21
 
 #define ARCHI_PMU_WIU_ISPMR_0 0x00
 #define ARCHI_PMU_WIU_ISPMR_1 0x01
