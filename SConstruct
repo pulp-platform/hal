@@ -82,6 +82,11 @@ for config in configs:
   if itc is not None:
     append_file('hal/itc/itc_v%d.h' % itc)
 
+  # GPIO
+  gpio = config.get_child_int('**/gpio/version')
+  if gpio is not None:
+    append_file('hal/gpio/gpio_v%d.h' % gpio)
+
 
   # Chip specific files can be included here
   if chip == 'vega':

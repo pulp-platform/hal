@@ -23,7 +23,7 @@
 #include "hal/maestro/pmu_v3.h"
 #include "hal/rom/rom_v2.h"
 #include "hal/fll/fll_v1.h"
-#include "hal/gpio/gpio_v2.h"
+#include "hal/gpio/gpio_v3.h"
 #include "hal/hwce/hwce_v5.h"
 #include "hal/pwm/pwm_v1.h"
 #include "hal/efuse/efuse_v1.h"
