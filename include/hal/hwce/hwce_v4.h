@@ -18,7 +18,7 @@
 #define __HAL_HWCE_HWCE_V4_H__
 
 #include "hal/pulp.h"
-#include "archi/hwce/hwce_v4.h"
+#include "archi/hwce/hwce_v4_old.h"
 
 #if HWCE_VERSION != 4
 #error This file must be included only with HWCE version 4
