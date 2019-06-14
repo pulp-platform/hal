@@ -15,6 +15,7 @@ if target_install_dir is None:
 
 files = [ 'hal/pulp.h', 'hal/utils.h', 'hal/pulp_io.h', 'hal/debug_bridge/debug_bridge.h' ]
 files.append('hal/gvsoc/gvsoc.h')
+files.append('hal/tb/tb.h')
 
 try:
   files += subprocess.check_output(shlex.split('plpfiles copy --item=hal_files')).decode('UTF-8').split()
