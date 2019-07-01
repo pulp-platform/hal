@@ -26,7 +26,7 @@
 #include "hal/rom/rom_v2.h"
 #include "hal/fll/fll_v1.h"
 #include "archi/stdout/stdout_v3.h"
-#include "hal/gpio/gpio_v2.h"
+#include "hal/gpio/gpio_v3.h"
 
 #include "hal/udma/cpi/udma_cpi_v1.h"
 #include "hal/udma/i2c/udma_i2c_v2.h"
