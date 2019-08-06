@@ -143,8 +143,6 @@ typedef struct {
 #define HWCE_ADDR_BASE  ARCHI_HWCE_ADDR
 #define HWCE_ADDR_SPACE 0x00000100
 
-static volatile hwce_mmap_t *hwce_memory_map = (hwce_mmap_t *) (HWCE_ADDR_BASE);
-
 // For all the following functions we use __builtin_pulp_OffsetedWrite and __builtin_pulp_OffsetedRead
 // instead of classic load/store because otherwise the compiler is not able to correctly factorize
 // the HWCE base in case several accesses are done, ending up with twice more code
