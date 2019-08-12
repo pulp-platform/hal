@@ -147,6 +147,7 @@ typedef enum {      /* Enum encoding follows the definition of the boot_type fie
   COLD_BOOT=0,    /* SoC cold boot, from Flash usually */
   DEEP_SLEEP_BOOT=1,  /* Reboot from deep sleep state, state has been lost, somehow equivalent to COLD_BOOT */
   RETENTIVE_BOOT=2, /* Reboot from Retentive state, state has been retained, should bypass flash reload */
+  FAST_DEEP_SLEEP_BOOT=3
 } PMU_WakeupStateT;
 
 typedef enum {
