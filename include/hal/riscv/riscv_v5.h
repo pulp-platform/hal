@@ -62,6 +62,27 @@ static inline unsigned int hal_spr_read(unsigned int reg)
     state; \
   })
 
+#define hal_spr_read_then_clr_from_reg(reg,val) \
+  ({ \
+    int state; \
+    asm volatile ("csrrc %0, %1, %2" :  "=r" (state) : "I" (reg), "r" (val) ); \
+    state; \
+  })
+
+#define hal_spr_read_then_set(reg,val) \
+  ({ \
+    int state; \
+    asm volatile ("csrrs %0, %1, %2" :  "=r" (state) : "I" (reg), "I" (val) ); \
+    state; \
+  })
+
+#define hal_spr_read_then_set_from_reg(reg,val) \
+  ({ \
+    int state; \
+    asm volatile ("csrrs %0, %1, %2" :  "=r" (state) : "I" (reg), "r" (val) ); \
+    state; \
+  })
+
 #define hal_spr_write(reg,val) \
 do { \
   asm volatile ("csrw %0, %1" :  : "I" (reg), "r" (val) ); \
