@@ -410,7 +410,13 @@ typedef struct {
   uint8_t fll_freq;
   uint8_t fll_lock_tolerance;
   uint8_t fll_assert_cycles;
-  uint8_t padding[4];
+  union {
+    struct {
+      unsigned int no_udma_memcpy:1;
+    } __attribute__((packed));
+    uint8_t raw;
+  } info7;
+  uint8_t padding[3];
 } __attribute__((packed)) efuse_t;
 
 #define PLP_EFUSE_PLT_OTHER   0
@@ -467,6 +473,7 @@ typedef struct {
 #define GAP_EFUSE_FLL_FREQ                           57
 #define GAP_EFUSE_FLL_TOLERANCE                      58
 #define GAP_EFUSE_FLL_ASSERT_CYCLES                  59
+#define GAP_EFUSE_INFO7_REG                          60
 
 static inline unsigned int plp_efuse_readShort(int lsb, int msb) {
   return plp_efuse_readByte(lsb) | (plp_efuse_readByte(msb) << 8);
