@@ -109,8 +109,8 @@ static inline unsigned int core_id() {
 #else
   asm("csrr %0, 0xF10" : "=r" (hart_id) : );
 #endif
-  // in PULP the hart id is {22'b0, cluster_id, core_id}
-  return hart_id & 0x01f;
+  // in PULP the hart id is {[31:16] cluster_id, [15:0] core_id}
+  return hart_id & 0xFFFF;
 }
 
 static inline unsigned int cluster_id() {  int hart_id;
@@ -123,8 +123,8 @@ static inline unsigned int cluster_id() {  int hart_id;
 #else
   asm("csrr %0, 0xF10" : "=r" (hart_id) : );
 #endif
-  // in PULP the hart id is {22'b0, cluster_id, core_id}
-  return (hart_id >> 5) & 0x3f;
+  // in PULP the hart id is {[31:16] cluster_id, [15:0] core_id}
+  return (hart_id >> 16) & 0xFFFF;
 }
 
 #ifndef PLP_NO_BUILTIN
@@ -170,8 +170,8 @@ static inline __attribute__((always_inline)) unsigned int hal_core_id() {
 #else
   asm("csrr %0, 0xF10" : "=r" (hart_id) : );
 #endif
-  // in PULP the hart id is {22'b0, cluster_id, core_id}
-  return hart_id & 0x01f;
+  // in PULP the hart id is {[31:16] cluster_id, [15:0] core_id}
+  return hart_id & 0xFFFF;
 }
 
 static inline __attribute__((always_inline)) unsigned int hal_cluster_id() {
@@ -185,8 +185,8 @@ static inline __attribute__((always_inline)) unsigned int hal_cluster_id() {
 #else
   asm("csrr %0, 0xF10" : "=r" (hart_id) : );
 #endif
-  // in PULP the hart id is {22'b0, cluster_id, core_id}
-  return (hart_id >> 5) & 0x3f;
+  // in PULP the hart id is {[31:16] cluster_id, [15:0] core_id}
+  return (hart_id >> 16)& 0xFFFF;
 }
 
 static inline __attribute__((always_inline)) unsigned int hal_has_fc() {
