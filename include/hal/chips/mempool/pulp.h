@@ -18,7 +18,7 @@
 #define __HAL_CHIPS_MEMPOOL_PULP_H__
 
 #include "hal/riscv/riscv_v5.h"
-#include "hal/eu/eu_v3.h"
+#include "hal/eu/eu_mempool_v1.h"
 #include "hal/itc/itc_v1.h"
 #include "hal/dma/mchan_v6.h"
 #include "hal/timer/timer_v2.h"
