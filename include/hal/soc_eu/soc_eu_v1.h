@@ -21,11 +21,11 @@
 #include "archi/soc_eu/soc_eu_v1.h"
 
 static inline void soc_eu_eventMask_set(unsigned int reg, unsigned int value) {
-  pulp_write32(ARCHI_SOC_EU_ADDR + reg, value);
+  ARCHI_WRITE(ARCHI_SOC_EU_ADDR, reg, value);
 }
 
 static inline unsigned int soc_eu_eventMask_get(unsigned int reg) {
-  return pulp_read32(ARCHI_SOC_EU_ADDR + reg);
+  return ARCHI_READ(ARCHI_SOC_EU_ADDR, reg);
 }
 
 static inline void soc_eu_eventMask_reset(unsigned int first_reg) {

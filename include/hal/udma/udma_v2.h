@@ -175,9 +175,9 @@ static inline int plp_udma_canEnqueue(unsigned int channelBase)
 
 static inline void plp_udma_enqueue(unsigned channelBase, unsigned int l2Addr, unsigned int size, unsigned int cfg)
 {
-  pulp_write32(channelBase + UDMA_CHANNEL_SADDR_OFFSET, l2Addr);
-  pulp_write32(channelBase + UDMA_CHANNEL_SIZE_OFFSET, size);
-  pulp_write32(channelBase + UDMA_CHANNEL_CFG_OFFSET, cfg | UDMA_CHANNEL_CFG_EN);
+  ARCHI_WRITE(channelBase, UDMA_CHANNEL_SADDR_OFFSET, l2Addr);
+  ARCHI_WRITE(channelBase, UDMA_CHANNEL_SIZE_OFFSET, size);
+  ARCHI_WRITE(channelBase, UDMA_CHANNEL_CFG_OFFSET, cfg | UDMA_CHANNEL_CFG_EN);
 }
 
 static inline int plp_udma_busy(unsigned channelOffset)
