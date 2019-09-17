@@ -94,6 +94,10 @@ for config in configs:
     append_file('hal/pwm/pwm_v1.h')
     append_file('hal/chips/vega/efuse.h')
     append_file('hal/chips/vega/pulp.h')
+  elif chip == 'gap9':
+    append_file('hal/pwm/pwm_v1.h')
+    append_file('hal/chips/gap9/efuse.h')
+    append_file('hal/chips/gap9/pulp.h')
   elif chip == 'gap':
     append_file('hal/pwm/pwm_v1.h')
   elif chip == 'wolfe':
