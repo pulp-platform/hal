@@ -42,7 +42,7 @@ static inline uint8_t pulp_read8(uint32_t add)
   return result;
 }
 
-static inline uint8_t pulp_read16(uint32_t add)
+static inline uint16_t pulp_read16(uint32_t add)
 {
   __asm__ __volatile__ ("" : : : "memory");
   uint16_t result = *(volatile uint16_t *)add;
