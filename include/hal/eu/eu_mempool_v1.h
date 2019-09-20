@@ -417,6 +417,31 @@ static inline void eu_mutex_init(unsigned int mutexAddr)
 
 //!@}
 
+// Software dispatch for dispatching tasks
+typedef struct dispatch_node_t dispatch_node_t;
+
+struct dispatch_node_t
+{
+  void (*entry)(void *);
+  void *arg;
+  unsigned stack;
+  int barrier;
+  unsigned nb_cores;
+};
+
+// Global dispatch element
+extern dispatch_node_t dispatch_node;
+
+static inline dispatch_node_t* dispatch_node_init(unsigned nb_cores, void (*entry)(void *), void *arg, int barrier)
+{
+  // Store the default values
+  dispatch_node.entry      = entry;
+  dispatch_node.arg        = arg;
+  dispatch_node.barrier    = barrier;
+  dispatch_node.nb_cores   = nb_cores;
+
+  return &dispatch_node;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Stuff not (yet) supported but keep function declarations to avoid compiler errors. //
