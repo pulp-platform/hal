@@ -212,7 +212,7 @@ static inline void eu_irq_mask(unsigned int irqMask)
 
 static inline void eu_irq_secMask(unsigned int irqMask)
 {
-  pulp_write32(ARCHI_EU_DEMUX_ADDR + EU_CORE_MASK_SEC_IRQ, irqMask);
+  pulp_write32(ARCHI_EU_DEMUX_ADDR + EU_SEC_DEMUX_OFFSET, irqMask);
 }
 
 static inline void eu_irq_maskSet_base(unsigned int base, unsigned int irqMask)
@@ -257,12 +257,12 @@ static inline unsigned int eu_irq_status()
 
 static inline unsigned int eu_evt_trig_remote_addr(int event)
 {
-  return ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_EU_OFFSET + EU_SW_EVENTS_AREA_BASE + EU_CORE_TRIGG_SW_EVENT + (event << 2);
+  return ARCHI_CLUSTER_PERIPHERALS_ADDR + ARCHI_EU_OFFSET + EU_SW_EVENTS_AREA_BASE + EU_CORE_TRIGG_SW_EVENT;
 }
 
 static inline unsigned int eu_evt_trig_cluster_addr(int cluster, int event)
 {
-  return ARCHI_CLUSTER_PERIPHERALS_GLOBAL_ADDR(cluster) + ARCHI_EU_OFFSET + EU_SW_EVENTS_AREA_BASE + EU_CORE_TRIGG_SW_EVENT + (event << 2);
+  return ARCHI_CLUSTER_PERIPHERALS_GLOBAL_ADDR(cluster) + ARCHI_EU_OFFSET + EU_SW_EVENTS_AREA_BASE + EU_CORE_TRIGG_SW_EVENT;
 }
 
 #ifdef ARCHI_HAS_FC
@@ -418,31 +418,36 @@ static inline void eu_mutex_init(unsigned int mutexAddr)
 //!@}
 
 
+////////////////////////////////////////////////////////////////////////////////////////
+// Stuff not (yet) supported but keep function declarations to avoid compiler errors. //
+////////////////////////////////////////////////////////////////////////////////////////
 
 /** @name Hardware dispatcher.
  *  Functions for managing the hardware dispatcher, which can be used to dispatch entry points to sleeping slave cores.
  */
 static inline unsigned int eu_dispatch_pop()
 {
-  eu_evt_maskSet(1<<PULP_DISPATCH_EVENT);
-  unsigned int result = evt_read32(ARCHI_EU_DEMUX_ADDR, EU_DISPATCH_DEMUX_OFFSET + EU_DISPATCH_FIFO_ACCESS);
-  eu_evt_maskClr(1<<PULP_DISPATCH_EVENT);
-  return result;
+  // eu_evt_maskSet(1<<PULP_DISPATCH_EVENT);
+  // unsigned int result = evt_read32(ARCHI_EU_DEMUX_ADDR, EU_DISPATCH_DEMUX_OFFSET + EU_DISPATCH_FIFO_ACCESS);
+  // eu_evt_maskClr(1<<PULP_DISPATCH_EVENT);
+  // return result;
+  return 0;
 }
 
 static inline void eu_dispatch_push(unsigned value)
 {
-  IP_WRITE(ARCHI_EU_DEMUX_ADDR, EU_DISPATCH_DEMUX_OFFSET + EU_DISPATCH_FIFO_ACCESS, value);
+  // IP_WRITE(ARCHI_EU_DEMUX_ADDR, EU_DISPATCH_DEMUX_OFFSET + EU_DISPATCH_FIFO_ACCESS, value);
 }
 
 static inline void eu_dispatch_team_config(unsigned value)
 {
-  IP_WRITE(ARCHI_EU_DEMUX_ADDR, EU_DISPATCH_DEMUX_OFFSET + EU_DISPATCH_TEAM_CONFIG, value);
+  // IP_WRITE(ARCHI_EU_DEMUX_ADDR, EU_DISPATCH_DEMUX_OFFSET + EU_DISPATCH_TEAM_CONFIG, value);
 }
 
 static inline unsigned int eu_dispatch_team_config_read()
 {
-  return IP_READ(ARCHI_EU_DEMUX_ADDR, EU_DISPATCH_DEMUX_OFFSET + EU_DISPATCH_TEAM_CONFIG);
+  // return IP_READ(ARCHI_EU_DEMUX_ADDR, EU_DISPATCH_DEMUX_OFFSET + EU_DISPATCH_TEAM_CONFIG);
+  return -1;
 }
 
 //!@}
@@ -457,52 +462,57 @@ static inline unsigned int eu_dispatch_team_config_read()
  */
 static inline unsigned eu_loop_addr(unsigned int id)
 {
-  return ARCHI_EU_DEMUX_ADDR + EU_LOOP_DEMUX_OFFSET;
+  // return ARCHI_EU_DEMUX_ADDR + EU_LOOP_DEMUX_OFFSET;
+  return -1;
 }
 
 static inline unsigned int eu_loop_getChunk(unsigned int addr)
 {
-  return pulp_read32(addr + EU_LOOP_CHUNK);
+  // return pulp_read32(addr + EU_LOOP_CHUNK);
+  return -1;
 }
 
 static inline unsigned int eu_loop_getStart(unsigned int addr)
 {
-  return pulp_read32(addr + EU_LOOP_START);
+  // return pulp_read32(addr + EU_LOOP_START);
+  return -1;
 }
 
 static inline unsigned int eu_loop_getState(unsigned int addr)
 {
-  return pulp_read32(addr + EU_LOOP_STATE);
+  // return pulp_read32(addr + EU_LOOP_STATE);
+  return -1;
 }
 
 static inline void eu_loop_setStart(unsigned int addr, unsigned int value)
 {
-  pulp_write32(addr + EU_LOOP_START, value);
+  // pulp_write32(addr + EU_LOOP_START, value);
 }
 
 static inline void eu_loop_setEnd(unsigned int addr, unsigned int value)
 {
-  pulp_write32(addr + EU_LOOP_END, value);
+  // pulp_write32(addr + EU_LOOP_END, value);
 }
 
 static inline void eu_loop_setIncr(unsigned int addr, unsigned int value)
 {
-  pulp_write32(addr + EU_LOOP_INCR, value);
+  // pulp_write32(addr + EU_LOOP_INCR, value);
 }
 
 static inline void eu_loop_setChunk(unsigned int addr, unsigned int value)
 {
-  pulp_write32(addr + EU_LOOP_CHUNK, value);
+  // pulp_write32(addr + EU_LOOP_CHUNK, value);
 }
 
 static inline void eu_loop_initEpoch(unsigned int addr, unsigned int coreSet)
 {
-  pulp_write32(addr + EU_LOOP_EPOCH, coreSet);
+  // pulp_write32(addr + EU_LOOP_EPOCH, coreSet);
 }
 
 static inline unsigned int eu_loop_getSingle(unsigned int addr)
 {
-  return pulp_read32(addr + EU_LOOP_SINGLE);
+  // return pulp_read32(addr + EU_LOOP_SINGLE);
+  return -1;
 }
 
 //!@}
