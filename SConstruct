@@ -50,11 +50,6 @@ for config in configs:
 
   append_file('hal/chips/%s/pulp.h' % chip)
 
-  # UDMA I2S
-  udma_i2s = config.get_child_int('**/udma/i2s/version')
-  if udma_i2s is not None:
-    append_file('hal/udma/i2s/udma_i2s_v%d.h' % udma_i2s)
-
   udma_hyper = config.get_child_int('**/udma/hyper/version')
   if udma_hyper is not None:
     append_file('hal/udma/hyper/udma_hyper_v%d.h' % udma_hyper)

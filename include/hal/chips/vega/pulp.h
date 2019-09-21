@@ -36,7 +36,6 @@
 #include "hal/udma/csi2/udma_csi2_v1.h"
 #include "hal/udma/hyper/udma_hyper_v2.h"
 #include "hal/udma/i2c/udma_i2c_v2.h"
-#include "hal/udma/i2s/udma_i2s_v2.h"
 #include "hal/udma/spim/udma_spim_v3.h"
 #include "hal/udma/uart/udma_uart_v1.h"
 #include "hal/vendors/dolphin/rtc.h"
