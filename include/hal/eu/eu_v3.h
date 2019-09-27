@@ -321,8 +321,8 @@ static inline unsigned int eu_bar_trig_wait_clr(unsigned int barAddr)
 
 static inline void eu_bar_setup_mask(unsigned int barAddr, unsigned int coreMask, unsigned int targetMask)
 {
-  pulp_write32(barAddr + EU_HW_BARR_TRIGGER_MASK, coreMask);
-  pulp_write32(barAddr + EU_HW_BARR_TARGET_MASK, targetMask);
+  IP_WRITE(barAddr, EU_HW_BARR_TRIGGER_MASK, coreMask);
+  IP_WRITE(barAddr, EU_HW_BARR_TARGET_MASK, targetMask);
 }
 
 static inline void eu_bar_setup(unsigned int barAddr, unsigned int coreMask)
@@ -435,9 +435,24 @@ static inline void eu_dispatch_push(unsigned value)
   IP_WRITE(ARCHI_EU_DEMUX_ADDR, EU_DISPATCH_DEMUX_OFFSET + EU_DISPATCH_FIFO_ACCESS, value);
 }
 
+static inline void eu_dispatch_push_base(unsigned int base, unsigned value)
+{
+  IP_WRITE(base, EU_DISPATCH_FIFO_ACCESS, value);
+}
+
 static inline void eu_dispatch_team_config(unsigned value)
 {
   IP_WRITE(ARCHI_EU_DEMUX_ADDR, EU_DISPATCH_DEMUX_OFFSET + EU_DISPATCH_TEAM_CONFIG, value);
+}
+
+static inline void eu_dispatch_team_config_base(unsigned int base, unsigned value)
+{
+  IP_WRITE(base, EU_DISPATCH_TEAM_CONFIG, value);
+}
+
+static inline unsigned int eu_dispatch_get_base(unsigned int id)
+{
+  return ARCHI_EU_DEMUX_ADDR + EU_DISPATCH_DEMUX_OFFSET + EU_DISPATCH_AREA_OFFSET_GET(id);
 }
 
 static inline unsigned int eu_dispatch_team_config_read()
