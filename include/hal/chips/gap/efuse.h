@@ -406,16 +406,20 @@ typedef struct {
   uint8_t hyper_latency;
   uint16_t ref_clk_wait_cycles_deep_sleep;
   uint16_t flash_id;
-  uint8_t burst_size;
+  uint8_t padding1;
   uint8_t fll_freq;
   uint8_t fll_lock_tolerance;
   uint8_t fll_assert_cycles;
   union {
     struct {
       unsigned int no_udma_memcpy:1;
+      unsigned int mode_gpio:1;
     } __attribute__((packed));
     uint8_t raw;
   } info7;
+  uint16_t burst_size;
+  uint8_t mode_gpio;
+  uint8_t mode_pad;
   uint8_t padding[3];
 } __attribute__((packed)) efuse_t;
 
@@ -469,11 +473,14 @@ typedef struct {
 #define GAP_EFUSE_REF_CLK_WAIT_CYCLES_DEEP_SLEEP_MSB 53
 #define GAP_EFUSE_FLASH_ID_LSB                       54
 #define GAP_EFUSE_FLASH_ID_MSB                       55
-#define GAP_EFUSE_BURST_SIZE                         56
 #define GAP_EFUSE_FLL_FREQ                           57
 #define GAP_EFUSE_FLL_TOLERANCE                      58
 #define GAP_EFUSE_FLL_ASSERT_CYCLES                  59
 #define GAP_EFUSE_INFO7_REG                          60
+#define GAP_EFUSE_BURST_SIZE_LSB                     61
+#define GAP_EFUSE_BURST_SIZE_MSB                     62
+#define GAP_EFUSE_MODE_GPIO                          63
+#define GAP_EFUSE_MODE_PAD                           64
 
 static inline unsigned int plp_efuse_readShort(int lsb, int msb) {
   return plp_efuse_readByte(lsb) | (plp_efuse_readByte(msb) << 8);
