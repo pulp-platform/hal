@@ -389,7 +389,7 @@ typedef struct {
       unsigned int i2c_pad_config:2;
       unsigned int signature:1;
       unsigned int flash_id:1;
-      unsigned int init_pads_after_wakeup:1;
+      unsigned int no_init_pads_after_wakeup:1;
       unsigned int set_burst_size:1;
     } __attribute__((packed));
     uint8_t raw;
@@ -414,6 +414,7 @@ typedef struct {
     struct {
       unsigned int no_udma_memcpy:1;
       unsigned int mode_gpio:1;
+      unsigned int partial_init_pads_after_wakeup:1;
     } __attribute__((packed));
     uint8_t raw;
   } info7;
