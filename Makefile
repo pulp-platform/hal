@@ -2,7 +2,7 @@ build:
 	scons
 
 clean:
-	rm .sconsign.dblite
+	rm -f .sconsign.dblite
 	scons -c
 
 .PHONY: build clean
