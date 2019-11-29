@@ -107,10 +107,14 @@ static inline int pulp_tryread_prefetch(const unsigned int* const addr)
   pulp_tryx_set_prefetch();
 
   // Issue a read through RAB.
+#ifndef __LLVM__
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
     const volatile unsigned int dummy = *(volatile unsigned int*)addr;
+#ifndef __LLVM__
   #pragma GCC diagnostic pop
+#endif
 
   if (pulp_tryx_has_slverr()) {
     #if DEBUG_TRYX == 1
@@ -156,10 +160,14 @@ static inline int pulp_trywrite_prefetch(unsigned int* const addr)
   pulp_tryx_set_prefetch();
 
   // Issue a write through RAB (to be discarded).
+#ifndef __LLVM__
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-    *(volatile unsigned int*)addr = 0x5000BAD1;
+#endif  
+  *(volatile unsigned int*)addr = 0x5000BAD1;
+#ifndef __LLVM__
   #pragma GCC diagnostic pop
+#endif
 
   if (pulp_tryx_has_slverr()) {
     #if DEBUG_TRYX == 1

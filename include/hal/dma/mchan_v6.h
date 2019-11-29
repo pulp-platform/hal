@@ -265,7 +265,8 @@ static inline void plp_dma_counter_free(int counter) {
 }
 
 static inline unsigned int plp_dma_getCmd(int ext2loc, unsigned int size, int is2D, int trigEvt, int trigIrq, int broadcast) {
-#if defined(__riscv__)
+#if defined(__riscv__) && !defined(__LLVM__)
+//FIXME: LLVM does not support __builtin at this moment
   unsigned int res;
   res = __builtin_bitinsert(0,  ext2loc,      1, PLP_DMA_TYPE_BIT);
   res = __builtin_bitinsert(res, PLP_DMA_INC, 1, PLP_DMA_INCR_BIT);

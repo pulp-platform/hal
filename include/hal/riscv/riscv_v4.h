@@ -379,7 +379,8 @@ static inline const char *cpu_perf_name(int event) {
   return (char *)0;
 }
 
-#if !defined(RV_ISA_RV32)
+#if !defined(RV_ISA_RV32) && !defined(__LLVM__)
+//FIXME: LLVM/Clang does not support these builtins
 
 /* Packing of scalars into vectors */
 #define __builtin_pack2(x, y)    __builtin_pulp_pack2((signed short)   (x), (signed short)   (y))

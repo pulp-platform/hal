@@ -33,7 +33,7 @@
 #ifndef __HAL_BUILTINS_V2_EMU_H__
 #define __HAL_BUILTINS_V2_EMU_H__
 
-#ifndef ARCHI_CORE_HAS_PULPV2
+#if !defined(ARCHI_CORE_HAS_PULPV2) || defined(__LLVM__)
 /* ARITHMETIC SECTION */
 typedef   signed short v2s __attribute__((vector_size (4)));
 typedef unsigned short v2u __attribute__((vector_size (4)));
