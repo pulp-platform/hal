@@ -59,10 +59,10 @@ int print_rab_cfg_l2_val(const rab_cfg_l2_varam_t* const varam_ptr,
     printf("va: ");
     print_virt_addr(&virt_addr);
     printf(", set %d, entry %d", (int)cfg_val->set, (int)entry);
-    printf(" @ varam: 0x%" PRIx32, (unsigned long)varam_ptr);
+    printf(" @ varam: 0x%" PRIx32, (unsigned int)varam_ptr);
     printf(", pa: ");
     print_phys_addr(&phys_addr);
-    printf(" @ param: 0x%" PRIx32, (unsigned long)param_ptr);
+    printf(" @ param: 0x%" PRIx32, (unsigned int)param_ptr);
     printf(", flags: 0x%" PRIx8, cfg_val->flags);
     return 0;
 }

@@ -32,7 +32,8 @@
 
 #ifndef __HAL_RISCV_BUILTINS_V2_H__
 #define __HAL_RISCV_BUILTINS_V2_H__
-#ifdef ARCHI_CORE_HAS_PULPV2
+#if defined(ARCHI_CORE_HAS_PULPV2) && !defined(__LLVM__)
+//FIXME: LLVM/Clang does not support builtins
 /* ARITHMETIC SECTION */
 typedef   signed short v2s __attribute__((vector_size (4)));
 typedef unsigned short v2u __attribute__((vector_size (4)));

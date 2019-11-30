@@ -35,7 +35,8 @@
   \param offset The offset in the event unit where to load from. Depending on this offset, this will trigger different behaviors (barrier, wait, wait&clear, etc).
   \return       The loaded value, after the core has been waken-up. This value depends on the feature which is accessed.
   */
-#if defined(__OPTIMIZE__)
+#if defined(__OPTIMIZE__) || defined(__LLVM__)
+//FIXME: LLVM/Clang does not support __builtin_pulp_event_unit_read
 static inline unsigned int evt_read32(unsigned int base, unsigned int offset)
 {
   unsigned int value;
