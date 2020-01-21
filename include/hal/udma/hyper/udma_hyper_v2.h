@@ -59,12 +59,12 @@ static inline void hal_hyper_enqueue(unsigned channelBase, unsigned int l2Addr, 
 
 static inline void hal_hyper_ram_ext_addr_set(unsigned int value)
 {
-  return hal_hyper_udma_addr_set(REG_MBR0 | value);
+  return hal_hyper_udma_addr_set(REG_MBR0 + value);
 }
 
 static inline void hal_hyper_flash_ext_addr_set(unsigned int value)
 {
-  return hal_hyper_udma_addr_set(REG_MBR1 | value);
+  return hal_hyper_udma_addr_set(REG_MBR1 + value);
 }
 
 /*
