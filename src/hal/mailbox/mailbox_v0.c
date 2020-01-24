@@ -19,62 +19,92 @@
 
 int mailbox_read(unsigned int* const ptr)
 {
-  uint32_t status;
-
-  if ( mailbox_status_read() & 0x1 )
-  {
-    status = 1;
-    // wait for not empty
-    while ( status )
-    {
-      rt_time_wait_cycles(500);
-      status = mailbox_status_read() & 0x1;
-    }
+  volatile unsigned int *base = (unsigned int*)0x1c00e108;
+  while(!*(base+1)) {
+    rt_time_wait_cycles(500);
   }
+  *ptr = *base;
+  *(base+1) = 0;
 
-  *ptr = mailbox_data_read();
   return MAILBOX_VALID;
 }
+
+/* int mailbox_read(unsigned int* const ptr) */
+/* { */
+/*   uint32_t status; */
+
+/*   if ( mailbox_status_read() & 0x1 ) */
+/*   { */
+/*     status = 1; */
+/*     // wait for not empty */
+/*     while ( status ) */
+/*     { */
+/*       rt_time_wait_cycles(500); */
+/*       status = mailbox_status_read() & 0x1; */
+/*     } */
+/*   } */
+
+/*   *ptr = mailbox_data_read(); */
+/*   return MAILBOX_VALID; */
+/* } */
 
 int mailbox_read_timed(unsigned int* const ptr, const unsigned int t)
 {
-  uint32_t status;
-
-  if ( mailbox_status_read() & 0x1 )
-  {
-    volatile uint32_t timeout = t;
-    status = 1;
-    // wait for not empty or timeout
-    while ( status && (timeout > 0) )
-    {
-      rt_time_wait_cycles(500);
-      timeout--;
-      status = mailbox_status_read() & 0x1;
-    }
-    if ( status )
-      return MAILBOX_FAIL;
-  }
-
-  *ptr = mailbox_data_read();
-  return MAILBOX_VALID;
+  return MAILBOX_FAIL;
 }
+
+/* int mailbox_read_timed(unsigned int* const ptr, const unsigned int t) */
+/* { */
+/*   return MAILBOX_FAIL; */
+
+/*   uint32_t status; */
+
+/*   if ( mailbox_status_read() & 0x1 ) */
+/*   { */
+/*     volatile uint32_t timeout = t; */
+/*     status = 1; */
+/*     // wait for not empty or timeout */
+/*     while ( status && (timeout > 0) ) */
+/*     { */
+/*       rt_time_wait_cycles(500); */
+/*       timeout--; */
+/*       status = mailbox_status_read() & 0x1; */
+/*     } */
+/*     if ( status ) */
+/*       return MAILBOX_FAIL; */
+/*   } */
+
+/*   *ptr = mailbox_data_read(); */
+/*   return MAILBOX_VALID; */
+/* } */
 
 int mailbox_write(const unsigned int value)
 {
-  uint32_t status;
-
-  if ( mailbox_status_read() & 0x2 )
-  {
-    status = 1;
-    // wait for not full
-    while ( status ) {
-      rt_time_wait_cycles(500);
-      status = mailbox_status_read() & 0x2;
-    }
-    if ( status )
-      return MAILBOX_FAIL;
+  volatile unsigned int *base = (unsigned int*) 0x1c00e100;
+  while(*(base+1)) {
+    rt_time_wait_cycles(500);
   }
-
-  mailbox_data_write(value);
+  *base = value;
+  *(base+1) = 1;
   return MAILBOX_VALID;
 }
+
+/* int mailbox_write(const unsigned int value) */
+/* { */
+/*   uint32_t status; */
+
+/*   if ( mailbox_status_read() & 0x2 ) */
+/*   { */
+/*     status = 1; */
+/*     // wait for not full */
+/*     while ( status ) { */
+/*       rt_time_wait_cycles(500); */
+/*       status = mailbox_status_read() & 0x2; */
+/*     } */
+/*     if ( status ) */
+/*       return MAILBOX_FAIL; */
+/*   } */
+
+/*   mailbox_data_write(value); */
+/*   return MAILBOX_VALID; */
+/* } */
