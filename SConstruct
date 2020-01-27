@@ -3,6 +3,7 @@ import subprocess
 import shlex
 import pulp_config as plpconfig
 import SCons.Util
+import os.path
 
 install_dir = os.environ.get('INSTALL_DIR')
 target_install_dir = os.environ.get('TARGET_INSTALL_DIR')
@@ -18,7 +19,10 @@ files.append('hal/gvsoc/gvsoc.h')
 files.append('hal/tb/tb.h')
 
 try:
-  files += subprocess.check_output(shlex.split('plpfiles copy --item=hal_files')).decode('UTF-8').split()
+  for file in subprocess.check_output(shlex.split('plpfiles copy --item=hal_files')).decode('UTF-8').split():
+    if os.path.exists('include/' + file):
+      files.append(file)
+
 except subprocess.CalledProcessError as e:
   print (e.output)
   raise
@@ -34,7 +38,7 @@ configs = plpconfig.get_configs_from_env()
 
 def append_file(file):
   global files
-  if not file in files:
+  if not file in files and os.path.exists('include/' + file):
     files.append(file)
 
 
