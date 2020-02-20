@@ -28,7 +28,12 @@
  */
 static inline int pulp_tryx_has_slverr()
 {
+#ifdef ARCHI_TRYX_ADDR
   return (*(const volatile unsigned int*)ARCHI_TRYX_ADDR & 0x1) == 0x1;
+#else
+  // If no TRYX is available, always succeed.
+  return 0;
+#endif
 }
 
 /** Set the TRYX register such that (1) the next memory access does not go from RAB further down
@@ -37,7 +42,9 @@ static inline int pulp_tryx_has_slverr()
  */
 static inline void pulp_tryx_set_prefetch()
 {
+#ifdef ARCHI_TRYX_ADDR // Nothing to do if there is no TRYX
   *(volatile unsigned int*)ARCHI_TRYX_ADDR = 0xFFFFFFFF;
+#endif
 }
 
 /** Try to read from a memory address without blocking in case it produces a slave error.
