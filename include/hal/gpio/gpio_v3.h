@@ -170,7 +170,7 @@ static inline void hal_gpio_set_value(uint32_t mask, uint8_t value)
 
 static inline uint32_t hal_gpio_get_value()
 {
-  return gpio_padout_get(ARCHI_GPIO_ADDR);
+  return gpio_padin_get(ARCHI_GPIO_ADDR);
 }
 
 
